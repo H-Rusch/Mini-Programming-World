@@ -1,0 +1,6 @@
+.idea/
+# IntelliJ
+out/
+
+# Project exclude paths
+/target/

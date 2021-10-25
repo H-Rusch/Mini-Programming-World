@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.Label?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+      prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="SimulatorPresenter">
+    <MenuBar>
+        <Menu text="Editor">
+            <MenuItem id="newMenuItem" mnemonicParsing="true" text="Neu">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP"
+                                        shortcut="DOWN"/>
+                </accelerator>
+            </MenuItem>
+
+            <MenuItem id="openMenuItem" mnemonicParsing="true" text="Öffnen">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP"
+                                        shortcut="DOWN"/>
+                </accelerator>
+            </MenuItem>
+
+            <SeparatorMenuItem mnemonicParsing="false"/>
+
+            <MenuItem id="compileMenuItem" mnemonicParsing="false" text="Kompilieren">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="K" control="UP" meta="UP" shift="UP"
+                                        shortcut="DOWN"/>
+                </accelerator>
+            </MenuItem>
+
+            <SeparatorMenuItem mnemonicParsing="false"/>
+
+            <MenuItem id="exitMenuItem" mnemonicParsing="false" text="Beenden">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="Q" control="UP" meta="UP" shift="UP"
+                                        shortcut="DOWN"/>
+                </accelerator>
+            </MenuItem>
+        </Menu>
+
+        <Menu mnemonicParsing="false" text="Supermarkt">
+            <Menu mnemonicParsing="false" text="Speichern">
+                <MenuItem mnemonicParsing="false" text="XML"/>
+                <MenuItem mnemonicParsing="false" text="Serialisieren"/>
+            </Menu>
+
+            <Menu mnemonicParsing="false" text="Laden">
+                <MenuItem mnemonicParsing="false" text="XML"/>
+                <MenuItem mnemonicParsing="false" text="Deserialisieren"/>
+            </Menu>
+
+            <Menu mnemonicParsing="false" text="Als Bild speichern">
+                <MenuItem mnemonicParsing="false" text="png"/>
+                <MenuItem mnemonicParsing="false" text="jpg"/>
+            </Menu>
+
+            <SeparatorMenuItem mnemonicParsing="false"/>
+
+            <RadioMenuItem id="placeCustomerMenuItem" mnemonicParsing="false" selected="true"
+                           text="Kunden platzieren">
+                <toggleGroup>
+                    <ToggleGroup fx:id="placeItem"/>
+                </toggleGroup>
+            </RadioMenuItem>
+            <RadioMenuItem id="placeShelfMenuItem" mnemonicParsing="false" text="Regal platzieren"
+                           toggleGroup="$placeItem"/>
+            <RadioMenuItem id="placeCartMenuItem" mnemonicParsing="false" text="Einkaufswagen platzieren"
+                           toggleGroup="$placeItem"/>
+            <RadioMenuItem id="placePresentMenuItem" mnemonicParsing="false" text="Geschenk platzieren"
+                           toggleGroup="$placeItem"/>
+            <RadioMenuItem id="deleteTileMenuItem" mnemonicParsing="false" text="Kachel löschen"
+                           toggleGroup="$placeItem"/>
+        </Menu>
+
+        <Menu mnemonicParsing="false" text="Kunde">
+            <MenuItem mnemonicParsing="false" text="vor">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="V" control="UP" meta="UP" shift="DOWN"
+                                        shortcut="DOWN"/>
+                </accelerator>
+            </MenuItem>
+
+            <MenuItem mnemonicParsing="false" text="dreheLinks">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="L" control="UP" meta="UP" shift="DOWN"
+                                        shortcut="DOWN"/>
+                </accelerator>
+            </MenuItem>
+
+            <MenuItem mnemonicParsing="false" text="dreheRechts">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="R" control="UP" meta="UP" shift="DOWN"
+                                        shortcut="DOWN"/>
+                </accelerator>
+            </MenuItem>
+
+            <MenuItem mnemonicParsing="false" text="nimmAuf">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="DOWN"
+                                        shortcut="DOWN"/>
+                </accelerator>
+            </MenuItem>
+
+            <MenuItem mnemonicParsing="false" text="legeAb">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="DOWN"
+                                        shortcut="DOWN"/>
+                </accelerator>
+            </MenuItem>
+
+            <MenuItem mnemonicParsing="false" text="Geschenke im Korb"/>
+        </Menu>
+
+        <Menu mnemonicParsing="false" text="Simulation">
+            <MenuItem mnemonicParsing="false" text="Starten">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="F5" control="UP" meta="UP" shift="UP"
+                                        shortcut="DOWN"/>
+                </accelerator>
+            </MenuItem>
+
+            <MenuItem mnemonicParsing="false" text="Pausieren">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="F6" control="UP" meta="UP" shift="UP"
+                                        shortcut="DOWN"/>
+                </accelerator>
+            </MenuItem>
+
+            <MenuItem mnemonicParsing="false" text="Stoppen">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="F8" control="UP" meta="UP" shift="UP"
+                                        shortcut="DOWN"/>
+                </accelerator>
+            </MenuItem>
+        </Menu>
+    </MenuBar>
+
+
+    <ToolBar prefHeight="40.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">
+        <Button fx:id="newButton" mnemonicParsing="false" maxHeight="30.0" maxWidth="30.0">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/New24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Erstelle einen neuen Simulator"/>
+            </tooltip>
+        </Button>
+
+        <Button fx:id="openButton" mnemonicParsing="false" maxHeight="30.0" maxWidth="30.0">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/Open24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Öffne einen Simulator"/>
+            </tooltip>
+        </Button>
+
+        <Separator orientation="VERTICAL"/>
+
+        <Button fx:id="saveButton" layoutX="60.0" layoutY="10.0" mnemonicParsing="false" maxHeight="30.0"
+                maxWidth="30.0">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/Save24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Speichere den Simulator"/>
+            </tooltip>
+        </Button>
+
+        <Button fx:id="compileButton" layoutX="110.0" layoutY="10.0" mnemonicParsing="false">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/Compile24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Kompiliere den Simulator"/>
+            </tooltip>
+        </Button>
+
+        <Separator orientation="VERTICAL"/>
+
+        <Button fx:id="resizeMarketButton" layoutX="170.0" layoutY="10.0" mnemonicParsing="false">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/Terrain24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Dimension des Markts ändern"/>
+            </tooltip>
+        </Button>
+
+        <RadioButton fx:id="placeCustomerButton" mnemonicParsing="false" toggleGroup="$placeItem">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/DownCustomer24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Kunden platzieren"/>
+            </tooltip>
+        </RadioButton>
+
+        <RadioButton fx:id="placeShelfButton" mnemonicParsing="false" toggleGroup="$placeItem">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/AltShelf24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Regal platzieren"/>
+            </tooltip>
+        </RadioButton>
+
+        <RadioButton fx:id="placeCartButton" mnemonicParsing="false" toggleGroup="$placeItem">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/ShoppingCart24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Einkaufswagen platziern"/>
+            </tooltip>
+        </RadioButton>
+
+        <RadioButton fx:id="placePresentButton" mnemonicParsing="false" toggleGroup="$placeItem">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/Present24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Geschenk platzieren"/>
+            </tooltip>
+        </RadioButton>
+
+        <RadioButton fx:id="clearTileButton" mnemonicParsing="false" toggleGroup="$placeItem" maxHeight="30.0"
+                     maxWidth="30.0">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/Delete24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Inhalt der Kachel löschen"/>
+            </tooltip>
+        </RadioButton>
+
+        <Separator orientation="VERTICAL"/>
+
+        <Button fx:id="forwardButton" layoutX="110.0" layoutY="10.0" mnemonicParsing="false">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/MoveForward24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Bewege den Kunden eine Kachel in Blickrichtung"/>
+            </tooltip>
+        </Button>
+
+        <Button fx:id="turnLeftButton" layoutX="160.0" layoutY="10.0" mnemonicParsing="false">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/TurnLeft24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Drehe den Kunden um 90° nach links"/>
+            </tooltip>
+        </Button>
+
+        <Button fx:id="turnRightButton" layoutX="160.0" layoutY="10.0" mnemonicParsing="false">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/TurnRight24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Drehe den Kunden um 90° nach rechts"/>
+            </tooltip>
+        </Button>
+
+        <Button fx:id="pickUpButton" layoutX="60.0" layoutY="10.0" mnemonicParsing="false">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/PickUp24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Nimm ein auf dem Boden liegendes Geschenk auf"/>
+            </tooltip>
+        </Button>
+
+        <Button fx:id="putDownButton" layoutX="330.0" layoutY="10.0" mnemonicParsing="false">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/PutDown24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Lege ein Geschenk aus dem Korb auf den Boden"/>
+            </tooltip>
+        </Button>
+
+        <Button fx:id="presentsButton" layoutX="280.0" layoutY="10.0" mnemonicParsing="false">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/Basket24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Lege die Anzahl der Geschenke im Korb fest"/>
+            </tooltip>
+        </Button>
+
+        <Separator orientation="VERTICAL"/>
+
+        <Button fx:id="playButton" layoutX="230.0" layoutY="10.0" mnemonicParsing="false">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/Play24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Starte die Simulation"/>
+            </tooltip>
+        </Button>
+
+        <Button fx:id="pauseButton" layoutX="500.0" layoutY="10.0" mnemonicParsing="false">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/Pause.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Pausiere die Simulation"/>
+            </tooltip>
+        </Button>
+
+        <Button fx:id="stopButton" layoutX="500.0" layoutY="10.0" mnemonicParsing="false">
+            <graphic>
+                <ImageView>
+                    <Image url="@../img/24x24/Stop24.png"/>
+                </ImageView>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Beende die Simulation"/>
+            </tooltip>
+        </Button>
+
+        <Slider fx:id="speedSlider" showTickLabels="true" value="50.0"/>
+    </ToolBar>
+
+    <SplitPane dividerPositions="0.4" prefHeight="600" prefWidth="1000.0" VBox.vgrow="ALWAYS">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+            <TextArea fx:id="codeTextArea" layoutX="-12.0" layoutY="-3.0" prefHeight="317.0"
+                      prefWidth="252.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+        </AnchorPane>
+
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="158.0" prefWidth="285.0">
+            <Pane fx:id="simulator" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+        </AnchorPane>
+    </SplitPane>
+
+    <Label id="notificationLabel" fx:id="notificationLabel" text="Hallo : )" VBox.vgrow="SOMETIMES"/>
+</VBox>
