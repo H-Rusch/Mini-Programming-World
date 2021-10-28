@@ -26,132 +26,139 @@
       prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="SimulatorPresenter">
     <MenuBar>
-        <Menu text="Editor">
-            <MenuItem id="newMenuItem" mnemonicParsing="true" text="Neu">
+        <Menu text="_Editor">
+            <MenuItem id="newMenuItem" text="_Neu">
                 <accelerator>
-                    <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP"
-                                        shortcut="DOWN"/>
+                    <KeyCodeCombination shortcut="DOWN" code="N"
+                                        alt="UP" control="UP" meta="UP" shift="UP"/>
                 </accelerator>
             </MenuItem>
 
-            <MenuItem id="openMenuItem" mnemonicParsing="true" text="Öffnen">
+            <MenuItem id="openMenuItem" text="_Öffnen">
                 <accelerator>
-                    <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP"
-                                        shortcut="DOWN"/>
-                </accelerator>
-            </MenuItem>
-
-            <SeparatorMenuItem mnemonicParsing="false"/>
-
-            <MenuItem id="compileMenuItem" mnemonicParsing="false" text="Kompilieren">
-                <accelerator>
-                    <KeyCodeCombination alt="UP" code="K" control="UP" meta="UP" shift="UP"
-                                        shortcut="DOWN"/>
+                    <KeyCodeCombination shortcut="DOWN" code="O"
+                                        alt="UP" control="UP" meta="UP" shift="UP"/>
                 </accelerator>
             </MenuItem>
 
             <SeparatorMenuItem mnemonicParsing="false"/>
 
-            <MenuItem id="exitMenuItem" mnemonicParsing="false" text="Beenden">
+            <MenuItem id="compileMenuItem" text="_Speichern">
                 <accelerator>
-                    <KeyCodeCombination alt="UP" code="Q" control="UP" meta="UP" shift="UP"
-                                        shortcut="DOWN"/>
+                    <KeyCodeCombination shortcut="DOWN" code="S"
+                                        alt="UP" control="UP" meta="UP" shift="UP"/>
+                </accelerator>
+            </MenuItem>
+
+            <MenuItem id="compileMenuItem" text="_Kompilieren">
+                <accelerator>
+                    <KeyCodeCombination shortcut="DOWN" code="K"
+                                        alt="UP" control="UP" meta="UP" shift="UP"/>
+                </accelerator>
+            </MenuItem>
+
+            <SeparatorMenuItem mnemonicParsing="false"/>
+
+            <MenuItem id="exitMenuItem" text="_Beenden">
+                <accelerator>
+                    <KeyCodeCombination shortcut="DOWN" code="Q"
+                                        alt="UP" control="UP" meta="UP" shift="UP"/>
                 </accelerator>
             </MenuItem>
         </Menu>
 
-        <Menu mnemonicParsing="false" text="Supermarkt">
-            <Menu mnemonicParsing="false" text="Speichern">
-                <MenuItem mnemonicParsing="false" text="XML"/>
-                <MenuItem mnemonicParsing="false" text="Serialisieren"/>
+        <Menu text="_Markt">
+            <Menu text="_Speichern">
+                <MenuItem text="_XML"/>
+                <MenuItem text="_Serialisieren"/>
             </Menu>
 
-            <Menu mnemonicParsing="false" text="Laden">
-                <MenuItem mnemonicParsing="false" text="XML"/>
-                <MenuItem mnemonicParsing="false" text="Deserialisieren"/>
+            <Menu text="_Laden">
+                <MenuItem text="_XML"/>
+                <MenuItem text="_Deserialisieren"/>
             </Menu>
 
-            <Menu mnemonicParsing="false" text="Als Bild speichern">
-                <MenuItem mnemonicParsing="false" text="png"/>
-                <MenuItem mnemonicParsing="false" text="jpg"/>
+            <Menu text="Als _Bild speichern">
+                <MenuItem text="_png"/>
+                <MenuItem text="_jpg"/>
             </Menu>
 
             <SeparatorMenuItem mnemonicParsing="false"/>
 
-            <RadioMenuItem id="placeCustomerMenuItem" mnemonicParsing="false" selected="true"
-                           text="Kunden platzieren">
+            <RadioMenuItem id="placeCustomerMenuItem" selected="true"
+                           text="_Kunden platzieren">
                 <toggleGroup>
                     <ToggleGroup fx:id="placeItem"/>
                 </toggleGroup>
             </RadioMenuItem>
-            <RadioMenuItem id="placeShelfMenuItem" mnemonicParsing="false" text="Regal platzieren"
+            <RadioMenuItem id="placeShelfMenuItem" text="_Regal platzieren"
                            toggleGroup="$placeItem"/>
-            <RadioMenuItem id="placeCartMenuItem" mnemonicParsing="false" text="Einkaufswagen platzieren"
+            <RadioMenuItem id="placeCartMenuItem" text="_Einkaufswagen platzieren"
                            toggleGroup="$placeItem"/>
-            <RadioMenuItem id="placePresentMenuItem" mnemonicParsing="false" text="Geschenk platzieren"
+            <RadioMenuItem id="placePresentMenuItem" text="_Geschenk platzieren"
                            toggleGroup="$placeItem"/>
-            <RadioMenuItem id="deleteTileMenuItem" mnemonicParsing="false" text="Kachel löschen"
+            <RadioMenuItem id="deleteTileMenuItem" text="K_achel löschen"
                            toggleGroup="$placeItem"/>
         </Menu>
 
-        <Menu mnemonicParsing="false" text="Kunde">
-            <MenuItem mnemonicParsing="false" text="vor">
+        <Menu text="_Kunde">
+            <MenuItem text="_vor">
                 <accelerator>
-                    <KeyCodeCombination alt="UP" code="V" control="UP" meta="UP" shift="DOWN"
-                                        shortcut="DOWN"/>
+                    <KeyCodeCombination shortcut="DOWN" shift="DOWN" code="V"
+                                        alt="UP" control="UP" meta="UP"/>
                 </accelerator>
             </MenuItem>
 
-            <MenuItem mnemonicParsing="false" text="dreheLinks">
+            <MenuItem text="drehe_Links">
                 <accelerator>
-                    <KeyCodeCombination alt="UP" code="L" control="UP" meta="UP" shift="DOWN"
-                                        shortcut="DOWN"/>
+                    <KeyCodeCombination shortcut="DOWN" shift="DOWN" code="L"
+                                        alt="UP" control="UP" meta="UP"/>
                 </accelerator>
             </MenuItem>
 
-            <MenuItem mnemonicParsing="false" text="dreheRechts">
+            <MenuItem text="drehe_Rechts">
                 <accelerator>
-                    <KeyCodeCombination alt="UP" code="R" control="UP" meta="UP" shift="DOWN"
-                                        shortcut="DOWN"/>
+                    <KeyCodeCombination shortcut="DOWN" shift="DOWN" code="R"
+                                        alt="UP" control="UP" meta="UP"/>
                 </accelerator>
             </MenuItem>
 
-            <MenuItem mnemonicParsing="false" text="nimmAuf">
+            <MenuItem text="_nimmAuf">
                 <accelerator>
-                    <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="DOWN"
-                                        shortcut="DOWN"/>
+                    <KeyCodeCombination shortcut="DOWN" shift="DOWN" code="N"
+                                        alt="UP" control="UP" meta="UP"/>
                 </accelerator>
             </MenuItem>
 
-            <MenuItem mnemonicParsing="false" text="legeAb">
+            <MenuItem text="lege_Ab">
                 <accelerator>
-                    <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="DOWN"
-                                        shortcut="DOWN"/>
+                    <KeyCodeCombination shortcut="DOWN" shift="DOWN" code="D"
+                                        alt="UP" control="UP" meta="UP"/>
                 </accelerator>
             </MenuItem>
 
-            <MenuItem mnemonicParsing="false" text="Geschenke im Korb"/>
+            <MenuItem text="_Geschenke im Korb"/>
         </Menu>
 
-        <Menu mnemonicParsing="false" text="Simulation">
-            <MenuItem mnemonicParsing="false" text="Starten">
+        <Menu text="_Simulation">
+            <MenuItem text="_Starten">
                 <accelerator>
-                    <KeyCodeCombination alt="UP" code="F5" control="UP" meta="UP" shift="UP"
-                                        shortcut="DOWN"/>
+                    <KeyCodeCombination shortcut="DOWN" code="F5"
+                                        alt="UP" control="UP" meta="UP" shift="UP"/>
                 </accelerator>
             </MenuItem>
 
-            <MenuItem mnemonicParsing="false" text="Pausieren">
+            <MenuItem text="_Pausieren">
                 <accelerator>
-                    <KeyCodeCombination alt="UP" code="F6" control="UP" meta="UP" shift="UP"
-                                        shortcut="DOWN"/>
+                    <KeyCodeCombination shortcut="DOWN" code="F6"
+                                        alt="UP" control="UP" meta="UP" shift="UP"/>
                 </accelerator>
             </MenuItem>
 
-            <MenuItem mnemonicParsing="false" text="Stoppen">
+            <MenuItem text="_Beenden">
                 <accelerator>
-                    <KeyCodeCombination alt="UP" code="F8" control="UP" meta="UP" shift="UP"
-                                        shortcut="DOWN"/>
+                    <KeyCodeCombination shortcut="DOWN" code="F8"
+                                        alt="UP" control="UP" meta="UP" shift="UP"/>
                 </accelerator>
             </MenuItem>
         </Menu>
