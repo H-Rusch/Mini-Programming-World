@@ -1,27 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.input.KeyCodeCombination?>
-<?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.RadioMenuItem?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.control.Label?>
-
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
       prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="SimulatorPresenter">
@@ -146,6 +128,11 @@
                     <KeyCodeCombination shortcut="DOWN" code="F5"
                                         alt="UP" control="UP" meta="UP" shift="UP"/>
                 </accelerator>
+                <graphic>
+                    <ImageView>
+                        <Image url="@../img/16x16/Play16.png"/>
+                    </ImageView>
+                </graphic>
             </MenuItem>
 
             <MenuItem text="_Pausieren">
@@ -153,6 +140,11 @@
                     <KeyCodeCombination shortcut="DOWN" code="F6"
                                         alt="UP" control="UP" meta="UP" shift="UP"/>
                 </accelerator>
+                <graphic>
+                    <ImageView>
+                        <Image url="@../img/16x16/Pause16.png"/>
+                    </ImageView>
+                </graphic>
             </MenuItem>
 
             <MenuItem text="_Beenden">
@@ -160,6 +152,11 @@
                     <KeyCodeCombination shortcut="DOWN" code="F8"
                                         alt="UP" control="UP" meta="UP" shift="UP"/>
                 </accelerator>
+                <graphic>
+                    <ImageView>
+                        <Image url="@../img/16x16/Stop16.png"/>
+                    </ImageView>
+                </graphic>
             </MenuItem>
         </Menu>
     </MenuBar>

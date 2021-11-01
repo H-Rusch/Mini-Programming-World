@@ -1,8 +1,6 @@
-import model.Direction;
 import model.Territory;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TestProgram {
