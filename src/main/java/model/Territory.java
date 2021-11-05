@@ -1,8 +1,8 @@
 package model;
 
-import exceptions.NoPresentHereException;
+import exceptions.NoPresentOnTileException;
 import exceptions.NoPresentInBasketException;
-import exceptions.PresentAlreadyHereException;
+import exceptions.PresentAlreadyOnTileException;
 import exceptions.TileBlockedException;
 
 public class Territory {
@@ -103,12 +103,12 @@ public class Territory {
      * Tries to pick up a present at the position the actor is standing at. If a present is picked up, the field it was
      * laying on will be empty and the counter of presents will be incremented.
      *
-     * @throws NoPresentHereException if there is no present at the current location.
+     * @throws NoPresentOnTileException if there is no present at the current location.
      */
     public void pickUp() {
         Field currentField = market[actorY][actorX];
         if (!currentField.containsPresent()) {
-            throw new NoPresentHereException("There is no present at the current location.");
+            throw new NoPresentOnTileException("There is no present at the current location.");
         } else {
             currentField.setState(FieldState.EMPTY);
             actor.setPresents(actor.getPresents() + 1);
@@ -119,13 +119,13 @@ public class Territory {
      * Tries to lay down a present at the position the actor is standing at. If a present is put down, the field it was
      * laying on will be empty and the counter of presents will be incremented.
      *
-     * @throws PresentAlreadyHereException if there already is a present at the current location.
+     * @throws PresentAlreadyOnTileException if there already is a present at the current location.
      * @throws NoPresentInBasketException  if the actor tries to place presents while the basket is empty.
      */
     public void putDown() {
         Field currentField = market[actorY][actorX];
         if (currentField.containsPresent()) {
-            throw new PresentAlreadyHereException("There is already a present laying at the current position.");
+            throw new PresentAlreadyOnTileException("There is already a present laying at the current position.");
         } else {
             if (basketEmpty()) {
                 throw new NoPresentInBasketException("There are no presents to place in the basket.");
