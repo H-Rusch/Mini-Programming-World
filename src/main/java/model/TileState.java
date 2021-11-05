@@ -1,6 +1,6 @@
 package model;
 
-public enum FieldState {
+public enum TileState {
     EMPTY,
     SHELF,
     CART,

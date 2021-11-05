@@ -1,5 +1,6 @@
 package model;
 
+/** Actor in the territory. The actor faces in one of the directions and carries a number of presents. */
 public class Actor {
 
     private Territory market;

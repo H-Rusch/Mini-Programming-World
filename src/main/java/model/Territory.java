@@ -13,17 +13,17 @@ public class Territory {
 
     private int height;
     private int width;
-    private Field[][] market;
+    private Tile[][] market;
 
     public Territory(int height, int width) {
         this.height = height;
         this.width = width;
 
-        // initialize all fields
-        market = new Field[height][width];
+        // initialize all tiles
+        market = new Tile[height][width];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                market[y][x] = new Field();
+                market[y][x] = new Tile();
             }
         }
 
@@ -34,8 +34,8 @@ public class Territory {
     }
 
     /**
-     * Try to move the actor one field forwards. Fails, if the actor tries to run into a shelf/ wall or into a blocked
-     * cart. Carts which are not blocked are pushed along onto the next field.
+     * Try to move the actor one tile forwards. Fails, if the actor tries to run into a shelf/ wall or into a blocked
+     * cart. Carts which are not blocked are pushed along onto the next tile.
      *
      * @throws TileBlockedException if the tile, the actor tries to walk on, is blocked by a wall or a blocked cart
      */
@@ -48,20 +48,20 @@ public class Territory {
                 throw new TileBlockedException("The cart can not be pushed because it is blocked itself.");
             } else {
                 // move cart
-                Field adjacent = getFieldsFurther(1);
-                Field furtherAway = getFieldsFurther(2);
+                Tile adjacent = getTilesFurther(1);
+                Tile furtherAway = getTilesFurther(2);
 
-                // remove the cart from the adjacent field
-                if (adjacent.getState() == FieldState.CART) {
-                    adjacent.setState(FieldState.EMPTY);
+                // remove the cart from the adjacent tile
+                if (adjacent.getState() == TileState.CART) {
+                    adjacent.setState(TileState.EMPTY);
                 } else {
-                    adjacent.setState(FieldState.PRESENT);
+                    adjacent.setState(TileState.PRESENT);
                 }
-                // push the cart onto the next field
-                if (furtherAway.getState() == FieldState.EMPTY) {
-                    furtherAway.setState(FieldState.CART);
+                // push the cart onto the next tile
+                if (furtherAway.getState() == TileState.EMPTY) {
+                    furtherAway.setState(TileState.CART);
                 } else {
-                    furtherAway.setState(FieldState.PRESENT_AND_CART);
+                    furtherAway.setState(TileState.PRESENT_AND_CART);
                 }
             }
         }
@@ -85,52 +85,48 @@ public class Territory {
         }
     }
 
-    /**
-     * Turn the actor 90° to the left.
-     */
+    /** Turn the actor 90° to the left. */
     public void turnLeft() {
         actor.setDirection(actor.getDirection().getDirectionLeft());
     }
 
-    /**
-     * Turn the actor 90° to the right.
-     */
+    /** Turn the actor 90° to the right. */
     public void turnRight() {
         actor.setDirection(actor.getDirection().getDirectionRight());
     }
 
     /**
-     * Tries to pick up a present at the position the actor is standing at. If a present is picked up, the field it was
+     * Tries to pick up a present at the position the actor is standing at. If a present is picked up, the tile it was
      * laying on will be empty and the counter of presents will be incremented.
      *
      * @throws NoPresentOnTileException if there is no present at the current location.
      */
     public void pickUp() {
-        Field currentField = market[actorY][actorX];
-        if (!currentField.containsPresent()) {
+        Tile currentTile = market[actorY][actorX];
+        if (!currentTile.containsPresent()) {
             throw new NoPresentOnTileException("There is no present at the current location.");
         } else {
-            currentField.setState(FieldState.EMPTY);
+            currentTile.setState(TileState.EMPTY);
             actor.setPresents(actor.getPresents() + 1);
         }
     }
 
     /**
-     * Tries to lay down a present at the position the actor is standing at. If a present is put down, the field it was
+     * Tries to lay down a present at the position the actor is standing at. If a present is put down, the tile it was
      * laying on will be empty and the counter of presents will be incremented.
      *
      * @throws PresentAlreadyOnTileException if there already is a present at the current location.
-     * @throws NoPresentInBasketException  if the actor tries to place presents while the basket is empty.
+     * @throws NoPresentInBasketException    if the actor tries to place presents while the basket is empty.
      */
     public void putDown() {
-        Field currentField = market[actorY][actorX];
-        if (currentField.containsPresent()) {
+        Tile currentTile = market[actorY][actorX];
+        if (currentTile.containsPresent()) {
             throw new PresentAlreadyOnTileException("There is already a present laying at the current position.");
         } else {
             if (basketEmpty()) {
                 throw new NoPresentInBasketException("There are no presents to place in the basket.");
             } else {
-                currentField.setState(FieldState.PRESENT);
+                currentTile.setState(TileState.PRESENT);
                 actor.setPresents(actor.getPresents() - 1);
             }
         }
@@ -166,7 +162,7 @@ public class Territory {
                     return true;
                 }
         }
-        return getFieldsFurther(1).getState() == FieldState.SHELF;
+        return getTilesFurther(1).getState() == TileState.SHELF;
     }
 
     /**
@@ -199,17 +195,17 @@ public class Territory {
                     return false;
                 }
         }
-        return getFieldsFurther(1).containsCart();
+        return getTilesFurther(1).containsCart();
     }
 
     /**
      * Checks whether a cart in front of the actor is pushable. A cart is pushable, if pushing it would not push it onto
-     * the field of a wall/ shelf or another cart.
+     * the tile of a wall/ shelf or another cart.
      *
      * @return true if there is a pushable cart one space ahead of the actor. false otherwise.
      */
     public boolean pushable() {
-        FieldState state;
+        TileState state;
         switch (actor.getDirection()) {
             case EAST:
                 // actor is at the edge, or the cart is at the edge
@@ -235,36 +231,32 @@ public class Territory {
                     return false;
                 }
         }
-        // cart on the field ahead
-        Field adjacent = getFieldsFurther(1);
+        // cart on the tile ahead
+        Tile adjacent = getTilesFurther(1);
         if (adjacent.containsCart()) {
-            state = getFieldsFurther(2).getState();
-            return state == FieldState.EMPTY || state == FieldState.PRESENT;
+            state = getTilesFurther(2).getState();
+            return state == TileState.EMPTY || state == TileState.PRESENT;
         }
         return false;
     }
 
-    /**
-     * Checks whether a present is laying at the current position of the actor.
-     */
+    /** Checks whether a present is laying at the current position of the actor. */
     public boolean presentHere() {
-        return market[actorY][actorX].getState() == FieldState.PRESENT;
+        return market[actorY][actorX].getState() == TileState.PRESENT;
     }
 
-    /**
-     * Checks whether the actor's basket is empty.
-     */
+    /** Checks whether the actor's basket is empty. */
     public boolean basketEmpty() {
         return actor.getPresents() == 0;
     }
 
     /**
-     * Get the field 'amount'-steps further into the direction the actor is currently facing in. No security regarding
+     * Get the tile 'amount'-steps further into the direction the actor is currently facing in. No security regarding
      * array indices.
      *
-     * @param amount the amount of fields further
+     * @param amount the amount of tiles further
      */
-    private Field getFieldsFurther(int amount) {
+    private Tile getTilesFurther(int amount) {
         switch (actor.getDirection()) {
             case EAST:
                 return market[actorY][actorX + amount];
@@ -297,13 +289,13 @@ public class Territory {
             width = 1;
         }
 
-        Field[][] tmpMarket = new Field[height][width];
+        Tile[][] tmpMarket = new Tile[height][width];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (y < this.height && x < this.width) {
-                    tmpMarket[y][x] = new Field(market[y][x].getState());
+                    tmpMarket[y][x] = new Tile(market[y][x].getState());
                 } else {
-                    tmpMarket[y][x] = new Field();
+                    tmpMarket[y][x] = new Tile();
                 }
             }
         }
@@ -316,69 +308,63 @@ public class Territory {
         }
     }
 
-    /**
-     * Set the position of the actor. Shelves and carts on the field will be removed, but presents stay.
-     */
+    /** Set the position of the actor. Shelves and carts on the tile will be removed, but presents stay. */
     public void placeActor(int x, int y) {
-        Field field = market[y][x];
-        if (field.getState() == FieldState.SHELF || field.getState() == FieldState.CART) {
-            field.setState(FieldState.EMPTY);
-        } else if (field.getState() == FieldState.PRESENT_AND_CART) {
-            field.setState(FieldState.PRESENT);
+        Tile tile = market[y][x];
+        if (tile.getState() == TileState.SHELF || tile.getState() == TileState.CART) {
+            tile.setState(TileState.EMPTY);
+        } else if (tile.getState() == TileState.PRESENT_AND_CART) {
+            tile.setState(TileState.PRESENT);
         }
 
         actorY = y;
         actorX = x;
     }
 
-    /**
-     * Set a field specified by its x and y coordinate to be a shelf.
-     */
+    /** Set a tile specified by its x and y coordinate to be a shelf. */
     public void placeShelf(int x, int y) {
         if (x != actorX || y != actorY) {
-            market[y][x].setState(FieldState.SHELF);
+            market[y][x].setState(TileState.SHELF);
         }
     }
 
     /**
-     * Set a field specified by its x and y coordinate to be a cart. If a present is already present, the present will
-     * be added onto the field without removing the present.
+     * Set a tile specified by its x and y coordinate to be a cart. If a present is already present, the present will
+     * be added onto the tile without removing the present.
      */
     public void placeCart(int x, int y) {
         if (x != actorX || y != actorY) {
-            Field field = market[y][x];
-            if (field.getState() == FieldState.PRESENT) {
-                field.setState(FieldState.PRESENT_AND_CART);
+            Tile tile = market[y][x];
+            if (tile.getState() == TileState.PRESENT) {
+                tile.setState(TileState.PRESENT_AND_CART);
             } else {
-                field.setState(FieldState.CART);
+                tile.setState(TileState.CART);
             }
         }
     }
 
     /**
-     * Set a field specified by its x and y coordinate to be a present. If a cart is already present, the present will
-     * be added onto the field without removing the cart.
+     * Set a tile specified by its x and y coordinate to be a present. If a cart is already present, the present will
+     * be added onto the tile without removing the cart.
      */
     public void placePresent(int x, int y) {
-        Field field = market[y][x];
-        if (field.getState() == FieldState.CART) {
-            field.setState(FieldState.PRESENT_AND_CART);
+        Tile tile = market[y][x];
+        if (tile.getState() == TileState.CART) {
+            tile.setState(TileState.PRESENT_AND_CART);
         } else {
-            field.setState(FieldState.PRESENT);
+            tile.setState(TileState.PRESENT);
         }
     }
 
-    /**
-     * Clear the content of a field specified by its x and y coordinate. The actor will not be removed.
-     */
-    public void clearField(int x, int y) {
-        market[y][x].setState(FieldState.EMPTY);
+    /** Clear the content of a tile specified by its x and y coordinate. The actor will not be removed. */
+    public void clearTile(int x, int y) {
+        market[y][x].setState(TileState.EMPTY);
     }
 
     public void print() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                FieldState state = market[y][x].getState();
+                TileState state = market[y][x].getState();
                 String output;
 
                 switch (state) {
