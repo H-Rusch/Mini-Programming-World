@@ -225,7 +225,7 @@
 
         <RadioButton fx:id="placeCustomerButton" mnemonicParsing="false" toggleGroup="$placeItem">
             <toggleGroup>
-                <ToggleGroup fx:id="placeItemToolbar"/>
+                <ToggleGroup/>
             </toggleGroup>
             <graphic>
                 <ImageView>
@@ -389,17 +389,16 @@
     </ToolBar>
 
     <SplitPane dividerPositions="0.4" prefHeight="600" prefWidth="1000.0" VBox.vgrow="ALWAYS">
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+        <AnchorPane minHeight="0.0" minWidth="0.0">
             <TextArea fx:id="codeTextArea" layoutX="-12.0" layoutY="-3.0" prefHeight="317.0"
                       prefWidth="252.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                       AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
         </AnchorPane>
 
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="158.0" prefWidth="285.0">
-            <Pane fx:id="simulator" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
-        </AnchorPane>
+        <ScrollPane minHeight="0.0" minWidth="0.0" >
+            <Pane fx:id="simulatorPanel"/>
+        </ScrollPane>
     </SplitPane>
 
-    <Label id="notificationLabel" fx:id="notificationLabel" text="Hallo : )" VBox.vgrow="SOMETIMES"/>
+    <Label id="notificationLabel" fx:id="notificationLabel" text="Welcome : )" VBox.vgrow="SOMETIMES"/>
 </VBox>

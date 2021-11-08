@@ -1,7 +1,7 @@
 package model;
 
-import model.exceptions.NoPresentOnTileException;
 import model.exceptions.NoPresentInBasketException;
+import model.exceptions.NoPresentOnTileException;
 import model.exceptions.PresentAlreadyOnTileException;
 import model.exceptions.TileBlockedException;
 
@@ -39,6 +39,22 @@ public class Territory {
     /** Get a specific tile based on its x and y coordinate. */
     public Tile getTile(Position post) {
         return market[post.getY()][post.getX()];
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public Position getActorPosition() {
+        return actorPosition;
+    }
+
+    public Direction getActorDirection() {
+        return actor.getDirection();
     }
 
     /**
@@ -165,13 +181,7 @@ public class Territory {
             return false;
         }
 
-        if (getTile(pos1).containsCart()) {
-            if (getTile(pos2).containsNothing() || getTile(pos2).containsOnlyPresent()) {
-                return true;
-            }
-        }
-
-        return false;
+        return getTile(pos1).containsCart() && (getTile(pos2).containsNothing() || getTile(pos2).containsOnlyPresent());
     }
 
     /** Checks whether a present is laying at the current position of the actor. */
