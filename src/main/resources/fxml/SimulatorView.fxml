@@ -224,6 +224,9 @@
         </Button>
 
         <RadioButton fx:id="placeCustomerButton" mnemonicParsing="false" toggleGroup="$placeItem">
+            <toggleGroup>
+                <ToggleGroup fx:id="placeItemToolbar"/>
+            </toggleGroup>
             <graphic>
                 <ImageView>
                     <Image url="@../img/24x24/DownCustomer24.png"/>

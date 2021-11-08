@@ -22,12 +22,29 @@ public class Tile {
         this.state = state;
     }
 
-    /** Checks whether this tile contains a present. */
+
+    public boolean containsNothing() {
+        return state == TileState.EMPTY;
+    }
+
+    public boolean containsOnlyPresent() {
+        return state == TileState.PRESENT;
+    }
+
+    public boolean containsOnlyCart() {
+        return state == TileState.CART;
+    }
+
+    public boolean containsShelf() {
+        return state == TileState.SHELF;
+    }
+
+    /** Checks whether this tile contains a present. The tile can also contain a present and a cart. */
     public boolean containsPresent() {
         return state == TileState.PRESENT || state == TileState.PRESENT_AND_CART;
     }
 
-    /** Checks whether this tile contains a cart. */
+    /** Checks whether this tile contains a cart. The tile can also contain a present. */
     public boolean containsCart() {
         return state == TileState.CART || state == TileState.PRESENT_AND_CART;
     }

@@ -1,4 +1,4 @@
-package exceptions;
+package model.exceptions;
 
 /**
  * Exception to be thrown, when the actor tries to pick up a present on a tile where no present is available.

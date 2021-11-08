@@ -1,4 +1,4 @@
-package exceptions;
+package model.exceptions;
 
 /**
  * Exception to be thrown, when a tile which can not be entered is attempted to be entered.

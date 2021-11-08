@@ -1,8 +1,15 @@
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.MapChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 
 public class SimulatorPresenter {
+
+    // menu items
+    @FXML
+    private ToggleGroup placeItem;
 
     // toolbar items
     @FXML
@@ -47,9 +54,9 @@ public class SimulatorPresenter {
     public Slider speedSlider;
 
     @FXML
-    public Pane simulator;
-    @FXML
     public TextArea codeTextArea;
+    @FXML
+    public Pane simulator;
 
     @FXML
     public Label notificationLabel;
@@ -62,7 +69,6 @@ public class SimulatorPresenter {
         styleRadioToToggleButton(placeCartButton);
         styleRadioToToggleButton(placePresentButton);
         styleRadioToToggleButton(clearTileButton);
-
 
     }
 
