@@ -1,10 +1,12 @@
+package controller;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import model.Territory;
 
 
-public class SimulatorPresenter {
+public class SimulatorController {
 
     private Territory territory;
 
@@ -57,7 +59,7 @@ public class SimulatorPresenter {
     @FXML
     public TextArea codeTextArea;
     @FXML
-    public Pane simulatorPanel;
+    public TerritoryPanel territoryPanel;
 
     @FXML
     public Label notificationLabel;
@@ -71,8 +73,8 @@ public class SimulatorPresenter {
         styleRadioToToggleButton(placePresentButton);
         styleRadioToToggleButton(clearTileButton);
 
-        this.territory = new Territory(22, 16);
-        /* put some initial elements into the market */
+        this.territory = new Territory(12, 16);
+        // put some initial elements into the market
         territory.placeActor(8, 7);
 
         territory.placeShelf(5, 5);
@@ -87,10 +89,8 @@ public class SimulatorPresenter {
         territory.placeCart(1, 4);
         territory.placeCart(7, 9);
 
-        simulatorPanel.getChildren().add(new TerritoryPanel(territory));
-
-        territory.resizeTerritory(6, 16);
-        // ((TerritoryPanel) simulatorPanel.getChildren().get(0)).draw(); // experimentell, um zu sehen, dass beim resize sich sich das territorium vernünftig anpasst
+        territoryPanel.setTerritory(territory);
+        territoryPanel.init();
     }
 
     /** Change the styling from a radio button to look like a toggle button. */

@@ -4,9 +4,10 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
+<?import controller.TerritoryPanel?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
       prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="SimulatorPresenter">
+      fx:controller="controller.SimulatorController">
     <MenuBar>
         <Menu text="_Editor">
             <MenuItem id="newMenuItem" text="_Neu">
@@ -395,8 +396,8 @@
                       AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
         </AnchorPane>
 
-        <ScrollPane minHeight="0.0" minWidth="0.0" >
-            <Pane fx:id="simulatorPanel"/>
+        <ScrollPane minHeight="0.0" minWidth="0.0">
+            <TerritoryPanel fx:id="territoryPanel"/>
         </ScrollPane>
     </SplitPane>
 
