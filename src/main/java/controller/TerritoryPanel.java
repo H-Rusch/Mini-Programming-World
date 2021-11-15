@@ -3,13 +3,15 @@ package controller;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import model.Direction;
 import model.Position;
 import model.Territory;
 import model.Tile;
+import util.Observer;
 
-public class TerritoryPanel extends Canvas {
+public class TerritoryPanel extends Region implements Observer {
 
     private static final double TILE_DIMENSION = 30.0;
     private static final double OFFSET = 3.0;
@@ -17,6 +19,9 @@ public class TerritoryPanel extends Canvas {
     private double width;
 
     private Territory territory;
+
+    private final Canvas backgroundCanvas = new Canvas();
+    private final Canvas foregroundCanvas = new Canvas();
 
     private Image shelfImg;
     private Image presentImg;
@@ -46,16 +51,22 @@ public class TerritoryPanel extends Canvas {
     }
 
     public void init() {
+        territory.addObserver(this);
+        this.getChildren().addAll(backgroundCanvas, foregroundCanvas);
+
         loadImages();
 
         draw();
     }
 
-    private void calculateSize() {
+    private void computeSize() {
         this.height = TILE_DIMENSION * territory.getHeight();
-        super.setHeight(height);
         this.width = TILE_DIMENSION * territory.getWidth();
-        super.setWidth(width);
+
+        foregroundCanvas.setHeight(height);
+        foregroundCanvas.setWidth(width);
+        backgroundCanvas.setHeight(height);
+        backgroundCanvas.setWidth(width);
     }
 
     /** Cache the images. */
@@ -81,14 +92,15 @@ public class TerritoryPanel extends Canvas {
     public void draw() {
         if (height == 0.0 || width == 0.0 || height != territory.getHeight() * TILE_DIMENSION
                 || width != territory.getWidth() * TILE_DIMENSION) {
-            calculateSize();
+            computeSize();
             drawBackground();
         }
         drawImages();
     }
 
+    /** Background is drawn with a solid color and a grid to seperate the tiles. */
     private void drawBackground() {
-        GraphicsContext background = this.getGraphicsContext2D();
+        GraphicsContext background = backgroundCanvas.getGraphicsContext2D();
 
         // list of javafx colors: https://docs.oracle.com/javase/8/javafx/api/javafx/scene/paint/Color.html
         background.setLineWidth(1);
@@ -107,12 +119,10 @@ public class TerritoryPanel extends Canvas {
         }
     }
 
+    /** For each tile an image is drawn which represents the tiles content. */
     private void drawImages() {
-        GraphicsContext fg = this.getGraphicsContext2D();
-
-        // tiles and their content framed by black borders
-        fg.setLineWidth(1);
-        fg.setStroke(Color.BLACK);
+        GraphicsContext foreground = foregroundCanvas.getGraphicsContext2D();
+        foreground.clearRect(0, 0, width, height);
 
         Position actorPosition = territory.getActorPosition();
         for (int y = 0; y < territory.getHeight(); y++) {
@@ -121,9 +131,9 @@ public class TerritoryPanel extends Canvas {
                 double tilePosY = y * TILE_DIMENSION;
 
                 if (y == actorPosition.getY() && x == actorPosition.getX()) {
-                    drawActor(fg, territory.getActorDirection(), territory.getTile(x, y), tilePosX, tilePosY);
+                    drawActor(foreground, territory.getActorDirection(), territory.getTile(x, y), tilePosX, tilePosY);
                 } else {
-                    drawTile(fg, territory.getTile(x, y), tilePosX, tilePosY);
+                    drawTile(foreground, territory.getTile(x, y), tilePosX, tilePosY);
                 }
             }
         }
@@ -169,5 +179,10 @@ public class TerritoryPanel extends Canvas {
                 image = tile.containsPresent() ? downPresentImg : downCustomerImg;
         }
         gc.drawImage(image, x, y);
+    }
+
+    @Override
+    public void update() {
+        draw();
     }
 }

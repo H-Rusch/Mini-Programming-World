@@ -1,18 +1,40 @@
 package controller;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
 import model.Territory;
+
+import java.io.IOException;
+import java.util.Optional;
 
 
 public class SimulatorController {
+
 
     private Territory territory;
 
     // menu items
     @FXML
+    public MenuItem saveMenuItem;
+    @FXML
     private ToggleGroup placeItem;
+    @FXML
+    public MenuItem resizeMarketMenuItem;
+    @FXML
+    public MenuItem forwardMenuItem;
+    @FXML
+    public MenuItem turnLeftMenuItem;
+    @FXML
+    public MenuItem turnRightMenuItem;
+    @FXML
+    public MenuItem pickUpMenuItem;
+    @FXML
+    public MenuItem putDownMenuItem;
+    @FXML
+    public MenuItem presentsMenuItem;
 
     // toolbar items
     @FXML
@@ -66,14 +88,15 @@ public class SimulatorController {
 
 
     public void initialize() {
-        // restyle radio buttons so they fit into the ui
-        styleRadioToToggleButton(placeCustomerButton);
-        styleRadioToToggleButton(placeShelfButton);
-        styleRadioToToggleButton(placeCartButton);
-        styleRadioToToggleButton(placePresentButton);
-        styleRadioToToggleButton(clearTileButton);
-
         this.territory = new Territory(12, 16);
+
+        // restyle radio buttons so they fit into the ui
+        restyleRadioButtons();
+
+        bindCustomerActions();
+        bindMarketActions();
+
+
         // put some initial elements into the market
         territory.placeActor(8, 7);
 
@@ -91,6 +114,62 @@ public class SimulatorController {
 
         territoryPanel.setTerritory(territory);
         territoryPanel.init();
+    }
+
+    private void restyleRadioButtons() {
+        styleRadioToToggleButton(placeCustomerButton);
+        styleRadioToToggleButton(placeShelfButton);
+        styleRadioToToggleButton(placeCartButton);
+        styleRadioToToggleButton(placePresentButton);
+        styleRadioToToggleButton(clearTileButton);
+    }
+
+    /** Add EventHandlers for the interaction between buttons and the customer. */
+    private void bindCustomerActions() {
+        forwardButton.setOnAction(a -> territory.forward());
+        turnLeftButton.setOnAction(a -> territory.turnLeft());
+        turnRightButton.setOnAction(a -> territory.turnRight());
+        pickUpButton.setOnAction(a -> territory.pickUp());
+        putDownButton.setOnAction(a -> territory.putDown());
+
+        forwardMenuItem.setOnAction(a -> territory.forward());
+        turnLeftMenuItem.setOnAction(a -> territory.turnLeft());
+        turnRightMenuItem.setOnAction(a -> territory.turnRight());
+        pickUpMenuItem.setOnAction(a -> territory.pickUp());
+        putDownMenuItem.setOnAction(a -> territory.putDown());
+    }
+
+    /** Add EventHandlers to change the territory with the buttons. */
+    private void bindMarketActions() {
+        // create a dialog window which takes the territory's dimensions as input and resizes the market based on those values
+        EventHandler<ActionEvent> resizerHandler = event -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ResizeDialogView.fxml"));
+                DialogPane dialogPane = loader.load();
+
+                ResizeDialogController controller = loader.getController();
+                controller.setColumnInputText(String.valueOf(territory.getHeight()));
+                controller.setRowInputText(String.valueOf(territory.getWidth()));
+
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setDialogPane(dialogPane);
+                dialog.setTitle("Territorium-Größe");
+
+                Optional<ButtonType> result = dialog.showAndWait();
+
+                result.ifPresent(buttonType -> {
+                    if (result.get() == ButtonType.OK) {
+                        territory.resizeTerritory(Integer.parseInt(controller.getInputTexts().getKey()),
+                                Integer.parseInt(controller.getInputTexts().getValue()));
+                    }
+                });
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
+        resizeMarketButton.addEventHandler(ActionEvent.ACTION, resizerHandler);
+        resizeMarketMenuItem.addEventHandler(ActionEvent.ACTION, resizerHandler);
     }
 
     /** Change the styling from a radio button to look like a toggle button. */

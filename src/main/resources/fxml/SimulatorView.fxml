@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import controller.TerritoryPanel?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
-<?import controller.TerritoryPanel?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
       prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controller.SimulatorController">
     <MenuBar>
         <Menu text="_Editor">
-            <MenuItem id="newMenuItem" text="_Neu">
+            <MenuItem fx:id="newMenuItem" text="_Neu">
                 <accelerator>
                     <KeyCodeCombination shortcut="DOWN" code="N"
                                         alt="UP" control="UP" meta="UP" shift="UP"/>
                 </accelerator>
             </MenuItem>
 
-            <MenuItem id="openMenuItem" text="_Öffnen">
+            <MenuItem fx:id="openMenuItem" text="_Öffnen">
                 <accelerator>
                     <KeyCodeCombination shortcut="DOWN" code="O"
                                         alt="UP" control="UP" meta="UP" shift="UP"/>
@@ -26,14 +26,14 @@
 
             <SeparatorMenuItem mnemonicParsing="false"/>
 
-            <MenuItem id="compileMenuItem" text="_Speichern">
+            <MenuItem fx:id="saveMenuItem" text="_Speichern">
                 <accelerator>
                     <KeyCodeCombination shortcut="DOWN" code="S"
                                         alt="UP" control="UP" meta="UP" shift="UP"/>
                 </accelerator>
             </MenuItem>
 
-            <MenuItem id="compileMenuItem" text="_Kompilieren">
+            <MenuItem fx:id="compileMenuItem" text="_Kompilieren">
                 <accelerator>
                     <KeyCodeCombination shortcut="DOWN" code="K"
                                         alt="UP" control="UP" meta="UP" shift="UP"/>
@@ -42,7 +42,7 @@
 
             <SeparatorMenuItem mnemonicParsing="false"/>
 
-            <MenuItem id="exitMenuItem" text="_Beenden">
+            <MenuItem fx:id="exitMenuItem" text="_Beenden">
                 <accelerator>
                     <KeyCodeCombination shortcut="DOWN" code="Q"
                                         alt="UP" control="UP" meta="UP" shift="UP"/>
@@ -67,60 +67,63 @@
             </Menu>
 
             <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem fx:id="resizeMarketMenuItem" text="_Dimension ändern"/>
 
-            <RadioMenuItem id="placeCustomerMenuItem" selected="true"
+            <SeparatorMenuItem mnemonicParsing="false"/>
+
+            <RadioMenuItem fx:id="placeCustomerMenuItem" selected="true"
                            text="_Kunden platzieren">
                 <toggleGroup>
                     <ToggleGroup fx:id="placeItem"/>
                 </toggleGroup>
             </RadioMenuItem>
-            <RadioMenuItem id="placeShelfMenuItem" text="_Regal platzieren"
+            <RadioMenuItem fx:id="placeShelfMenuItem" text="_Regal platzieren"
                            toggleGroup="$placeItem"/>
-            <RadioMenuItem id="placeCartMenuItem" text="_Einkaufswagen platzieren"
+            <RadioMenuItem fx:id="placeCartMenuItem" text="_Einkaufswagen platzieren"
                            toggleGroup="$placeItem"/>
-            <RadioMenuItem id="placePresentMenuItem" text="_Geschenk platzieren"
+            <RadioMenuItem fx:id="placePresentMenuItem" text="_Geschenk platzieren"
                            toggleGroup="$placeItem"/>
-            <RadioMenuItem id="deleteTileMenuItem" text="K_achel löschen"
+            <RadioMenuItem fx:id="deleteTileMenuItem" text="K_achel löschen"
                            toggleGroup="$placeItem"/>
         </Menu>
 
         <Menu text="_Kunde">
-            <MenuItem text="_vor">
+            <MenuItem fx:id="forwardMenuItem" text="_vor">
                 <accelerator>
                     <KeyCodeCombination shortcut="DOWN" shift="DOWN" code="V"
                                         alt="UP" control="UP" meta="UP"/>
                 </accelerator>
             </MenuItem>
 
-            <MenuItem text="drehe_Links">
+            <MenuItem fx:id="turnLeftMenuItem" text="drehe_Links">
                 <accelerator>
                     <KeyCodeCombination shortcut="DOWN" shift="DOWN" code="L"
                                         alt="UP" control="UP" meta="UP"/>
                 </accelerator>
             </MenuItem>
 
-            <MenuItem text="drehe_Rechts">
+            <MenuItem fx:id="turnRightMenuItem" text="drehe_Rechts">
                 <accelerator>
                     <KeyCodeCombination shortcut="DOWN" shift="DOWN" code="R"
                                         alt="UP" control="UP" meta="UP"/>
                 </accelerator>
             </MenuItem>
 
-            <MenuItem text="_nimmAuf">
+            <MenuItem fx:id="pickUpMenuItem" text="_nimmAuf">
                 <accelerator>
                     <KeyCodeCombination shortcut="DOWN" shift="DOWN" code="N"
                                         alt="UP" control="UP" meta="UP"/>
                 </accelerator>
             </MenuItem>
 
-            <MenuItem text="lege_Ab">
+            <MenuItem fx:id="putDownMenuItem" text="lege_Ab">
                 <accelerator>
                     <KeyCodeCombination shortcut="DOWN" shift="DOWN" code="D"
                                         alt="UP" control="UP" meta="UP"/>
                 </accelerator>
             </MenuItem>
 
-            <MenuItem text="_Geschenke im Korb"/>
+            <MenuItem fx:id="presentsMenuItem" text="_Geschenke im Korb"/>
         </Menu>
 
         <Menu text="_Simulation">
@@ -396,9 +399,13 @@
                       AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
         </AnchorPane>
 
-        <ScrollPane minHeight="0.0" minWidth="0.0">
-            <TerritoryPanel fx:id="territoryPanel"/>
-        </ScrollPane>
+        <HBox alignment="CENTER">
+            <VBox alignment="CENTER">
+                <ScrollPane minHeight="0.0" minWidth="0.0">
+                    <TerritoryPanel fx:id="territoryPanel"/>
+                </ScrollPane>
+            </VBox>
+        </HBox>
     </SplitPane>
 
     <Label id="notificationLabel" fx:id="notificationLabel" text="Welcome : )" VBox.vgrow="SOMETIMES"/>

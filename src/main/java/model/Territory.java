@@ -4,8 +4,9 @@ import model.exceptions.NoPresentInBasketException;
 import model.exceptions.NoPresentOnTileException;
 import model.exceptions.PresentAlreadyOnTileException;
 import model.exceptions.TileBlockedException;
+import util.Observable;
 
-public class Territory {
+public class Territory extends Observable {
 
     private Actor actor;
     private Position actorPosition;
@@ -91,16 +92,25 @@ public class Territory {
         }
         // move actor onto the adjacent tile
         actorPosition = pos;
+
+        setChanged();
+        notifyObservers();
     }
 
     /** Turn the actor 90° to the left. */
     public void turnLeft() {
         actor.setDirection(actor.getDirection().getDirectionLeft());
+
+        setChanged();
+        notifyObservers();
     }
 
     /** Turn the actor 90° to the right. */
     public void turnRight() {
         actor.setDirection(actor.getDirection().getDirectionRight());
+
+        setChanged();
+        notifyObservers();
     }
 
     /**
@@ -117,6 +127,9 @@ public class Territory {
             currentTile.setState(TileState.EMPTY);
             actor.setPresents(actor.getPresents() + 1);
         }
+
+        setChanged();
+        notifyObservers();
     }
 
     /**
@@ -138,6 +151,9 @@ public class Territory {
                 actor.setPresents(actor.getPresents() - 1);
             }
         }
+
+        setChanged();
+        notifyObservers();
     }
 
     /**
@@ -270,6 +286,9 @@ public class Territory {
         if (actorPosition.getX() >= width || actorPosition.getY() >= height) {
             placeActor(0, 0);
         }
+
+        setChanged();
+        notifyObservers();
     }
 
     /** Set the position of the actor. Shelves and carts on the tile will be removed, but presents stay. */
@@ -282,6 +301,9 @@ public class Territory {
         }
 
         actorPosition = new Position(x, y);
+
+        setChanged();
+        notifyObservers();
     }
 
     /** Set a tile specified by its x and y coordinate to be a shelf. */
@@ -289,6 +311,9 @@ public class Territory {
         if (x != actorPosition.getX() || y != actorPosition.getY()) {
             getTile(x, y).setState(TileState.SHELF);
         }
+
+        setChanged();
+        notifyObservers();
     }
 
     /**
@@ -304,6 +329,9 @@ public class Territory {
                 tile.setState(TileState.CART);
             }
         }
+
+        setChanged();
+        notifyObservers();
     }
 
     /**
@@ -317,11 +345,17 @@ public class Territory {
         } else {
             tile.setState(TileState.PRESENT);
         }
+
+        setChanged();
+        notifyObservers();
     }
 
     /** Clear the content of a tile specified by its x and y coordinate. The actor will not be removed. */
     public void clearTile(int x, int y) {
         getTile(x, y).setState(TileState.EMPTY);
+
+        setChanged();
+        notifyObservers();
     }
 
     public void print() {
