@@ -10,7 +10,6 @@ import model.Territory;
 import util.Observer;
 import util.Position;
 
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -92,27 +91,19 @@ public class SimulatorController implements Observer {
     @FXML
     public Label notificationLabel;
 
-
+    /**
+     * Initialize the controller by generating te model. Also set up the EventHandlers, so the user can
+     * manipulate the territory by clicking in the UI.
+     */
     public void initialize() {
         this.territory = new Territory(12, 16);
         this.selection = new PlaceOnTileSelection();
         selection.addObserver(this);
 
-        // restyle radio buttons so they fit into the ui
         restyleRadioButtons();
 
-        bindCustomerActions();
         bindMarketActions();
-
-        // event handlers to synchronize the selection of the toggle groups
-        placeItemToggleMenu.selectedToggleProperty().addListener((obs, old_toggle, new_toggle) -> {
-            selection.setSelected(placeItemToggleMenu.getToggles().indexOf(new_toggle));
-        });
-        placeItemToggleToolbar.selectedToggleProperty().addListener((obs, old_toggle, new_toggle) -> {
-            selection.setSelected(placeItemToggleToolbar.getToggles().indexOf(new_toggle));
-        });
-
-
+        bindCustomerActions();
 
         // put some initial elements into the market
         territory.forcePlaceActor(8, 7);
@@ -133,6 +124,7 @@ public class SimulatorController implements Observer {
         territoryPanel.init();
     }
 
+    /** Convert radio buttons into toggle buttons visually. */
     private void restyleRadioButtons() {
         styleRadioToToggleButton(placeCustomerButton);
         styleRadioToToggleButton(placeShelfButton);
@@ -161,6 +153,14 @@ public class SimulatorController implements Observer {
 
     /** Add EventHandlers to change the territory with the buttons. */
     private void bindMarketActions() {
+        // event handlers to synchronize the selection of the toggle groups
+        placeItemToggleMenu.selectedToggleProperty().addListener((obs, old_toggle, new_toggle) -> {
+            selection.setSelected(placeItemToggleMenu.getToggles().indexOf(new_toggle));
+        });
+        placeItemToggleToolbar.selectedToggleProperty().addListener((obs, old_toggle, new_toggle) -> {
+            selection.setSelected(placeItemToggleToolbar.getToggles().indexOf(new_toggle));
+        });
+
         // create a dialog window which takes the territory's dimensions as input and resizes the market based on those values
         EventHandler<ActionEvent> resizerHandler = event -> {
             try {
@@ -193,12 +193,12 @@ public class SimulatorController implements Observer {
 
         // event handlers to place objects
         territoryPanel.setOnMousePressed((me) -> {
-            Position pos = territoryPanel.getTileAtCoordinate(me.getX(), me.getY());
+            Position pos = territoryPanel.getTilePositionAtCoordinate(me.getX(), me.getY());
             placeItemAtPosition(pos);
             //territory.placeShelf(pos.getX(), pos.getY());
         });
         territoryPanel.setOnMouseDragged((me) -> {
-            Position pos = territoryPanel.getTileAtCoordinate(me.getX(), me.getY());
+            Position pos = territoryPanel.getTilePositionAtCoordinate(me.getX(), me.getY());
             if (pos != null) {
                 placeItemAtPosition(pos);
 
@@ -207,14 +207,18 @@ public class SimulatorController implements Observer {
         });
     }
 
-    /**
-     * Change the styling from a radio button to look like a toggle button.
-     */
+    /** Change the styling from a radio button to look like a toggle button. */
     private void styleRadioToToggleButton(RadioButton radioButton) {
         radioButton.getStyleClass().remove("radio-button");
         radioButton.getStyleClass().add("toggle-button");
     }
 
+    /**
+     * Place an "item" at a specific location. Placing the actor will try to place the actor at that position, but if
+     * the tile is blocked, the actor will not be moved.
+     *
+     * @param pos the position the "item" should bee placed at
+     */
     public void placeItemAtPosition(Position pos) {
         switch (selection.getSelected()) {
             case 0:
@@ -234,6 +238,7 @@ public class SimulatorController implements Observer {
         }
     }
 
+    /** Update the selected item in the toggle group, so they have the same option selected at all times. */
     @Override
     public void update() {
         int index = selection.getSelected();

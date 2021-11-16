@@ -6,10 +6,10 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import model.Direction;
-import util.Position;
 import model.Territory;
 import model.Tile;
 import util.Observer;
+import util.Position;
 
 public class TerritoryPanel extends Region implements Observer {
 
@@ -59,6 +59,7 @@ public class TerritoryPanel extends Region implements Observer {
         draw();
     }
 
+    /** Compute what size the canvases have to take up in oder to draw the full territory. */
     private void computeSize() {
         this.height = TILE_DIMENSION * territory.getHeight();
         this.width = TILE_DIMENSION * territory.getWidth();
@@ -186,7 +187,13 @@ public class TerritoryPanel extends Region implements Observer {
         draw();
     }
 
-    public Position getTileAtCoordinate(double x, double y) {
+    /**
+     * Get the position of a tile specified by the coordinate of a pixel in the region.
+     *
+     * @return if the pixel is in the region this returns the position of the tile which the pixel belongs to
+     * otherwise null is returned if the pixel is outside the region
+     */
+    public Position getTilePositionAtCoordinate(double x, double y) {
         if (x < 0 || x >= width || y < 0 || y >= height) {
             return null;
         }
