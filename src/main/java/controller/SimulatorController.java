@@ -5,22 +5,26 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import model.PlaceOnTileSelection;
 import model.Territory;
+import util.Observer;
+import util.Position;
 
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.Optional;
 
 
-public class SimulatorController {
-
+public class SimulatorController implements Observer {
 
     private Territory territory;
+    private PlaceOnTileSelection selection;
 
     // menu items
     @FXML
     public MenuItem saveMenuItem;
     @FXML
-    private ToggleGroup placeItem;
+    private ToggleGroup placeItemToggleMenu;
     @FXML
     public MenuItem resizeMarketMenuItem;
     @FXML
@@ -47,6 +51,8 @@ public class SimulatorController {
     public Button compileButton;
     @FXML
     public Button resizeMarketButton;
+    @FXML
+    public ToggleGroup placeItemToggleToolbar;
     @FXML
     public RadioButton placeCustomerButton;
     @FXML
@@ -89,6 +95,8 @@ public class SimulatorController {
 
     public void initialize() {
         this.territory = new Territory(12, 16);
+        this.selection = new PlaceOnTileSelection();
+        selection.addObserver(this);
 
         // restyle radio buttons so they fit into the ui
         restyleRadioButtons();
@@ -96,9 +104,18 @@ public class SimulatorController {
         bindCustomerActions();
         bindMarketActions();
 
+        // event handlers to synchronize the selection of the toggle groups
+        placeItemToggleMenu.selectedToggleProperty().addListener((obs, old_toggle, new_toggle) -> {
+            selection.setSelected(placeItemToggleMenu.getToggles().indexOf(new_toggle));
+        });
+        placeItemToggleToolbar.selectedToggleProperty().addListener((obs, old_toggle, new_toggle) -> {
+            selection.setSelected(placeItemToggleToolbar.getToggles().indexOf(new_toggle));
+        });
+
+
 
         // put some initial elements into the market
-        territory.placeActor(8, 7);
+        territory.forcePlaceActor(8, 7);
 
         territory.placeShelf(5, 5);
         territory.placeShelf(4, 4);
@@ -127,15 +144,18 @@ public class SimulatorController {
     /** Add EventHandlers for the interaction between buttons and the customer. */
     private void bindCustomerActions() {
         forwardButton.setOnAction(a -> territory.forward());
-        turnLeftButton.setOnAction(a -> territory.turnLeft());
-        turnRightButton.setOnAction(a -> territory.turnRight());
-        pickUpButton.setOnAction(a -> territory.pickUp());
-        putDownButton.setOnAction(a -> territory.putDown());
-
         forwardMenuItem.setOnAction(a -> territory.forward());
+
+        turnLeftButton.setOnAction(a -> territory.turnLeft());
         turnLeftMenuItem.setOnAction(a -> territory.turnLeft());
+
+        turnRightButton.setOnAction(a -> territory.turnRight());
         turnRightMenuItem.setOnAction(a -> territory.turnRight());
+
+        pickUpButton.setOnAction(a -> territory.pickUp());
         pickUpMenuItem.setOnAction(a -> territory.pickUp());
+
+        putDownButton.setOnAction(a -> territory.putDown());
         putDownMenuItem.setOnAction(a -> territory.putDown());
     }
 
@@ -170,11 +190,54 @@ public class SimulatorController {
         };
         resizeMarketButton.addEventHandler(ActionEvent.ACTION, resizerHandler);
         resizeMarketMenuItem.addEventHandler(ActionEvent.ACTION, resizerHandler);
+
+        // event handlers to place objects
+        territoryPanel.setOnMousePressed((me) -> {
+            Position pos = territoryPanel.getTileAtCoordinate(me.getX(), me.getY());
+            placeItemAtPosition(pos);
+            //territory.placeShelf(pos.getX(), pos.getY());
+        });
+        territoryPanel.setOnMouseDragged((me) -> {
+            Position pos = territoryPanel.getTileAtCoordinate(me.getX(), me.getY());
+            if (pos != null) {
+                placeItemAtPosition(pos);
+
+                //territory.placePresent(pos.getX(), pos.getY());
+            }
+        });
     }
 
-    /** Change the styling from a radio button to look like a toggle button. */
+    /**
+     * Change the styling from a radio button to look like a toggle button.
+     */
     private void styleRadioToToggleButton(RadioButton radioButton) {
         radioButton.getStyleClass().remove("radio-button");
         radioButton.getStyleClass().add("toggle-button");
+    }
+
+    public void placeItemAtPosition(Position pos) {
+        switch (selection.getSelected()) {
+            case 0:
+                territory.tryPlaceActor(pos.getX(), pos.getY());
+                break;
+            case 1:
+                territory.placeShelf(pos.getX(), pos.getY());
+                break;
+            case 2:
+                territory.placeCart(pos.getX(), pos.getY());
+                break;
+            case 3:
+                territory.placePresent(pos.getX(), pos.getY());
+                break;
+            case 4:
+                territory.clearTile(pos.getX(), pos.getY());
+        }
+    }
+
+    @Override
+    public void update() {
+        int index = selection.getSelected();
+        placeItemToggleMenu.selectToggle(placeItemToggleMenu.getToggles().get(index));
+        placeItemToggleToolbar.selectToggle(placeItemToggleToolbar.getToggles().get(index));
     }
 }

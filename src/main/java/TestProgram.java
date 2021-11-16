@@ -8,7 +8,7 @@ public class TestProgram {
     public static void main(String[] args) {
         Territory t = new Territory(9, 10);
 
-        t.placeActor(7, 5);
+        t.forcePlaceActor(7, 5);
 
         t.placeShelf(5, 5);
         t.placeShelf(3, 5);

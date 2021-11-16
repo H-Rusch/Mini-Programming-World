@@ -74,17 +74,17 @@
             <RadioMenuItem fx:id="placeCustomerMenuItem" selected="true"
                            text="_Kunden platzieren">
                 <toggleGroup>
-                    <ToggleGroup fx:id="placeItem"/>
+                    <ToggleGroup fx:id="placeItemToggleMenu"/>
                 </toggleGroup>
             </RadioMenuItem>
             <RadioMenuItem fx:id="placeShelfMenuItem" text="_Regal platzieren"
-                           toggleGroup="$placeItem"/>
+                           toggleGroup="$placeItemToggleMenu"/>
             <RadioMenuItem fx:id="placeCartMenuItem" text="_Einkaufswagen platzieren"
-                           toggleGroup="$placeItem"/>
+                           toggleGroup="$placeItemToggleMenu"/>
             <RadioMenuItem fx:id="placePresentMenuItem" text="_Geschenk platzieren"
-                           toggleGroup="$placeItem"/>
+                           toggleGroup="$placeItemToggleMenu"/>
             <RadioMenuItem fx:id="deleteTileMenuItem" text="K_achel löschen"
-                           toggleGroup="$placeItem"/>
+                           toggleGroup="$placeItemToggleMenu"/>
         </Menu>
 
         <Menu text="_Kunde">
@@ -227,9 +227,10 @@
             </tooltip>
         </Button>
 
-        <RadioButton fx:id="placeCustomerButton" mnemonicParsing="false" toggleGroup="$placeItem">
+        <RadioButton fx:id="placeCustomerButton" mnemonicParsing="false" toggleGroup="$placeItemToggleToolbar"
+            selected="true">
             <toggleGroup>
-                <ToggleGroup/>
+                <ToggleGroup fx:id="placeItemToggleToolbar"/>
             </toggleGroup>
             <graphic>
                 <ImageView>
@@ -241,7 +242,7 @@
             </tooltip>
         </RadioButton>
 
-        <RadioButton fx:id="placeShelfButton" mnemonicParsing="false" toggleGroup="$placeItem">
+        <RadioButton fx:id="placeShelfButton" mnemonicParsing="false" toggleGroup="$placeItemToggleToolbar">
             <graphic>
                 <ImageView>
                     <Image url="@../img/24x24/AltShelf24.png"/>
@@ -252,7 +253,7 @@
             </tooltip>
         </RadioButton>
 
-        <RadioButton fx:id="placeCartButton" mnemonicParsing="false" toggleGroup="$placeItem">
+        <RadioButton fx:id="placeCartButton" mnemonicParsing="false" toggleGroup="$placeItemToggleToolbar">
             <graphic>
                 <ImageView>
                     <Image url="@../img/24x24/ShoppingCart24.png"/>
@@ -263,7 +264,7 @@
             </tooltip>
         </RadioButton>
 
-        <RadioButton fx:id="placePresentButton" mnemonicParsing="false" toggleGroup="$placeItem">
+        <RadioButton fx:id="placePresentButton" mnemonicParsing="false" toggleGroup="$placeItemToggleToolbar">
             <graphic>
                 <ImageView>
                     <Image url="@../img/24x24/Present24.png"/>
@@ -274,8 +275,7 @@
             </tooltip>
         </RadioButton>
 
-        <RadioButton fx:id="clearTileButton" mnemonicParsing="false" toggleGroup="$placeItem" maxHeight="30.0"
-                     maxWidth="30.0">
+        <RadioButton fx:id="clearTileButton" mnemonicParsing="false" toggleGroup="$placeItemToggleToolbar">
             <graphic>
                 <ImageView>
                     <Image url="@../img/24x24/Delete24.png"/>

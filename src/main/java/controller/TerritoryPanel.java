@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import model.Direction;
-import model.Position;
+import util.Position;
 import model.Territory;
 import model.Tile;
 import util.Observer;
@@ -184,5 +184,12 @@ public class TerritoryPanel extends Region implements Observer {
     @Override
     public void update() {
         draw();
+    }
+
+    public Position getTileAtCoordinate(double x, double y) {
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            return null;
+        }
+        return new Position((int) (x / TILE_DIMENSION), (int) (y / TILE_DIMENSION));
     }
 }

@@ -5,6 +5,7 @@ import model.exceptions.NoPresentOnTileException;
 import model.exceptions.PresentAlreadyOnTileException;
 import model.exceptions.TileBlockedException;
 import util.Observable;
+import util.Position;
 
 public class Territory extends Observable {
 
@@ -284,7 +285,7 @@ public class Territory extends Observable {
         this.width = width;
 
         if (actorPosition.getX() >= width || actorPosition.getY() >= height) {
-            placeActor(0, 0);
+            forcePlaceActor(0, 0);
         }
 
         setChanged();
@@ -292,7 +293,7 @@ public class Territory extends Observable {
     }
 
     /** Set the position of the actor. Shelves and carts on the tile will be removed, but presents stay. */
-    public void placeActor(int x, int y) {
+    public void forcePlaceActor(int x, int y) {
         Tile tile = getTile(x, y);
         if (tile.containsShelf() || tile.containsOnlyCart()) {
             tile.setState(TileState.EMPTY);
@@ -305,6 +306,18 @@ public class Territory extends Observable {
         setChanged();
         notifyObservers();
     }
+
+    /** Try to set the actor at this position. If the tile is blocked, the actor's position will not be updated. */
+    public void tryPlaceActor(int x, int y) {
+        Tile tile = getTile(x, y);
+        if (!(tile.containsShelf() || tile.containsCart())) {
+            actorPosition = new Position(x, y);
+
+            setChanged();
+            notifyObservers();
+        }
+    }
+
 
     /** Set a tile specified by its x and y coordinate to be a shelf. */
     public void placeShelf(int x, int y) {
@@ -323,7 +336,7 @@ public class Territory extends Observable {
     public void placeCart(int x, int y) {
         if (x != actorPosition.getX() || y != actorPosition.getY()) {
             Tile tile = getTile(x, y);
-            if (tile.containsOnlyPresent()) {
+            if (tile.containsPresent()) {
                 tile.setState(TileState.PRESENT_AND_CART);
             } else {
                 tile.setState(TileState.CART);
@@ -340,7 +353,7 @@ public class Territory extends Observable {
      */
     public void placePresent(int x, int y) {
         Tile tile = getTile(x, y);
-        if (tile.containsOnlyCart()) {
+        if (tile.containsCart()) {
             tile.setState(TileState.PRESENT_AND_CART);
         } else {
             tile.setState(TileState.PRESENT);
