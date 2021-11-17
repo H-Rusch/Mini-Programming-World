@@ -51,6 +51,14 @@ public class Territory extends Observable {
         return width;
     }
 
+    public int getActorPresentCount() {
+        return actor.getPresents();
+    }
+
+    public void setActorPresentCount(int count) {
+        actor.setPresents(count);
+    }
+
     public Position getActorPosition() {
         return actorPosition;
     }

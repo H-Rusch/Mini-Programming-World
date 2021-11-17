@@ -6,6 +6,7 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.util.Pair;
+import util.Validation;
 
 /**
  * Dialog with two input fields. Checks
@@ -57,21 +58,15 @@ public class ResizeDialogController {
         columnInput.setText(text);
     }
 
-    public Pair<String, String> getInputTexts() {
-        return new Pair<>(columnInput.getText(), rowInput.getText());
+    public String getRowInputText() {
+        return rowInput.getText();
+    }
+
+    public String getColumnInputText() {
+        return columnInput.getText();
     }
 
     private boolean validValue(String str) {
-        return !str.equals("") && isNumeric(str)
-                && Integer.parseInt(str) > 0 && Integer.parseInt(str) <= 100;
-    }
-
-    private boolean isNumeric(String str) {
-        for (char c : str.toCharArray()) {
-            if (!Character.isDigit(c)) {
-                return false;
-            }
-        }
-        return true;
+        return Validation.isNumeric(str) && Integer.parseInt(str) > 0 && Integer.parseInt(str) <= 100;
     }
 }

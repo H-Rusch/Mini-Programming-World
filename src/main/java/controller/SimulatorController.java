@@ -149,17 +149,44 @@ public class SimulatorController implements Observer {
 
         putDownButton.setOnAction(a -> territory.putDown());
         putDownMenuItem.setOnAction(a -> territory.putDown());
+
+        // create a dialog window which asks the user to input how many presents should be in the basket
+        EventHandler<ActionEvent> presentSettingHandler = event -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PresentsDialogView.fxml"));
+                DialogPane dialogPane = loader.load();
+
+                PresentsDialogController controller = loader.getController();
+                controller.setPresentsInputText(String.valueOf(territory.getActorPresentCount()));
+
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setDialogPane(dialogPane);
+                dialog.setTitle("Geschenke im Korb");
+
+                Optional<ButtonType> result = dialog.showAndWait();
+
+                result.ifPresent(buttonType -> {
+                    if (result.get() == ButtonType.OK) {
+                        territory.setActorPresentCount(Integer.parseInt(controller.getPresentsInputText()));
+                    }
+                });
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
+
+        presentsButton.setOnAction(presentSettingHandler);
+        presentsMenuItem.setOnAction(presentSettingHandler);
     }
 
     /** Add EventHandlers to change the territory with the buttons. */
     private void bindMarketActions() {
         // event handlers to synchronize the selection of the toggle groups
-        placeItemToggleMenu.selectedToggleProperty().addListener((obs, old_toggle, new_toggle) -> {
-            selection.setSelected(placeItemToggleMenu.getToggles().indexOf(new_toggle));
-        });
-        placeItemToggleToolbar.selectedToggleProperty().addListener((obs, old_toggle, new_toggle) -> {
-            selection.setSelected(placeItemToggleToolbar.getToggles().indexOf(new_toggle));
-        });
+        placeItemToggleMenu.selectedToggleProperty().addListener((obs, old_toggle, new_toggle) ->
+                selection.setSelected(placeItemToggleMenu.getToggles().indexOf(new_toggle)));
+        placeItemToggleToolbar.selectedToggleProperty().addListener((obs, old_toggle, new_toggle) ->
+                selection.setSelected(placeItemToggleToolbar.getToggles().indexOf(new_toggle)));
 
         // create a dialog window which takes the territory's dimensions as input and resizes the market based on those values
         EventHandler<ActionEvent> resizerHandler = event -> {
@@ -168,8 +195,8 @@ public class SimulatorController implements Observer {
                 DialogPane dialogPane = loader.load();
 
                 ResizeDialogController controller = loader.getController();
-                controller.setColumnInputText(String.valueOf(territory.getHeight()));
-                controller.setRowInputText(String.valueOf(territory.getWidth()));
+                controller.setColumnInputText(String.valueOf(territory.getWidth()));
+                controller.setRowInputText(String.valueOf(territory.getHeight()));
 
                 Dialog<ButtonType> dialog = new Dialog<>();
                 dialog.setDialogPane(dialogPane);
@@ -179,8 +206,8 @@ public class SimulatorController implements Observer {
 
                 result.ifPresent(buttonType -> {
                     if (result.get() == ButtonType.OK) {
-                        territory.resizeTerritory(Integer.parseInt(controller.getInputTexts().getKey()),
-                                Integer.parseInt(controller.getInputTexts().getValue()));
+                        territory.resizeTerritory(Integer.parseInt(controller.getRowInputText()),
+                                Integer.parseInt(controller.getColumnInputText()));
                     }
                 });
 
@@ -195,14 +222,11 @@ public class SimulatorController implements Observer {
         territoryPanel.setOnMousePressed((me) -> {
             Position pos = territoryPanel.getTilePositionAtCoordinate(me.getX(), me.getY());
             placeItemAtPosition(pos);
-            //territory.placeShelf(pos.getX(), pos.getY());
         });
         territoryPanel.setOnMouseDragged((me) -> {
             Position pos = territoryPanel.getTilePositionAtCoordinate(me.getX(), me.getY());
             if (pos != null) {
                 placeItemAtPosition(pos);
-
-                //territory.placePresent(pos.getX(), pos.getY());
             }
         });
     }
