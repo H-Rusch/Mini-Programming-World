@@ -5,11 +5,10 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.util.Pair;
 import util.Validation;
 
 /**
- * Dialog with two input fields. Checks
+ * Dialog with two input fields. Only positive numbers are valid values for the input fields.
  */
 public class ResizeDialogController {
     @FXML

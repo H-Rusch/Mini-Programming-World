@@ -5,16 +5,15 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.util.Pair;
 import model.PlaceOnTileSelection;
 import model.Territory;
-import util.Observer;
 import util.Position;
 
 import java.io.IOException;
-import java.util.Optional;
 
 
-public class SimulatorController implements Observer {
+public class SimulatorController {
 
     private Territory territory;
     private PlaceOnTileSelection selection;
@@ -24,6 +23,16 @@ public class SimulatorController implements Observer {
     public MenuItem saveMenuItem;
     @FXML
     private ToggleGroup placeItemToggleMenu;
+    @FXML
+    private RadioMenuItem placeCustomerMenuItem;
+    @FXML
+    private RadioMenuItem placeShelfMenuItem;
+    @FXML
+    private RadioMenuItem placeCartMenuItem;
+    @FXML
+    private RadioMenuItem placePresentMenuItem;
+    @FXML
+    private RadioMenuItem clearTileMenuItem;
     @FXML
     public MenuItem resizeMarketMenuItem;
     @FXML
@@ -98,7 +107,6 @@ public class SimulatorController implements Observer {
     public void initialize() {
         this.territory = new Territory(12, 16);
         this.selection = new PlaceOnTileSelection();
-        selection.addObserver(this);
 
         restyleRadioButtons();
 
@@ -159,16 +167,19 @@ public class SimulatorController implements Observer {
                 PresentsDialogController controller = loader.getController();
                 controller.setPresentsInputText(String.valueOf(territory.getActorPresentCount()));
 
-                Dialog<ButtonType> dialog = new Dialog<>();
+                Dialog<String> dialog = new Dialog<>();
                 dialog.setDialogPane(dialogPane);
                 dialog.setTitle("Geschenke im Korb");
 
-                Optional<ButtonType> result = dialog.showAndWait();
-
-                result.ifPresent(buttonType -> {
-                    if (result.get() == ButtonType.OK) {
-                        territory.setActorPresentCount(Integer.parseInt(controller.getPresentsInputText()));
+                dialog.setResultConverter(dialogButton -> {
+                    if (dialogButton == ButtonType.OK) {
+                        return controller.getPresentsInputText();
                     }
+                    return null;
+                });
+
+                dialog.showAndWait().ifPresent(result -> {
+                    territory.setActorPresentCount(Integer.parseInt(result));
                 });
 
             } catch (IOException e) {
@@ -182,11 +193,26 @@ public class SimulatorController implements Observer {
 
     /** Add EventHandlers to change the territory with the buttons. */
     private void bindMarketActions() {
+        placeCustomerButton.selectedProperty().bindBidirectional(placeCustomerMenuItem.selectedProperty());
+        placeShelfButton.selectedProperty().bindBidirectional(placeShelfMenuItem.selectedProperty());
+        placeCartButton.selectedProperty().bindBidirectional(placeCartMenuItem.selectedProperty());
+        placePresentButton.selectedProperty().bindBidirectional(placePresentMenuItem.selectedProperty());
+        clearTileButton.selectedProperty().bindBidirectional(clearTileMenuItem.selectedProperty());
+
         // event handlers to synchronize the selection of the toggle groups
-        placeItemToggleMenu.selectedToggleProperty().addListener((obs, old_toggle, new_toggle) ->
-                selection.setSelected(placeItemToggleMenu.getToggles().indexOf(new_toggle)));
-        placeItemToggleToolbar.selectedToggleProperty().addListener((obs, old_toggle, new_toggle) ->
-                selection.setSelected(placeItemToggleToolbar.getToggles().indexOf(new_toggle)));
+        placeItemToggleToolbar.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+            if (newToggle == placeCustomerButton) {
+                selection.setSelected(PlaceOnTileSelection.ACTOR);
+            } else if (newToggle == placeShelfButton) {
+                selection.setSelected(PlaceOnTileSelection.SHELF);
+            } else if (newToggle == placeCartButton) {
+                selection.setSelected(PlaceOnTileSelection.CART);
+            } else if (newToggle == placePresentButton) {
+                selection.setSelected(PlaceOnTileSelection.PRESENT);
+            } else if (newToggle == clearTileButton) {
+                selection.setSelected(PlaceOnTileSelection.REMOVE);
+            }
+        });
 
         // create a dialog window which takes the territory's dimensions as input and resizes the market based on those values
         EventHandler<ActionEvent> resizerHandler = event -> {
@@ -198,17 +224,19 @@ public class SimulatorController implements Observer {
                 controller.setColumnInputText(String.valueOf(territory.getWidth()));
                 controller.setRowInputText(String.valueOf(territory.getHeight()));
 
-                Dialog<ButtonType> dialog = new Dialog<>();
+                Dialog<Pair<String, String>> dialog = new Dialog<>();
                 dialog.setDialogPane(dialogPane);
                 dialog.setTitle("Territorium-Größe");
 
-                Optional<ButtonType> result = dialog.showAndWait();
-
-                result.ifPresent(buttonType -> {
-                    if (result.get() == ButtonType.OK) {
-                        territory.resizeTerritory(Integer.parseInt(controller.getRowInputText()),
-                                Integer.parseInt(controller.getColumnInputText()));
+                dialog.setResultConverter(dialogButton -> {
+                    if (dialogButton == ButtonType.OK) {
+                        return new Pair<>(controller.getRowInputText(), controller.getColumnInputText());
                     }
+                    return null;
+                });
+
+                dialog.showAndWait().ifPresent(pair -> {
+                    territory.resizeTerritory(Integer.parseInt(pair.getKey()), Integer.parseInt(pair.getValue()));
                 });
 
             } catch (IOException e) {
@@ -245,28 +273,20 @@ public class SimulatorController implements Observer {
      */
     public void placeItemAtPosition(Position pos) {
         switch (selection.getSelected()) {
-            case 0:
+            case PlaceOnTileSelection.ACTOR:
                 territory.tryPlaceActor(pos.getX(), pos.getY());
                 break;
-            case 1:
+            case PlaceOnTileSelection.SHELF:
                 territory.placeShelf(pos.getX(), pos.getY());
                 break;
-            case 2:
+            case PlaceOnTileSelection.CART:
                 territory.placeCart(pos.getX(), pos.getY());
                 break;
-            case 3:
+            case PlaceOnTileSelection.PRESENT:
                 territory.placePresent(pos.getX(), pos.getY());
                 break;
-            case 4:
+            case PlaceOnTileSelection.REMOVE:
                 territory.clearTile(pos.getX(), pos.getY());
         }
-    }
-
-    /** Update the selected item in the toggle group, so they have the same option selected at all times. */
-    @Override
-    public void update() {
-        int index = selection.getSelected();
-        placeItemToggleMenu.selectToggle(placeItemToggleMenu.getToggles().get(index));
-        placeItemToggleToolbar.selectToggle(placeItemToggleToolbar.getToggles().get(index));
     }
 }

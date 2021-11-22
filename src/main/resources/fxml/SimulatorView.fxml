@@ -83,7 +83,7 @@
                            toggleGroup="$placeItemToggleMenu"/>
             <RadioMenuItem fx:id="placePresentMenuItem" text="_Geschenk platzieren"
                            toggleGroup="$placeItemToggleMenu"/>
-            <RadioMenuItem fx:id="deleteTileMenuItem" text="K_achel löschen"
+            <RadioMenuItem fx:id="clearTileMenuItem" text="K_achel löschen"
                            toggleGroup="$placeItemToggleMenu"/>
         </Menu>
 

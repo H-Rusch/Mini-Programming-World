@@ -61,13 +61,18 @@ public class TerritoryPanel extends Region implements Observer {
 
     /** Compute what size the canvases have to take up in oder to draw the full territory. */
     private void computeSize() {
-        this.height = TILE_DIMENSION * territory.getHeight();
-        this.width = TILE_DIMENSION * territory.getWidth();
+        double h = TILE_DIMENSION * territory.getHeight();
+        double w = TILE_DIMENSION * territory.getWidth();
 
-        foregroundCanvas.setHeight(height);
-        foregroundCanvas.setWidth(width);
-        backgroundCanvas.setHeight(height);
-        backgroundCanvas.setWidth(width);
+        if (h != height || w != width) {
+            this.height = TILE_DIMENSION * territory.getHeight();
+            this.width = TILE_DIMENSION * territory.getWidth();
+
+            foregroundCanvas.setHeight(height);
+            foregroundCanvas.setWidth(width);
+            backgroundCanvas.setHeight(height);
+            backgroundCanvas.setWidth(width);
+        }
     }
 
     /** Cache the images. */

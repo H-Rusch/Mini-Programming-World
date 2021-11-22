@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
+<?import javafx.scene.layout.HBox?>
 <DialogPane fx:id="dialogPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-              fx:controller="controller.PresentsDialogController">
+            fx:controller="controller.PresentsDialogController">
     <content>
         <HBox>
             <Label fx:id="presentsLabel" text="Geschenke: "/>
