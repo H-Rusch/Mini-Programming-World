@@ -1,4 +1,4 @@
-package model;
+package model.territory;
 
 /** Single tile of the territory. The tile can be in one of the TileStates and is initially empty. */
 public class Tile {

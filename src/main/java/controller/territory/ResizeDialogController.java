@@ -1,4 +1,4 @@
-package controller;
+package controller.territory;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;

@@ -1,4 +1,4 @@
-package model;
+package model.territory;
 
 public enum TileState {
     EMPTY,

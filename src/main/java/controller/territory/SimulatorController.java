@@ -1,26 +1,42 @@
-package controller;
+package controller.territory;
 
+import controller.program.CompileController;
+import controller.program.ProgramController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import javafx.util.Pair;
-import model.PlaceOnTileSelection;
-import model.Territory;
+import model.program.Program;
+import model.territory.PlaceOnTileSelection;
+import model.territory.Territory;
 import util.Position;
+import view.CodeEditor;
+import view.TerritoryPanel;
 
 import java.io.IOException;
 
 
 public class SimulatorController {
 
+    private Stage stage;
     private Territory territory;
+    private Program program;
     private PlaceOnTileSelection selection;
 
     // menu items
     @FXML
+    public MenuItem newMenuItem;
+    @FXML
+    public MenuItem openMenuItem;
+    @FXML
     public MenuItem saveMenuItem;
+    @FXML
+    public MenuItem compileMenuItem;
+    @FXML
+    public MenuItem exitMenuItem;
     @FXML
     private ToggleGroup placeItemToggleMenu;
     @FXML
@@ -93,43 +109,45 @@ public class SimulatorController {
     public Slider speedSlider;
 
     @FXML
-    public TextArea codeTextArea;
+    public CodeEditor codeTextArea;
     @FXML
     public TerritoryPanel territoryPanel;
 
     @FXML
     public Label notificationLabel;
 
+    public void initialize() {
+        this.selection = new PlaceOnTileSelection();
+    }
+
+    public void setTerritory(Territory territory) {
+        this.territory = territory;
+
+        setupUI();
+    }
+
+    public void setProgram(Program program) {
+        this.program = program;
+        codeTextArea.setProgram(program);
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+        stage.setOnCloseRequest(event -> ProgramController.removeProgram(program));
+    }
+
     /**
-     * Initialize the controller by generating te model. Also set up the EventHandlers, so the user can
+     * Set up the UI by restyling some elements. Also set up the EventHandlers, so the user can
      * manipulate the territory by clicking in the UI.
      */
-    public void initialize() {
-        this.territory = new Territory(12, 16);
-        this.selection = new PlaceOnTileSelection();
-
+    private void setupUI() {
         restyleRadioButtons();
 
+        bindProgramActions();
         bindMarketActions();
         bindCustomerActions();
 
-        // put some initial elements into the market
-        territory.forcePlaceActor(8, 7);
-
-        territory.placeShelf(5, 5);
-        territory.placeShelf(4, 4);
-        territory.placeShelf(4, 5);
-        territory.placeShelf(4, 3);
-
-        territory.placePresent(1, 4);
-        territory.placePresent(8, 9);
-        territory.placePresent(15, 3);
-
-        territory.placeCart(1, 4);
-        territory.placeCart(7, 9);
-
         territoryPanel.setTerritory(territory);
-        territoryPanel.init();
     }
 
     /** Convert radio buttons into toggle buttons visually. */
@@ -139,6 +157,26 @@ public class SimulatorController {
         styleRadioToToggleButton(placeCartButton);
         styleRadioToToggleButton(placePresentButton);
         styleRadioToToggleButton(clearTileButton);
+    }
+
+    /** Add EventHandlers for the interaction between buttons and the program. */
+    private void bindProgramActions() {
+        newButton.setOnAction(a -> ProgramController.newProgram());
+        newMenuItem.setOnAction(a -> ProgramController.newProgram());
+
+        openButton.setOnAction(a -> ProgramController.openProgram(stage));
+        openMenuItem.setOnAction(a -> ProgramController.openProgram(stage));
+
+        saveButton.setOnAction(a -> ProgramController.saveProgram(program, codeTextArea.getText()));
+        saveMenuItem.setOnAction(a -> ProgramController.saveProgram(program, codeTextArea.getText()));
+
+        compileButton.setOnAction(a -> CompileController.compileProgram(program, codeTextArea.getText()));
+        compileMenuItem.setOnAction(a -> CompileController.compileProgram(program, codeTextArea.getText()));
+
+        exitMenuItem.setOnAction(a -> {
+            ProgramController.removeProgram(program);
+            stage.close();
+        });
     }
 
     /** Add EventHandlers for the interaction between buttons and the customer. */

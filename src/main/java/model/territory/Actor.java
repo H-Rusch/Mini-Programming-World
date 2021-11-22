@@ -1,4 +1,4 @@
-package model;
+package model.territory;
 
 /** Actor in the territory. The actor faces in one of the directions and carries a number of presents. */
 public class Actor {
@@ -7,7 +7,11 @@ public class Actor {
     private Direction direction;
     private int presents;
 
-    Actor(Territory market) {
+    public Actor() {
+
+    }
+
+    public Actor(Territory market) {
         this.market = market;
         this.direction = Direction.EAST;
         this.presents = 0;

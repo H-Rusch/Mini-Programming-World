@@ -1,4 +1,4 @@
-package model.exceptions;
+package model.territory.exceptions;
 
 /**
  * Exception to be thrown, when the actor tries to put a present down at a position where there already is a present on

@@ -3,14 +3,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.HBox?>
 <DialogPane fx:id="dialogPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.territory.PresentsDialogController">
+            fx:controller="controller.program.NewFileNameDialogController">
     <content>
         <HBox>
-            <Label fx:id="presentsLabel" text="Geschenke: "/>
-            <TextField fx:id="presentsInput"/>
+            <Label fx:id="filenameLabel" text="Dateiname: "/>
+            <TextField fx:id="filenameInput"/>
         </HBox>
     </content>
 
     <ButtonType fx:id="submitButton" fx:constant="OK"/>
-    <ButtonType fx:id="cancelButton" fx:constant="CANCEL"/>
+    <ButtonType fx:constant="CANCEL"/>
 </DialogPane>

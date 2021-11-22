@@ -1,9 +1,9 @@
-package model;
+package model.territory;
 
-import model.exceptions.NoPresentInBasketException;
-import model.exceptions.NoPresentOnTileException;
-import model.exceptions.PresentAlreadyOnTileException;
-import model.exceptions.TileBlockedException;
+import model.territory.exceptions.NoPresentInBasketException;
+import model.territory.exceptions.NoPresentOnTileException;
+import model.territory.exceptions.PresentAlreadyOnTileException;
+import model.territory.exceptions.TileBlockedException;
 import util.Observable;
 import util.Position;
 

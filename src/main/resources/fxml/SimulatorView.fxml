@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import controller.TerritoryPanel?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
+<?import view.CodeEditor?>
+<?import view.TerritoryPanel?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
       prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="controller.SimulatorController">
+      fx:controller="controller.territory.SimulatorController">
     <MenuBar>
         <Menu text="_Editor">
             <MenuItem fx:id="newMenuItem" text="_Neu">
@@ -394,7 +395,7 @@
 
     <SplitPane dividerPositions="0.4" prefHeight="600" prefWidth="1000.0" VBox.vgrow="ALWAYS">
         <AnchorPane minHeight="0.0" minWidth="0.0">
-            <TextArea fx:id="codeTextArea" layoutX="-12.0" layoutY="-3.0" prefHeight="317.0"
+            <CodeEditor fx:id="codeTextArea" layoutX="-12.0" layoutY="-3.0" prefHeight="317.0"
                       prefWidth="252.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                       AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
         </AnchorPane>

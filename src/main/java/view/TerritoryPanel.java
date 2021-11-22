@@ -1,13 +1,13 @@
-package controller;
+package view;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import model.Direction;
-import model.Territory;
-import model.Tile;
+import model.territory.Direction;
+import model.territory.Territory;
+import model.territory.Tile;
 import util.Observer;
 import util.Position;
 
@@ -48,6 +48,8 @@ public class TerritoryPanel extends Region implements Observer {
 
     public void setTerritory(Territory territory) {
         this.territory = territory;
+
+        init();
     }
 
     public void init() {
