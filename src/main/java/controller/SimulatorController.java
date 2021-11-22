@@ -178,9 +178,9 @@ public class SimulatorController {
                     return null;
                 });
 
-                dialog.showAndWait().ifPresent(result -> {
-                    territory.setActorPresentCount(Integer.parseInt(result));
-                });
+                dialog.showAndWait().ifPresent(result ->
+                        territory.setActorPresentCount(Integer.parseInt(result))
+                );
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -235,9 +235,9 @@ public class SimulatorController {
                     return null;
                 });
 
-                dialog.showAndWait().ifPresent(pair -> {
-                    territory.resizeTerritory(Integer.parseInt(pair.getKey()), Integer.parseInt(pair.getValue()));
-                });
+                dialog.showAndWait().ifPresent(pair ->
+                        territory.resizeTerritory(Integer.parseInt(pair.getKey()), Integer.parseInt(pair.getValue()))
+                );
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -247,11 +247,11 @@ public class SimulatorController {
         resizeMarketMenuItem.addEventHandler(ActionEvent.ACTION, resizerHandler);
 
         // event handlers to place objects
-        territoryPanel.setOnMousePressed((me) -> {
+        territoryPanel.setOnMousePressed(me -> {
             Position pos = territoryPanel.getTilePositionAtCoordinate(me.getX(), me.getY());
             placeItemAtPosition(pos);
         });
-        territoryPanel.setOnMouseDragged((me) -> {
+        territoryPanel.setOnMouseDragged(me -> {
             Position pos = territoryPanel.getTilePositionAtCoordinate(me.getX(), me.getY());
             if (pos != null) {
                 placeItemAtPosition(pos);
@@ -285,7 +285,7 @@ public class SimulatorController {
             case PlaceOnTileSelection.PRESENT:
                 territory.placePresent(pos.getX(), pos.getY());
                 break;
-            case PlaceOnTileSelection.REMOVE:
+            default:
                 territory.clearTile(pos.getX(), pos.getY());
         }
     }
