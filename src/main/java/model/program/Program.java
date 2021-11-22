@@ -8,7 +8,6 @@ import java.io.File;
 public class Program {
 
     private final String name;
-    private Stage stage;
 
     public Program(String name) {
         this.name = name;
@@ -16,13 +15,6 @@ public class Program {
 
     public String getName() {
         return name;
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
-    public Stage getStage() {
-        return stage;
     }
 
     public String getFullFileName() {

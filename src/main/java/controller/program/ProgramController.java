@@ -3,6 +3,7 @@ package controller.program;
 import controller.territory.SimulatorController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
@@ -92,12 +93,9 @@ public class ProgramController {
             controller.setProgram(program);
             controller.setStage(stage);
 
-            // not sure about this, but with this I can make the fitting stage for a program get focus
-            program.setStage(stage);
-
             stage.show();
         } catch (IOException e) {
-            // TODO alert
+            new Alert(Alert.AlertType.ERROR, "Simulator konnte nicht gestartet werden", ButtonType.OK).showAndWait();
         }
     }
 
@@ -154,8 +152,7 @@ public class ProgramController {
             return builder.toString();
 
         } catch (IOException e) {
-            // TODO alert
-            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Konnte Programmdatei nicht laden.", ButtonType.OK).showAndWait();
         }
         return null;
     }
@@ -180,8 +177,7 @@ public class ProgramController {
 
             Files.write(file, lines);
         } catch (IOException e) {
-            // Todo alert
-            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Konnte Programm nicht speichern.", ButtonType.OK).showAndWait();
         }
     }
 
@@ -210,7 +206,8 @@ public class ProgramController {
             dialog.showAndWait().ifPresent(ProgramController::startSimulatorStage);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Neues Programm konnte nicht erstellt werden.", ButtonType.OK)
+                    .showAndWait();
         }
     }
 
@@ -222,21 +219,23 @@ public class ProgramController {
      */
     public static void openProgram(Stage stage) {
         FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Java Files (*.java)",
+                "*.java"));
         fileChooser.setInitialDirectory(new File(DIRECTORY));
         File selectedFile = fileChooser.showOpenDialog(stage);
 
         if (selectedFile != null) {
             // can only open files in the 'programs' folder
             if (!selectedFile.getParent().equals(Paths.get(DIRECTORY).toAbsolutePath().toString())) {
-                // TODO ALERT
+                new Alert(Alert.AlertType.ERROR, "Die angegebene Datei stammt nicht aus dem 'programs'-Verzeichnis",
+                        ButtonType.OK).showAndWait();
                 return;
             }
             // filename without the '.java'
             String filename = selectedFile.getName().substring(0, selectedFile.getName().indexOf("."));
             if (ProgramController.isOpen(filename)) {
-                // TODO alert
-                programList.stream().filter(p -> p.getName().equals(filename))
-                        .findFirst().ifPresent(p -> p.getStage().requestFocus());
+                new Alert(Alert.AlertType.INFORMATION, "Das Programm ist bereits in einem anderen Fenster geöffnet.",
+                        ButtonType.OK).showAndWait();
             } else {
                 ProgramController.startSimulatorStage(filename);
             }
