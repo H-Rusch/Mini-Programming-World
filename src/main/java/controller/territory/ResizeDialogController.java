@@ -34,19 +34,13 @@ public class ResizeDialogController {
      */
     public void initialize() {
         columnInput.textProperty().addListener(((observable, oldValue, newValue) -> {
-            if (validValue(newValue) && validValue(rowInput.getText())) {
-                dialogPane.lookupButton(submitButton).setDisable(false);
-            } else {
-                dialogPane.lookupButton(submitButton).setDisable(true);
-            }
+            boolean disable = !(validValue(newValue) && validValue(rowInput.getText()));
+            dialogPane.lookupButton(submitButton).setDisable(disable);
         }));
 
         rowInput.textProperty().addListener(((observable, oldValue, newValue) -> {
-            if (validValue(newValue) && validValue(columnInput.getText())) {
-                dialogPane.lookupButton(submitButton).setDisable(false);
-            } else {
-                dialogPane.lookupButton(submitButton).setDisable(true);
-            }
+            boolean disable = !(validValue(newValue) && validValue(columnInput.getText()));
+            dialogPane.lookupButton(submitButton).setDisable(disable);
         }));
 
         // request focus in the input field after the components have been initialized
