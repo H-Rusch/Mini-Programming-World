@@ -19,9 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class ProgramController {
 
@@ -33,20 +31,23 @@ public class ProgramController {
     private static final String DIRECTORY = "programs";
     private static final String DEFAULT = "void main() {\n  \n}";
 
-    private static final List<Program> programList = new ArrayList<>();
+    private static final Map<String, Stage> stageMap = new HashMap<>();
+    private static final Map<String, Program> programMap = new HashMap<>();
 
-    public static void addProgram(Program program) {
-        programList.add(program);
+    public static void addProgram(Program program, Stage stage) {
+        programMap.put(program.getName(), program);
+        stageMap.put(program.getName(), stage);
     }
 
     public static void removeProgram(Program program) {
-        programList.remove(program);
+        programMap.remove(program.getName());
+        stageMap.remove(program.getName());
     }
 
 
     /** Checks if the program which belongs to a file is already open. */
     public static boolean isOpen(String filename) {
-        for (Program program : programList) {
+        for (Program program : programMap.values()) {
             if (program.getName().equals(filename)) {
                 return true;
             }
@@ -65,8 +66,16 @@ public class ProgramController {
      */
     public static void startSimulatorStage(String programName) {
         try {
+            Stage stage = new Stage();
+            FXMLLoader fxmlLoader = new FXMLLoader(ProgramController.class.getResource("/fxml/SimulatorView.fxml"));
+            VBox view = fxmlLoader.load();
+            Scene scene = new Scene(view, 1080, 640);
+            stage.setTitle("Market MPW: " + programName);
+            stage.setScene(scene);
+            stage.getIcons().add(new Image(String.valueOf(ProgramController.class.getResource("/img/24x24/Present24.png"))));
+
             Program program = new Program(programName);
-            ProgramController.addProgram(program);
+            ProgramController.addProgram(program, stage);
             Territory territory = new Territory(12, 15);
             // put some initial elements into the market
             territory.forcePlaceActor(8, 7);
@@ -79,14 +88,6 @@ public class ProgramController {
             territory.placePresent(14, 3);
             territory.placeCart(1, 4);
             territory.placeCart(7, 9);
-
-            Stage stage = new Stage();
-            FXMLLoader fxmlLoader = new FXMLLoader(ProgramController.class.getResource("/fxml/SimulatorView.fxml"));
-            VBox view = fxmlLoader.load();
-            Scene scene = new Scene(view, 1080, 640);
-            stage.setTitle("Market MPW: " + programName);
-            stage.setScene(scene);
-            stage.getIcons().add(new Image(String.valueOf(ProgramController.class.getResource("/img/24x24/Present24.png"))));
 
             SimulatorController controller = fxmlLoader.getController();
             controller.setTerritory(territory);
@@ -234,8 +235,8 @@ public class ProgramController {
             // filename without the '.java'
             String filename = selectedFile.getName().substring(0, selectedFile.getName().indexOf("."));
             if (ProgramController.isOpen(filename)) {
-                new Alert(Alert.AlertType.INFORMATION, "Das Programm ist bereits in einem anderen Fenster geöffnet.",
-                        ButtonType.OK).showAndWait();
+                // move the simulator which has the program opened into the foreground
+                stageMap.get(filename).requestFocus();
             } else {
                 ProgramController.startSimulatorStage(filename);
             }
