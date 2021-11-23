@@ -1,5 +1,6 @@
 package controller.territory;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
@@ -27,6 +28,9 @@ public class PresentsDialogController {
     public void initialize() {
         presentsInput.textProperty().addListener(((observable, oldValue, newValue) ->
                 dialogPane.lookupButton(submitButton).setDisable(!Validation.isNumeric(newValue))));
+
+        // request focus in the input field after the components have been initialized
+        Platform.runLater(() -> presentsInput.requestFocus());
     }
 
     public String getPresentsInputText() {

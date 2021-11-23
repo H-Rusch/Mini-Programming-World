@@ -1,5 +1,6 @@
 package controller.program;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
@@ -28,6 +29,9 @@ public class NewFileNameDialogController {
         filenameInput.textProperty().addListener(((observable, oldValue, newValue) ->
                 dialogPane.lookupButton(submitButton).setDisable(!validValue(newValue))
         ));
+
+        // request focus in the input field after the components have been initialized
+        Platform.runLater(() -> filenameInput.requestFocus());
     }
 
     public String getFilenameInputText() {

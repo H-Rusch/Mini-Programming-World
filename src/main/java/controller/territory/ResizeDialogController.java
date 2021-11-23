@@ -1,5 +1,6 @@
 package controller.territory;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
@@ -47,6 +48,9 @@ public class ResizeDialogController {
                 dialogPane.lookupButton(submitButton).setDisable(true);
             }
         }));
+
+        // request focus in the input field after the components have been initialized
+        Platform.runLater(() -> rowInput.requestFocus());
     }
 
     public void setRowInputText(String text) {
