@@ -133,7 +133,10 @@ public class SimulatorController {
 
     public void setStage(Stage stage) {
         this.stage = stage;
-        stage.setOnCloseRequest(event -> ProgramController.removeProgram(program));
+        stage.setOnCloseRequest(event -> {
+            ProgramController.saveProgram(program, codeTextArea.getText());
+            ProgramController.removeProgram(program);
+        });
     }
 
     /**
@@ -174,6 +177,7 @@ public class SimulatorController {
         compileMenuItem.setOnAction(a -> CompileController.compileProgram(program, codeTextArea.getText()));
 
         exitMenuItem.setOnAction(a -> {
+            ProgramController.saveProgram(program, codeTextArea.getText());
             ProgramController.removeProgram(program);
             stage.close();
         });
