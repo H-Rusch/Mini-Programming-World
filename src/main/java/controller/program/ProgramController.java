@@ -66,12 +66,9 @@ public class ProgramController {
      */
     public static void startSimulatorStage(String programName) {
         try {
-            Stage stage = new Stage();
             FXMLLoader fxmlLoader = new FXMLLoader(ProgramController.class.getResource("/fxml/SimulatorView.fxml"));
-            VBox view = fxmlLoader.load();
-            Scene scene = new Scene(view, 1080, 640);
+            Stage stage = fxmlLoader.load();
             stage.setTitle("Market MPW: " + programName);
-            stage.setScene(scene);
             stage.getIcons().add(new Image(String.valueOf(ProgramController.class.getResource("/img/24x24/Present24.png"))));
 
             Program program = new Program(programName);
