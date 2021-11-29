@@ -1,9 +1,6 @@
 package model.program;
 
 import controller.program.ProgramController;
-import javafx.stage.Stage;
-
-import java.io.File;
 
 public class Program {
 
@@ -11,6 +8,8 @@ public class Program {
 
     public Program(String name) {
         this.name = name;
+        // make sure the file is created
+        getCode();
     }
 
     public String getName() {

@@ -1,5 +1,6 @@
 package controller.territory;
 
+import controller.actor.ActorController;
 import controller.program.CompileController;
 import controller.program.ProgramController;
 import javafx.event.ActionEvent;
@@ -7,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import model.program.Program;
@@ -25,6 +27,7 @@ public class SimulatorController {
     private Territory territory;
     private Program program;
     private PlaceOnTileSelection selection;
+    private ActorController actorController;
 
     // menu items
     @FXML
@@ -139,6 +142,10 @@ public class SimulatorController {
         });
     }
 
+    public void setActorController(ActorController actorController) {
+        this.actorController = actorController;
+    }
+
     /**
      * Set up the UI by restyling some elements. Also set up the EventHandlers, so the user can
      * manipulate the territory by clicking in the UI.
@@ -173,8 +180,8 @@ public class SimulatorController {
         saveButton.setOnAction(a -> ProgramController.saveProgram(program, codeTextArea.getText()));
         saveMenuItem.setOnAction(a -> ProgramController.saveProgram(program, codeTextArea.getText()));
 
-        compileButton.setOnAction(a -> CompileController.compileProgram(program, codeTextArea.getText()));
-        compileMenuItem.setOnAction(a -> CompileController.compileProgram(program, codeTextArea.getText()));
+        compileButton.setOnAction(a -> CompileController.compileProgram(program, codeTextArea.getText(), territory));
+        compileMenuItem.setOnAction(a -> CompileController.compileProgram(program, codeTextArea.getText(), territory));
 
         exitMenuItem.setOnAction(a -> {
             ProgramController.saveProgram(program, codeTextArea.getText());
@@ -185,52 +192,23 @@ public class SimulatorController {
 
     /** Add EventHandlers for the interaction between buttons and the customer. */
     private void bindCustomerActions() {
-        forwardButton.setOnAction(a -> territory.forward());
-        forwardMenuItem.setOnAction(a -> territory.forward());
+        forwardButton.setOnAction(a -> actorController.forward());
+        forwardMenuItem.setOnAction(a -> actorController.forward());
 
-        turnLeftButton.setOnAction(a -> territory.turnLeft());
-        turnLeftMenuItem.setOnAction(a -> territory.turnLeft());
+        turnLeftButton.setOnAction(a -> actorController.turnLeft());
+        turnLeftMenuItem.setOnAction(a -> actorController.turnLeft());
 
-        turnRightButton.setOnAction(a -> territory.turnRight());
-        turnRightMenuItem.setOnAction(a -> territory.turnRight());
+        turnRightButton.setOnAction(a -> actorController.turnRight());
+        turnRightMenuItem.setOnAction(a -> actorController.turnRight());
 
-        pickUpButton.setOnAction(a -> territory.pickUp());
-        pickUpMenuItem.setOnAction(a -> territory.pickUp());
+        pickUpButton.setOnAction(a -> actorController.pickUp());
+        pickUpMenuItem.setOnAction(a -> actorController.pickUp());
 
-        putDownButton.setOnAction(a -> territory.putDown());
-        putDownMenuItem.setOnAction(a -> territory.putDown());
+        putDownButton.setOnAction(a -> actorController.putDown());
+        putDownMenuItem.setOnAction(a -> actorController.putDown());
 
-        // create a dialog window which asks the user to input how many presents should be in the basket
-        EventHandler<ActionEvent> presentSettingHandler = event -> {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PresentsDialogView.fxml"));
-                DialogPane dialogPane = loader.load();
-
-                PresentsDialogController controller = loader.getController();
-                controller.setPresentsInputText(String.valueOf(territory.getActorPresentCount()));
-
-                Dialog<String> dialog = new Dialog<>();
-                dialog.setDialogPane(dialogPane);
-                dialog.setTitle("Geschenke im Korb");
-
-                dialog.setResultConverter(dialogButton -> {
-                    if (dialogButton == ButtonType.OK) {
-                        return controller.getPresentsInputText();
-                    }
-                    return null;
-                });
-
-                dialog.showAndWait().ifPresent(result ->
-                        territory.setActorPresentCount(Integer.parseInt(result))
-                );
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        };
-
-        presentsButton.setOnAction(presentSettingHandler);
-        presentsMenuItem.setOnAction(presentSettingHandler);
+        presentsButton.setOnAction(a -> actorController.setPresentCount());
+        presentsMenuItem.setOnAction(a -> actorController.setPresentCount());
     }
 
     /** Add EventHandlers to change the territory with the buttons. */
@@ -290,13 +268,25 @@ public class SimulatorController {
 
         // event handlers to place objects
         territoryPanel.setOnMousePressed(me -> {
-            Position pos = territoryPanel.getTilePositionAtCoordinate(me.getX(), me.getY());
-            placeItemAtPosition(pos);
+            if (me.getButton() == MouseButton.PRIMARY) {
+                Position pos = territoryPanel.getTilePositionAtCoordinate(me.getX(), me.getY());
+                placeItemAtPosition(pos);
+            }
         });
         territoryPanel.setOnMouseDragged(me -> {
+            if (me.getButton() == MouseButton.PRIMARY) {
+                Position pos = territoryPanel.getTilePositionAtCoordinate(me.getX(), me.getY());
+                if (pos != null) {
+                    placeItemAtPosition(pos);
+                }
+            }
+        });
+
+        // context menu from where the user can call every method
+        territoryPanel.setOnContextMenuRequested(me -> {
             Position pos = territoryPanel.getTilePositionAtCoordinate(me.getX(), me.getY());
-            if (pos != null) {
-                placeItemAtPosition(pos);
+            if (pos.getX() == territory.getActorPosition().getX() && pos.getY() == territory.getActorPosition().getY()) {
+                actorController.createActionContextMenu(stage, me.getScreenX() + 10, me.getScreenY() - 10);
             }
         });
     }

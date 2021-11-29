@@ -67,6 +67,21 @@ public class Territory extends Observable {
         return actor.getDirection();
     }
 
+    public Actor getActor() {
+        return actor;
+    }
+
+    /** Change the actor object with a new actor object. */
+    public void changeActor(Actor actor) {
+        Direction actorDirection = this.actor.getDirection();
+        int presentCount = this.getActorPresentCount();
+
+        this.actor = actor;
+        this.actor.setTerritory(this);
+        this.actor.setDirection(actorDirection);
+        this.actor.setPresents(presentCount);
+    }
+
     /**
      * Try to move the actor one tile forwards. Fails, if the actor tries to run into a shelf/ wall or into a blocked
      * cart. Carts which are not blocked are pushed along onto the next tile.

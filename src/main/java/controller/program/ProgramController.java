@@ -1,14 +1,13 @@
 package controller.program;
 
+import controller.actor.ActorController;
 import controller.territory.SimulatorController;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.program.Program;
@@ -24,15 +23,19 @@ import java.util.*;
 public class ProgramController {
 
     private static final String PREFIX1 = "public class ";
-    private static final String PREFIX2 = " extends model.territory.Actor {";
+    private static final String PREFIX2 = " extends model.territory.Actor { public";
     private static final String SUFFIX = "}";
 
     private static final String FILE_EXTENSION = ".java";
-    private static final String DIRECTORY = "programs";
+    public static final String DIRECTORY = "programs";
     private static final String DEFAULT = "void main() {\n  \n}";
 
     private static final Map<String, Stage> stageMap = new HashMap<>();
     private static final Map<String, Program> programMap = new HashMap<>();
+
+    private ProgramController() {
+
+    }
 
     public static void addProgram(Program program, Stage stage) {
         programMap.put(program.getName(), program);
@@ -86,10 +89,13 @@ public class ProgramController {
             territory.placeCart(1, 4);
             territory.placeCart(7, 9);
 
+            CompileController.compileProgramSilently(program, territory);
+
             SimulatorController controller = fxmlLoader.getController();
             controller.setTerritory(territory);
             controller.setProgram(program);
             controller.setStage(stage);
+            controller.setActorController(new ActorController(territory, territory.getActor()));
 
             stage.show();
         } catch (IOException e) {
@@ -133,7 +139,7 @@ public class ProgramController {
             List<String> lines = Files.readAllLines(file);
 
             // write initial content into the file if it is empty
-            if (lines.size() == 0) {
+            if (lines.isEmpty()) {
                 lines.add(PREFIX1 + programName + PREFIX2);
                 lines.add(DEFAULT);
                 lines.add(SUFFIX);

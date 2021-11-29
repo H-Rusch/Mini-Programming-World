@@ -3,75 +3,84 @@ package model.territory;
 /** Actor in the territory. The actor faces in one of the directions and carries a number of presents. */
 public class Actor {
 
-    private Territory market;
+    private Territory territory;
     private Direction direction;
     private int presents;
 
-    public Actor() {
-
+    protected Actor() {
+        this.direction = Direction.EAST;
+        this.presents = 0;
     }
 
-    public Actor(Territory market) {
-        this.market = market;
+    protected Actor(Territory territory) {
+        this.territory = territory;
         this.direction = Direction.EAST;
         this.presents = 0;
     }
 
     /* Getters and Setters */
-    public int getPresents() {
+    protected int getPresents() {
         return presents;
     }
 
-    public void setPresents(int presents) {
+    protected void setPresents(int presents) {
         this.presents = presents;
     }
 
-    public Direction getDirection() {
+    protected Direction getDirection() {
         return direction;
     }
 
-    public void setDirection(Direction direction) {
+    protected void setDirection(Direction direction) {
         this.direction = direction;
     }
 
+    protected void setTerritory(Territory territory) {
+        this.territory = territory;
+    }
+
     /* Methods */
+    public void main() {
+        // to be overwritten by custom classes
+    }
+
     public void forward() {
-        market.forward();
+        territory.forward();
     }
 
     public void turnLeft() {
-        market.turnLeft();
+        territory.turnLeft();
     }
 
     public void turnRight() {
-        market.turnRight();
+        territory.turnRight();
     }
 
     public void pickUp() {
-        market.pickUp();
+        territory.pickUp();
     }
 
     public void putDown() {
-        market.putDown();
+        territory.putDown();
     }
 
     public boolean wallAhead() {
-        return market.wallAhead();
+        return territory.wallAhead();
     }
 
     public boolean cartAhead() {
-        return market.cartAhead();
+        return territory.cartAhead();
     }
 
     public boolean pushable() {
-        return market.pushable();
+        return territory.pushable();
     }
 
     public boolean presentHere() {
-        return this.market.presentHere();
+        return this.territory.presentHere();
     }
 
     public boolean basketEmpty() {
-        return market.basketEmpty();
+        return territory.basketEmpty();
     }
 }

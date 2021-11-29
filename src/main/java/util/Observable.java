@@ -6,10 +6,20 @@ import java.util.List;
 public class Observable {
 
     private boolean changed = false;
+    private boolean paused = false;
     private List<Observer> observers;
 
     public Observable() {
         observers = new ArrayList<>();
+    }
+
+    public void pauseNotify() {
+        paused = true;
+    }
+
+    public void resumeNotify() {
+        paused = false;
+        notifyObservers();
     }
 
     public void addObserver(Observer o) {
@@ -23,7 +33,8 @@ public class Observable {
     }
 
     public void notifyObservers() {
-        if (hasChanged()) {
+        if (!paused && hasChanged()) {
+            System.out.println("call notify");
             clearChanged();
             for (Observer observer : observers) {
                 observer.update();
