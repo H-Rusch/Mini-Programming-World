@@ -34,7 +34,6 @@ public class Observable {
 
     public void notifyObservers() {
         if (!paused && hasChanged()) {
-            System.out.println("call notify");
             clearChanged();
             for (Observer observer : observers) {
                 observer.update();

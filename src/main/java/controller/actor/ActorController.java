@@ -130,7 +130,7 @@ public class ActorController {
                     if (e.getCause() instanceof ActorException) {
                         errorSound.play(0.2);
                     } else {
-                        new Alert(Alert.AlertType.ERROR, "Es ist ein Fehler aufgetreten", ButtonType.OK).showAndWait();
+                        new Alert(Alert.AlertType.ERROR, e.getCause().getMessage(), ButtonType.OK).showAndWait();
                         e.printStackTrace();
                     }
                 } finally {
