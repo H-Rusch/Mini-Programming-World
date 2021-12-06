@@ -282,7 +282,7 @@ public class SimulatorController {
             }
         });
 
-        // context menu from where the user can call every method
+        // context menu from where the user can call every method the actor implements
         territoryPanel.setOnContextMenuRequested(me -> {
             Position pos = territoryPanel.getTilePositionAtCoordinate(me.getX(), me.getY());
             if (pos.getX() == territory.getActorPosition().getX() && pos.getY() == territory.getActorPosition().getY()) {

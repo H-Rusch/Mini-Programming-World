@@ -11,6 +11,8 @@ public class Territory extends Observable {
 
     private Actor actor;
     private Position actorPosition;
+    private Direction actorDirection;
+    private int actorPresents;
 
     private int height;
     private int width;
@@ -31,6 +33,8 @@ public class Territory extends Observable {
         // spawn the actor
         this.actor = new Actor(this);
         this.actorPosition = new Position(0, 0);
+        this.actorDirection = Direction.EAST;
+        this.actorPresents = 0;
     }
 
     /** Get a specific tile based on its x and y coordinate. */
@@ -51,20 +55,24 @@ public class Territory extends Observable {
         return width;
     }
 
-    public int getActorPresentCount() {
-        return actor.getPresents();
-    }
-
-    public void setActorPresentCount(int count) {
-        actor.setPresents(count);
-    }
-
     public Position getActorPosition() {
         return actorPosition;
     }
 
     public Direction getActorDirection() {
-        return actor.getDirection();
+        return actorDirection;
+    }
+
+    public void setActorDirection(Direction actorDirection) {
+        this.actorDirection = actorDirection;
+    }
+
+    public int getActorPresents() {
+        return actorPresents;
+    }
+
+    public void setActorPresents(int actorPresents) {
+        this.actorPresents = actorPresents;
     }
 
     public Actor getActor() {
@@ -73,13 +81,8 @@ public class Territory extends Observable {
 
     /** Change the actor object with a new actor object. */
     public void changeActor(Actor actor) {
-        Direction actorDirection = this.actor.getDirection();
-        int presentCount = this.getActorPresentCount();
-
         this.actor = actor;
         this.actor.setTerritory(this);
-        this.actor.setDirection(actorDirection);
-        this.actor.setPresents(presentCount);
     }
 
     /**
@@ -123,7 +126,7 @@ public class Territory extends Observable {
 
     /** Turn the actor 90° to the left. */
     public void turnLeft() {
-        actor.setDirection(actor.getDirection().getDirectionLeft());
+        actorDirection = actorDirection.getDirectionLeft();
 
         setChanged();
         notifyObservers();
@@ -131,7 +134,7 @@ public class Territory extends Observable {
 
     /** Turn the actor 90° to the right. */
     public void turnRight() {
-        actor.setDirection(actor.getDirection().getDirectionRight());
+        actorDirection = actorDirection.getDirectionRight();
 
         setChanged();
         notifyObservers();
@@ -149,7 +152,7 @@ public class Territory extends Observable {
             throw new NoPresentOnTileException("There is no present at the current location.");
         } else {
             currentTile.setState(TileState.EMPTY);
-            actor.setPresents(actor.getPresents() + 1);
+            actorPresents++;
         }
 
         setChanged();
@@ -172,7 +175,7 @@ public class Territory extends Observable {
                 throw new PresentAlreadyOnTileException("There is already a present laying at the current position.");
             } else {
                 currentTile.setState(TileState.PRESENT);
-                actor.setPresents(actor.getPresents() - 1);
+                actorPresents--;
             }
         }
 
@@ -231,7 +234,7 @@ public class Territory extends Observable {
 
     /** Checks whether the actor's basket is empty. */
     public boolean basketEmpty() {
-        return actor.getPresents() == 0;
+        return actorPresents == 0;
     }
 
     /**
@@ -242,7 +245,7 @@ public class Territory extends Observable {
     private Position getTilesFurther(int amount) {
         int x = actorPosition.getX();
         int y = actorPosition.getY();
-        switch (actor.getDirection()) {
+        switch (actorDirection) {
             case EAST:
                 x += amount;
                 break;

@@ -4,37 +4,15 @@ package model.territory;
 public class Actor {
 
     private Territory territory;
-    private Direction direction;
-    private int presents;
 
     protected Actor() {
-        this.direction = Direction.EAST;
-        this.presents = 0;
     }
 
     protected Actor(Territory territory) {
         this.territory = territory;
-        this.direction = Direction.EAST;
-        this.presents = 0;
     }
 
-    /* Getters and Setters */
-    protected int getPresents() {
-        return presents;
-    }
-
-    protected void setPresents(int presents) {
-        this.presents = presents;
-    }
-
-    protected Direction getDirection() {
-        return direction;
-    }
-
-    protected void setDirection(Direction direction) {
-        this.direction = direction;
-    }
-
+    /* Setter */
     protected void setTerritory(Territory territory) {
         this.territory = territory;
     }

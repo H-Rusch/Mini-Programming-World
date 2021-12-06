@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
-import model.program.Invisible;
+import util.annotations.Invisible;
 import model.territory.Actor;
 import model.territory.Territory;
 import model.territory.exceptions.ActorException;
@@ -57,7 +57,7 @@ public class ActorController {
             DialogPane dialogPane = loader.load();
 
             PresentsDialogController controller = loader.getController();
-            controller.setPresentsInputText(String.valueOf(territory.getActorPresentCount()));
+            controller.setPresentsInputText(String.valueOf(territory.getActorPresents()));
 
             Dialog<String> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
@@ -71,7 +71,7 @@ public class ActorController {
             });
 
             dialog.showAndWait().ifPresent(result ->
-                    territory.setActorPresentCount(Integer.parseInt(result))
+                    territory.setActorPresents(Integer.parseInt(result))
             );
         } catch (IOException e) {
             e.printStackTrace();
@@ -123,7 +123,6 @@ public class ActorController {
             item.setOnAction(a -> {
                 try {
                     territory.pauseNotify();
-                    // currently, the methods have to be created as public, else I would need to set everything accessible
                     method.setAccessible(true);
                     method.invoke(actor);
                 } catch (IllegalAccessException | InvocationTargetException e) {

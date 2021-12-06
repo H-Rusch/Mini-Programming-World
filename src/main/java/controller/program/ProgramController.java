@@ -22,7 +22,7 @@ import java.util.*;
 
 public class ProgramController {
 
-    private static final String PREFIX1 = "public class ";
+    private static final String PREFIX1 = "import util.annotations.Invisible;\npublic class ";
     private static final String PREFIX2 = " extends model.territory.Actor { public";
     private static final String SUFFIX = "}";
 
@@ -148,6 +148,7 @@ public class ProgramController {
             }
 
             // remove class definition and closing bracket
+            lines.remove(0);
             lines.remove(0);
             lines.remove(lines.size() - 1);
             StringBuilder builder = new StringBuilder();
