@@ -1,7 +1,8 @@
 package controller.program;
 
+import controller.MainController;
 import controller.actor.ActorController;
-import controller.territory.SimulatorController;
+import controller.simulation.SimulationController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -23,7 +24,7 @@ import java.util.*;
 public class ProgramController {
 
     private static final String PREFIX1 = "import util.annotations.Invisible;\npublic class ";
-    private static final String PREFIX2 = " extends model.territory.Actor { public";
+    private static final String PREFIX2 = " extends model.territory.Actor { @Invisible public";
     private static final String SUFFIX = "}";
 
     private static final String FILE_EXTENSION = ".java";
@@ -78,7 +79,7 @@ public class ProgramController {
             ProgramController.addProgram(program, stage);
             Territory territory = new Territory(12, 15);
             // put some initial elements into the market
-            territory.forcePlaceActor(8, 7);
+            territory.forcePlaceActor(0, 7);
             territory.placeShelf(5, 5);
             territory.placeShelf(4, 4);
             territory.placeShelf(4, 5);
@@ -91,11 +92,14 @@ public class ProgramController {
 
             CompileController.compileProgramSilently(program, territory);
 
-            SimulatorController controller = fxmlLoader.getController();
+            MainController controller = fxmlLoader.getController();
             controller.setTerritory(territory);
             controller.setProgram(program);
             controller.setStage(stage);
             controller.setActorController(new ActorController(territory, territory.getActor()));
+
+            SimulationController simulationController = new SimulationController(territory);
+            controller.setSimulationController(simulationController);
 
             stage.show();
         } catch (IOException e) {

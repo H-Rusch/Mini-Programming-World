@@ -1,5 +1,6 @@
 package view;
 
+import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -106,7 +107,7 @@ public class TerritoryPanel extends Region implements Observer {
         drawImages();
     }
 
-    /** Background is drawn with a solid color and a grid to seperate the tiles. */
+    /** Background is drawn with a solid color and a grid to separate the tiles. */
     private void drawBackground() {
         GraphicsContext background = backgroundCanvas.getGraphicsContext2D();
 
@@ -191,7 +192,11 @@ public class TerritoryPanel extends Region implements Observer {
 
     @Override
     public void update() {
-        draw();
+        if (Platform.isFxApplicationThread()) {
+            draw();
+        } else {
+            Platform.runLater(this::draw);
+        }
     }
 
     /**

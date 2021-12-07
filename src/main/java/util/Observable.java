@@ -1,16 +1,15 @@
 package util;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Observable {
 
     private boolean changed = false;
     private boolean paused = false;
-    private List<Observer> observers;
+    private CopyOnWriteArrayList<Observer> observers;
 
     public Observable() {
-        observers = new ArrayList<>();
+        observers = new CopyOnWriteArrayList<>();
     }
 
     public void pauseNotify() {

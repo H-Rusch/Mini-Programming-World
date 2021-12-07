@@ -1,8 +1,10 @@
-package controller.territory;
+package controller;
 
 import controller.actor.ActorController;
 import controller.program.CompileController;
 import controller.program.ProgramController;
+import controller.simulation.SimulationController;
+import controller.territory.ResizeDialogController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,13 +23,15 @@ import view.TerritoryPanel;
 import java.io.IOException;
 
 
-public class SimulatorController {
+public class MainController {
 
     private Stage stage;
     private Territory territory;
     private Program program;
     private PlaceOnTileSelection selection;
     private ActorController actorController;
+
+    private SimulationController simulationController;
 
     // menu items
     @FXML
@@ -66,6 +70,12 @@ public class SimulatorController {
     public MenuItem putDownMenuItem;
     @FXML
     public MenuItem presentsMenuItem;
+    @FXML
+    public MenuItem playMenuItem;
+    @FXML
+    public MenuItem pauseMenuItem;
+    @FXML
+    public MenuItem stopMenuItem;
 
     // toolbar items
     @FXML
@@ -144,6 +154,11 @@ public class SimulatorController {
 
     public void setActorController(ActorController actorController) {
         this.actorController = actorController;
+    }
+
+    public void setSimulationController(SimulationController simulationController) {
+        this.simulationController = simulationController;
+        this.simulationController.setMainController(this);
     }
 
     /**

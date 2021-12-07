@@ -10,7 +10,7 @@
 <?import view.CodeEditor?>
 <?import view.TerritoryPanel?>
 <Stage title="My Application" xmlns:fx="http://javafx.com/fxml/1" height="640.0" width="1080.0"
-       fx:controller="controller.territory.SimulatorController">
+       fx:controller="controller.MainController">
     <scene>
         <Scene>
             <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
@@ -134,7 +134,7 @@
                     </Menu>
 
                     <Menu text="_Simulation">
-                        <MenuItem text="_Starten">
+                        <MenuItem fx:id="playMenuItem" text="_Starten">
                             <accelerator>
                                 <KeyCodeCombination shortcut="DOWN" code="F5"
                                                     alt="UP" control="UP" meta="UP" shift="UP"/>
@@ -146,7 +146,7 @@
                             </graphic>
                         </MenuItem>
 
-                        <MenuItem text="_Pausieren">
+                        <MenuItem fx:id="pauseMenuItem" text="_Pausieren">
                             <accelerator>
                                 <KeyCodeCombination shortcut="DOWN" code="F6"
                                                     alt="UP" control="UP" meta="UP" shift="UP"/>
@@ -158,7 +158,7 @@
                             </graphic>
                         </MenuItem>
 
-                        <MenuItem text="_Beenden">
+                        <MenuItem fx:id="stopMenuItem" text="_Beenden">
                             <accelerator>
                                 <KeyCodeCombination shortcut="DOWN" code="F8"
                                                     alt="UP" control="UP" meta="UP" shift="UP"/>

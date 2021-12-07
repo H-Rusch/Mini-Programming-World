@@ -5,10 +5,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
-import util.annotations.Invisible;
 import model.territory.Actor;
 import model.territory.Territory;
 import model.territory.exceptions.ActorException;
+import util.annotations.Invisible;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -21,13 +21,9 @@ public class ActorController {
     private final Territory territory;
     private Actor actor;
 
-    private AudioClip errorSound;
-
     public ActorController(Territory territory, Actor actor) {
         this.territory = territory;
         this.actor = actor;
-
-        this.errorSound = new AudioClip(String.valueOf(getClass().getResource("/sound/error_sound.mp3")));
     }
 
     public void forward() {
@@ -127,11 +123,11 @@ public class ActorController {
                     method.invoke(actor);
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     if (e.getCause() instanceof ActorException) {
-                        errorSound.play(0.2);
+                        new AudioClip(String.valueOf(getClass().getResource("/sound/error_sound.mp3"))).play(0.2);
                     } else {
-                        new Alert(Alert.AlertType.ERROR, e.getCause().getMessage(), ButtonType.OK).showAndWait();
                         e.printStackTrace();
                     }
+                    new Alert(Alert.AlertType.ERROR, e.getCause().getMessage(), ButtonType.OK).showAndWait();
                 } finally {
                     territory.resumeNotify();
                 }

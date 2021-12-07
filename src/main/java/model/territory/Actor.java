@@ -1,6 +1,8 @@
 package model.territory;
 
-/** Actor in the territory. The actor faces in one of the directions and carries a number of presents. */
+import util.annotations.Invisible;
+
+/** Actor in the territory. */
 public class Actor {
 
     private Territory territory;

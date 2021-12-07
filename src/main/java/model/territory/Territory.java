@@ -65,6 +65,8 @@ public class Territory extends Observable {
 
     public void setActorDirection(Direction actorDirection) {
         this.actorDirection = actorDirection;
+        setChanged();
+        notifyObservers();
     }
 
     public int getActorPresents() {
@@ -73,6 +75,8 @@ public class Territory extends Observable {
 
     public void setActorPresents(int actorPresents) {
         this.actorPresents = actorPresents;
+        setChanged();
+        notifyObservers();
     }
 
     public Actor getActor() {
