@@ -38,53 +38,53 @@ public class Territory extends Observable {
     }
 
     /** Get a specific tile based on its x and y coordinate. */
-    public Tile getTile(int x, int y) {
+    public synchronized Tile getTile(int x, int y) {
         return market[y][x];
     }
 
     /** Get a specific tile based on its x and y coordinate. */
-    public Tile getTile(Position post) {
+    public synchronized Tile getTile(Position post) {
         return market[post.getY()][post.getX()];
     }
 
-    public int getHeight() {
+    public synchronized int getHeight() {
         return height;
     }
 
-    public int getWidth() {
+    public synchronized int getWidth() {
         return width;
     }
 
-    public Position getActorPosition() {
+    public synchronized Position getActorPosition() {
         return actorPosition;
     }
 
-    public Direction getActorDirection() {
+    public synchronized Direction getActorDirection() {
         return actorDirection;
     }
 
-    public void setActorDirection(Direction actorDirection) {
+    public synchronized void setActorDirection(Direction actorDirection) {
         this.actorDirection = actorDirection;
         setChanged();
         notifyObservers();
     }
 
-    public int getActorPresents() {
+    public synchronized int getActorPresents() {
         return actorPresents;
     }
 
-    public void setActorPresents(int actorPresents) {
+    public synchronized void setActorPresents(int actorPresents) {
         this.actorPresents = actorPresents;
         setChanged();
         notifyObservers();
     }
 
-    public Actor getActor() {
+    public synchronized Actor getActor() {
         return actor;
     }
 
     /** Change the actor object with a new actor object. */
-    public void changeActor(Actor actor) {
+    public synchronized void changeActor(Actor actor) {
         this.actor = actor;
         this.actor.setTerritory(this);
     }
@@ -96,41 +96,44 @@ public class Territory extends Observable {
      * @throws TileBlockedException if the tile, the actor tries to walk on, is blocked by a wall or a blocked cart
      */
     public void forward() {
-        Position pos = getTilesFurther(1);
-        if (wallAhead()) {
-            throw new TileBlockedException("The tile is blocked by a wall.");
-        }
-        if (cartAhead()) {
-            if (!pushable()) {
-                throw new TileBlockedException("The cart can not be pushed because it is blocked itself.");
-            } else {
-                Tile adjacent = getTile(getTilesFurther(1));
-                Tile furtherAway = getTile(getTilesFurther(2));
+        synchronized (this) {
+            Position pos = getTilesFurther(1);
+            if (wallAhead()) {
+                throw new TileBlockedException("The tile is blocked by a wall.");
+            }
+            if (cartAhead()) {
+                if (!pushable()) {
+                    throw new TileBlockedException("The cart can not be pushed because it is blocked itself.");
+                } else {
+                    Tile adjacent = getTile(getTilesFurther(1));
+                    Tile furtherAway = getTile(getTilesFurther(2));
 
-                // remove the cart from the adjacent tile
-                if (adjacent.containsOnlyCart()) {
-                    adjacent.setState(TileState.EMPTY);
-                } else {
-                    adjacent.setState(TileState.PRESENT);
-                }
-                // push the cart onto the tile one tile further away
-                if (furtherAway.containsNothing()) {
-                    furtherAway.setState(TileState.CART);
-                } else {
-                    furtherAway.setState(TileState.PRESENT_AND_CART);
+                    // remove the cart from the adjacent tile
+                    if (adjacent.containsOnlyCart()) {
+                        adjacent.setState(TileState.EMPTY);
+                    } else {
+                        adjacent.setState(TileState.PRESENT);
+                    }
+                    // push the cart onto the tile one tile further away
+                    if (furtherAway.containsNothing()) {
+                        furtherAway.setState(TileState.CART);
+                    } else {
+                        furtherAway.setState(TileState.PRESENT_AND_CART);
+                    }
                 }
             }
+            // move actor onto the adjacent tile
+            actorPosition = pos;
         }
-        // move actor onto the adjacent tile
-        actorPosition = pos;
-
         setChanged();
         notifyObservers();
     }
 
     /** Turn the actor 90° to the left. */
     public void turnLeft() {
-        actorDirection = actorDirection.getDirectionLeft();
+        synchronized (this) {
+            actorDirection = actorDirection.getDirectionLeft();
+        }
 
         setChanged();
         notifyObservers();
@@ -138,7 +141,9 @@ public class Territory extends Observable {
 
     /** Turn the actor 90° to the right. */
     public void turnRight() {
-        actorDirection = actorDirection.getDirectionRight();
+        synchronized (this) {
+            actorDirection = actorDirection.getDirectionRight();
+        }
 
         setChanged();
         notifyObservers();
@@ -151,12 +156,14 @@ public class Territory extends Observable {
      * @throws NoPresentOnTileException if there is no present at the current location.
      */
     public void pickUp() {
-        Tile currentTile = getTile(actorPosition);
-        if (!currentTile.containsPresent()) {
-            throw new NoPresentOnTileException("There is no present at the current location.");
-        } else {
-            currentTile.setState(TileState.EMPTY);
-            actorPresents++;
+        synchronized (this) {
+            Tile currentTile = getTile(actorPosition);
+            if (!currentTile.containsPresent()) {
+                throw new NoPresentOnTileException("There is no present at the current location.");
+            } else {
+                currentTile.setState(TileState.EMPTY);
+                actorPresents++;
+            }
         }
 
         setChanged();
@@ -171,18 +178,19 @@ public class Territory extends Observable {
      * @throws NoPresentInBasketException    if the actor tries to place presents while the basket is empty.
      */
     public void putDown() {
-        Tile currentTile = getTile(actorPosition);
-        if (basketEmpty()) {
-            throw new NoPresentInBasketException("There are no presents to place in the basket.");
-        } else {
-            if (currentTile.containsPresent()) {
-                throw new PresentAlreadyOnTileException("There is already a present laying at the current position.");
+        synchronized (this) {
+            Tile currentTile = getTile(actorPosition);
+            if (basketEmpty()) {
+                throw new NoPresentInBasketException("There are no presents to place in the basket.");
             } else {
-                currentTile.setState(TileState.PRESENT);
-                actorPresents--;
+                if (currentTile.containsPresent()) {
+                    throw new PresentAlreadyOnTileException("There is already a present laying at the current position.");
+                } else {
+                    currentTile.setState(TileState.PRESENT);
+                    actorPresents--;
+                }
             }
         }
-
         setChanged();
         notifyObservers();
     }
@@ -192,7 +200,7 @@ public class Territory extends Observable {
      *
      * @return true if there is a wall one space ahead of the actor. false otherwise.
      */
-    public boolean wallAhead() {
+    public synchronized boolean wallAhead() {
         Position pos = getTilesFurther(1);
         if (!isInbounds(pos)) {
             return true;
@@ -206,7 +214,7 @@ public class Territory extends Observable {
      *
      * @return true if there is a cart one space ahead of the actor. false otherwise.
      */
-    public boolean cartAhead() {
+    public synchronized boolean cartAhead() {
         Position pos = getTilesFurther(1);
         if (!isInbounds(pos)) {
             return false;
@@ -220,7 +228,7 @@ public class Territory extends Observable {
      *
      * @return true if there is a pushable cart one space ahead of the actor. false otherwise.
      */
-    public boolean pushable() {
+    public synchronized boolean pushable() {
         Position pos1 = getTilesFurther(1);
         Position pos2 = getTilesFurther(2);
 
@@ -232,12 +240,12 @@ public class Territory extends Observable {
     }
 
     /** Checks whether a present is laying at the current position of the actor. */
-    public boolean presentHere() {
+    public synchronized boolean presentHere() {
         return getTile(actorPosition).containsPresent();
     }
 
     /** Checks whether the actor's basket is empty. */
-    public boolean basketEmpty() {
+    public synchronized boolean basketEmpty() {
         return actorPresents == 0;
     }
 
@@ -289,7 +297,7 @@ public class Territory extends Observable {
      * the new territory is bigger than before, new empty rows are created at the bottom and new columns are created on
      * the right. If the actor is on a position which is removed, the actor will be spawned at (0, 0) again.
      */
-    public void resizeTerritory(int height, int width) {
+    public synchronized void resizeTerritory(int height, int width) {
         if (height == this.height && width == this.width) {
             return;
         }
@@ -323,7 +331,7 @@ public class Territory extends Observable {
     }
 
     /** Set the position of the actor. Shelves and carts on the tile will be removed, but presents stay. */
-    public void forcePlaceActor(int x, int y) {
+    public synchronized void forcePlaceActor(int x, int y) {
         Tile tile = getTile(x, y);
         if (tile.containsShelf() || tile.containsOnlyCart()) {
             tile.setState(TileState.EMPTY);
@@ -338,7 +346,7 @@ public class Territory extends Observable {
     }
 
     /** Try to set the actor at this position. If the tile is blocked, the actor's position will not be updated. */
-    public void tryPlaceActor(int x, int y) {
+    public synchronized void tryPlaceActor(int x, int y) {
         Tile tile = getTile(x, y);
         if (!(tile.containsShelf() || tile.containsCart())) {
             actorPosition = new Position(x, y);
@@ -350,7 +358,7 @@ public class Territory extends Observable {
 
 
     /** Set a tile specified by its x and y coordinate to be a shelf. */
-    public void placeShelf(int x, int y) {
+    public synchronized void placeShelf(int x, int y) {
         if (x != actorPosition.getX() || y != actorPosition.getY()) {
             getTile(x, y).setState(TileState.SHELF);
         }
@@ -363,7 +371,7 @@ public class Territory extends Observable {
      * Set a tile specified by its x and y coordinate to be a cart. If a present is already present, the present will
      * be added onto the tile without removing the present.
      */
-    public void placeCart(int x, int y) {
+    public synchronized void placeCart(int x, int y) {
         if (x != actorPosition.getX() || y != actorPosition.getY()) {
             Tile tile = getTile(x, y);
             if (tile.containsPresent()) {
@@ -381,7 +389,7 @@ public class Territory extends Observable {
      * Set a tile specified by its x and y coordinate to be a present. If a cart is already present, the present will
      * be added onto the tile without removing the cart.
      */
-    public void placePresent(int x, int y) {
+    public synchronized void placePresent(int x, int y) {
         Tile tile = getTile(x, y);
         if (tile.containsCart()) {
             tile.setState(TileState.PRESENT_AND_CART);
@@ -394,7 +402,7 @@ public class Territory extends Observable {
     }
 
     /** Clear the content of a tile specified by its x and y coordinate. The actor will not be removed. */
-    public void clearTile(int x, int y) {
+    public synchronized void clearTile(int x, int y) {
         getTile(x, y).setState(TileState.EMPTY);
 
         setChanged();

@@ -70,6 +70,7 @@ public class SimulationController {
         controller.playMenuItem.setOnAction(event -> continueSimulation());
 
         simulation = new Simulation(territory, this, controller.speedSlider.getValue());
+        simulation.setDaemon(true);
         simulation.start();
     }
 

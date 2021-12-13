@@ -8,8 +8,8 @@ import util.Observer;
 
 public class Simulation extends Thread implements Observer {
 
-    private Territory territory;
-    private SimulationController controller;
+    private final Territory territory;
+    private final SimulationController controller;
     private final Object syncObject = new Object();
 
     private volatile double simulationSpeed;

@@ -190,6 +190,7 @@ public class TerritoryPanel extends Region implements Observer {
         gc.drawImage(image, x, y);
     }
 
+    /** Draw the market to the UI. */
     @Override
     public void update() {
         if (Platform.isFxApplicationThread()) {

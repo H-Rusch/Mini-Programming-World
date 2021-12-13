@@ -1,7 +1,5 @@
 package model.territory;
 
-import util.annotations.Invisible;
-
 /** Actor in the territory. */
 public class Actor {
 
