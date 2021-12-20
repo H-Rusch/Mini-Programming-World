@@ -1,5 +1,6 @@
 package controller.actor;
 
+import controller.FXMLController;
 import controller.territory.PresentsDialogController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -18,12 +19,37 @@ import java.util.Arrays;
 
 public class ActorController {
 
+    private final FXMLController fxmlController;
     private final Territory territory;
     private Actor actor;
 
-    public ActorController(Territory territory, Actor actor) {
+    public ActorController(Territory territory, Actor actor, FXMLController controller) {
         this.territory = territory;
         this.actor = actor;
+        this.fxmlController = controller;
+
+        setUpEventHandlers();
+    }
+
+    /** Add EventHandlers for the interaction between buttons and the customer. */
+    private void setUpEventHandlers() {
+        fxmlController.forwardButton.setOnAction(a -> forward());
+        fxmlController.forwardMenuItem.setOnAction(a -> forward());
+
+        fxmlController.turnLeftButton.setOnAction(a -> turnLeft());
+        fxmlController.turnLeftMenuItem.setOnAction(a -> turnLeft());
+
+        fxmlController.turnRightButton.setOnAction(a -> turnRight());
+        fxmlController.turnRightMenuItem.setOnAction(a -> turnRight());
+
+        fxmlController.pickUpButton.setOnAction(a -> pickUp());
+        fxmlController.pickUpMenuItem.setOnAction(a -> pickUp());
+
+        fxmlController.putDownButton.setOnAction(a -> putDown());
+        fxmlController.putDownMenuItem.setOnAction(a -> putDown());
+
+        fxmlController.presentsButton.setOnAction(a -> setPresentCount());
+        fxmlController.presentsMenuItem.setOnAction(a -> setPresentCount());
     }
 
     public void forward() {

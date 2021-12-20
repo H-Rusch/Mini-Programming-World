@@ -1,6 +1,6 @@
 package controller.program;
 
-import controller.MainController;
+import controller.FXMLController;
 import controller.actor.ActorController;
 import controller.simulation.SimulationController;
 import javafx.fxml.FXMLLoader;
@@ -92,14 +92,12 @@ public class ProgramController {
 
             CompileController.compileProgramSilently(program, territory);
 
-            MainController controller = fxmlLoader.getController();
+            FXMLController controller = fxmlLoader.getController();
             controller.setTerritory(territory);
             controller.setProgram(program);
             controller.setStage(stage);
-            controller.setActorController(new ActorController(territory, territory.getActor()));
 
-            SimulationController simulationController = new SimulationController(territory);
-            controller.setSimulationController(simulationController);
+            controller.setUpControllers();
 
             stage.show();
         } catch (IOException e) {

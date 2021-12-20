@@ -23,14 +23,14 @@ import view.TerritoryPanel;
 import java.io.IOException;
 
 
-public class MainController {
+public class FXMLController {
 
     private Stage stage;
     private Territory territory;
     private Program program;
     private PlaceOnTileSelection selection;
-    private ActorController actorController;
 
+    private ActorController actorController;
     private SimulationController simulationController;
 
     // menu items
@@ -133,6 +133,11 @@ public class MainController {
         this.selection = new PlaceOnTileSelection();
     }
 
+    public void setUpControllers() {
+        this.actorController = new ActorController(territory, territory.getActor(), this);
+        this.simulationController = new SimulationController(territory, this);
+    }
+
     public void setTerritory(Territory territory) {
         this.territory = territory;
 
@@ -152,15 +157,6 @@ public class MainController {
         });
     }
 
-    public void setActorController(ActorController actorController) {
-        this.actorController = actorController;
-    }
-
-    public void setSimulationController(SimulationController simulationController) {
-        this.simulationController = simulationController;
-        this.simulationController.setMainController(this);
-    }
-
     /**
      * Set up the UI by restyling some elements. Also set up the EventHandlers, so the user can
      * manipulate the territory by clicking in the UI.
@@ -170,7 +166,6 @@ public class MainController {
 
         bindProgramActions();
         bindMarketActions();
-        bindCustomerActions();
 
         territoryPanel.setTerritory(territory);
     }
@@ -203,27 +198,6 @@ public class MainController {
             ProgramController.removeProgram(program);
             stage.close();
         });
-    }
-
-    /** Add EventHandlers for the interaction between buttons and the customer. */
-    private void bindCustomerActions() {
-        forwardButton.setOnAction(a -> actorController.forward());
-        forwardMenuItem.setOnAction(a -> actorController.forward());
-
-        turnLeftButton.setOnAction(a -> actorController.turnLeft());
-        turnLeftMenuItem.setOnAction(a -> actorController.turnLeft());
-
-        turnRightButton.setOnAction(a -> actorController.turnRight());
-        turnRightMenuItem.setOnAction(a -> actorController.turnRight());
-
-        pickUpButton.setOnAction(a -> actorController.pickUp());
-        pickUpMenuItem.setOnAction(a -> actorController.pickUp());
-
-        putDownButton.setOnAction(a -> actorController.putDown());
-        putDownMenuItem.setOnAction(a -> actorController.putDown());
-
-        presentsButton.setOnAction(a -> actorController.setPresentCount());
-        presentsMenuItem.setOnAction(a -> actorController.setPresentCount());
     }
 
     /** Add EventHandlers to change the territory with the buttons. */

@@ -10,7 +10,7 @@
 <?import view.CodeEditor?>
 <?import view.TerritoryPanel?>
 <Stage title="My Application" xmlns:fx="http://javafx.com/fxml/1" height="640.0" width="1080.0"
-       fx:controller="controller.MainController">
+       fx:controller="controller.FXMLController">
     <scene>
         <Scene>
             <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"

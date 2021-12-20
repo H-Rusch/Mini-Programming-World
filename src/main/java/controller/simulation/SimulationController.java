@@ -1,6 +1,6 @@
 package controller.simulation;
 
-import controller.MainController;
+import controller.FXMLController;
 import javafx.scene.control.Tooltip;
 import model.simulation.Simulation;
 import model.territory.Territory;
@@ -10,14 +10,11 @@ public class SimulationController {
 
     private Simulation simulation;
     private final Territory territory;
-    private MainController controller;
+    private final FXMLController fxmlController;
 
-    public SimulationController(Territory territory) {
+    public SimulationController(Territory territory, FXMLController controller) {
         this.territory = territory;
-    }
-
-    public void setMainController(MainController controller) {
-        this.controller = controller;
+        this.fxmlController = controller;
 
         setUpEventHandlers();
         setPauseButtonsEnabled(false);
@@ -26,38 +23,38 @@ public class SimulationController {
 
     /** Connect buttons and menu items with corresponding event handlers. */
     private void setUpEventHandlers() {
-        controller.speedSlider.valueProperty().addListener((obs, oldValue, newValue) -> {
+        fxmlController.speedSlider.valueProperty().addListener((obs, oldValue, newValue) -> {
             if (simulation != null) {
                 simulation.setSimulationSpeed((Double) newValue);
             }
         });
 
-        controller.playButton.setOnAction(event -> startSimulation());
-        controller.playMenuItem.setOnAction(event -> startSimulation());
+        fxmlController.playButton.setOnAction(event -> startSimulation());
+        fxmlController.playMenuItem.setOnAction(event -> startSimulation());
 
-        controller.pauseButton.setOnAction(event -> pauseSimulation());
-        controller.pauseMenuItem.setOnAction(event -> pauseSimulation());
+        fxmlController.pauseButton.setOnAction(event -> pauseSimulation());
+        fxmlController.pauseMenuItem.setOnAction(event -> pauseSimulation());
 
-        controller.stopButton.setOnAction(event -> stopSimulation());
-        controller.stopMenuItem.setOnAction(event -> stopSimulation());
+        fxmlController.stopButton.setOnAction(event -> stopSimulation());
+        fxmlController.stopMenuItem.setOnAction(event -> stopSimulation());
     }
 
     /** Enable or disable the play buttons in the application. */
     private void setPlayButtonsEnabled(boolean enabled) {
-        controller.playButton.setDisable(!enabled);
-        controller.playMenuItem.setDisable(!enabled);
+        fxmlController.playButton.setDisable(!enabled);
+        fxmlController.playMenuItem.setDisable(!enabled);
     }
 
     /** Enable or disable the pause buttons in the application. */
     private void setPauseButtonsEnabled(boolean enabled) {
-        controller.pauseButton.setDisable(!enabled);
-        controller.pauseMenuItem.setDisable(!enabled);
+        fxmlController.pauseButton.setDisable(!enabled);
+        fxmlController.pauseMenuItem.setDisable(!enabled);
     }
 
     /** Enable or disable the stop buttons in the application. */
     private void setStopButtonsEnabled(boolean enabled) {
-        controller.stopButton.setDisable(!enabled);
-        controller.stopMenuItem.setDisable(!enabled);
+        fxmlController.stopButton.setDisable(!enabled);
+        fxmlController.stopMenuItem.setDisable(!enabled);
     }
 
     /** Start the simulation. Disable unneeded buttons and change the 'play' buttons functionality from 'start' to 'continue'. */
@@ -66,10 +63,10 @@ public class SimulationController {
         setPauseButtonsEnabled(true);
         setStopButtonsEnabled(true);
 
-        controller.playButton.setOnAction(event -> continueSimulation());
-        controller.playMenuItem.setOnAction(event -> continueSimulation());
+        fxmlController.playButton.setOnAction(event -> continueSimulation());
+        fxmlController.playMenuItem.setOnAction(event -> continueSimulation());
 
-        simulation = new Simulation(territory, this, controller.speedSlider.getValue());
+        simulation = new Simulation(territory, this, fxmlController.speedSlider.getValue());
         simulation.setDaemon(true);
         simulation.start();
     }
@@ -80,7 +77,7 @@ public class SimulationController {
         setPauseButtonsEnabled(true);
         setStopButtonsEnabled(true);
 
-        controller.playButton.setTooltip(new Tooltip("Setze die Simulation fort"));
+        fxmlController.playButton.setTooltip(new Tooltip("Setze die Simulation fort"));
 
         simulation.setPauseSimulation(false);
         simulation.notifySyncObject();
@@ -112,9 +109,9 @@ public class SimulationController {
         setPauseButtonsEnabled(false);
         setStopButtonsEnabled(false);
 
-        controller.playButton.setTooltip(new Tooltip("Starte die Simulation"));
+        fxmlController.playButton.setTooltip(new Tooltip("Starte die Simulation"));
 
-        controller.playButton.setOnAction(event -> startSimulation());
-        controller.playMenuItem.setOnAction(event -> startSimulation());
+        fxmlController.playButton.setOnAction(event -> startSimulation());
+        fxmlController.playMenuItem.setOnAction(event -> startSimulation());
     }
 }
