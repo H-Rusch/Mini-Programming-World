@@ -60,12 +60,12 @@
                     <Menu text="_Markt">
                         <Menu text="_Speichern">
                             <MenuItem text="_XML"/>
-                            <MenuItem text="_Serialisieren"/>
+                            <MenuItem fx:id="serializeMenuItem" text="_Serialisieren"/>
                         </Menu>
 
                         <Menu text="_Laden">
                             <MenuItem text="_XML"/>
-                            <MenuItem text="_Deserialisieren"/>
+                            <MenuItem fx:id="deserializeMenuItem" text="_Deserialisieren"/>
                         </Menu>
 
                         <Menu text="Als _Bild speichern">

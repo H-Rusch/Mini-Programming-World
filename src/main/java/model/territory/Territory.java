@@ -7,9 +7,13 @@ import model.territory.exceptions.TileBlockedException;
 import util.Observable;
 import util.Position;
 
-public class Territory extends Observable {
+import java.io.Serializable;
 
-    private Actor actor;
+public class Territory extends Observable implements Serializable {
+
+    private static final long serialVersionUID = 123456L;
+
+    private transient Actor actor;
     private Position actorPosition;
     private Direction actorDirection;
     private int actorPresents;
@@ -35,6 +39,24 @@ public class Territory extends Observable {
         this.actorPosition = new Position(0, 0);
         this.actorDirection = Direction.EAST;
         this.actorPresents = 0;
+    }
+
+    /** Change this territory to another territory when this one is loaded. */
+    public void loadTerritory(Territory other) {
+        synchronized (this) {
+            this.height = other.getHeight();
+            this.width = other.getWidth();
+            this.market = other.getMarket();
+            this.actorPosition = other.getActorPosition();
+            this.actorDirection = other.getActorDirection();
+            this.actorPresents = other.getActorPresents();
+        }
+        setChanged();
+        notifyObservers();
+    }
+
+    public synchronized Tile[][] getMarket() {
+        return market;
     }
 
     /** Get a specific tile based on its x and y coordinate. */

@@ -3,6 +3,7 @@ package controller;
 import controller.actor.ActorController;
 import controller.program.CompileController;
 import controller.program.ProgramController;
+import controller.save.SaveController;
 import controller.simulation.SimulationController;
 import controller.territory.ResizeDialogController;
 import javafx.event.ActionEvent;
@@ -32,6 +33,7 @@ public class FXMLController {
 
     private ActorController actorController;
     private SimulationController simulationController;
+    private SaveController saveController;
 
     // menu items
     @FXML
@@ -44,6 +46,10 @@ public class FXMLController {
     public MenuItem compileMenuItem;
     @FXML
     public MenuItem exitMenuItem;
+    @FXML
+    public MenuItem serializeMenuItem;
+    @FXML
+    public MenuItem deserializeMenuItem;
     @FXML
     private ToggleGroup placeItemToggleMenu;
     @FXML
@@ -136,6 +142,7 @@ public class FXMLController {
     public void setUpControllers() {
         this.actorController = new ActorController(territory, territory.getActor(), this);
         this.simulationController = new SimulationController(territory, this);
+        this.saveController = new SaveController(territory, stage, this);
     }
 
     public void setTerritory(Territory territory) {

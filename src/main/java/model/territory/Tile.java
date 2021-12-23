@@ -1,7 +1,11 @@
 package model.territory;
 
+import java.io.Serializable;
+
 /** Single tile of the territory. The tile can be in one of the TileStates and is initially empty. */
-public class Tile {
+public class Tile implements Serializable {
+
+    private static final long serialVersionUID = 123456L;
 
     private TileState state;
 
