@@ -68,10 +68,7 @@
                             <MenuItem fx:id="deserializeMenuItem" text="_Deserialisieren"/>
                         </Menu>
 
-                        <Menu text="Als _Bild speichern">
-                            <MenuItem text="_png"/>
-                            <MenuItem text="_jpg"/>
-                        </Menu>
+                        <MenuItem fx:id="saveImageMenuItem" text="Als _Bild speichern"/>
 
                         <SeparatorMenuItem mnemonicParsing="false"/>
                         <MenuItem fx:id="resizeMarketMenuItem" text="_Dimension ändern"/>
