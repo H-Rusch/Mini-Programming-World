@@ -1,8 +1,6 @@
 package controller.program;
 
 import controller.FXMLController;
-import controller.actor.ActorController;
-import controller.simulation.SimulationController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -74,6 +72,7 @@ public class ProgramController {
             Stage stage = fxmlLoader.load();
             stage.setTitle("Market MPW: " + programName);
             stage.getIcons().add(new Image(String.valueOf(ProgramController.class.getResource("/img/24x24/Present24.png"))));
+            stage.getScene().getStylesheets().add("css/style.css");
 
             Program program = new Program(programName);
             ProgramController.addProgram(program, stage);
@@ -101,6 +100,7 @@ public class ProgramController {
 
             stage.show();
         } catch (IOException e) {
+            e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Simulator konnte nicht gestartet werden", ButtonType.OK).showAndWait();
         }
     }
@@ -213,6 +213,7 @@ public class ProgramController {
             dialog.showAndWait().ifPresent(ProgramController::startSimulatorStage);
 
         } catch (IOException e) {
+            e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Neues Programm konnte nicht erstellt werden.", ButtonType.OK)
                     .showAndWait();
         }

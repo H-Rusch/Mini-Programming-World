@@ -10,7 +10,6 @@ public class CodeEditor extends TextArea {
 
     public CodeEditor() {
         super();
-        setFont(Font.font(java.awt.Font.MONOSPACED, 14));
     }
 
     public void setProgram(Program program) {

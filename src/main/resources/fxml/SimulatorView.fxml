@@ -11,6 +11,7 @@
 <?import view.TerritoryPanel?>
 <Stage title="My Application" xmlns:fx="http://javafx.com/fxml/1" height="640.0" width="1080.0"
        fx:controller="controller.FXMLController">
+
     <scene>
         <Scene>
             <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
@@ -171,130 +172,41 @@
 
 
                 <ToolBar prefHeight="40.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">
-                    <Button fx:id="newButton" mnemonicParsing="false" maxHeight="30.0" maxWidth="30.0">
+
+                    <Slider fx:id="speedSlider" showTickLabels="true" value="50.0"/>
+
+                    <Button fx:id="playButton" layoutX="230.0" layoutY="10.0" mnemonicParsing="false">
                         <graphic>
                             <ImageView>
-                                <Image url="@../img/24x24/New24.png"/>
+                                <Image url="@../img/24x24/Play24.png"/>
                             </ImageView>
                         </graphic>
                         <tooltip>
-                            <Tooltip text="Erstelle einen neuen Simulator"/>
+                            <Tooltip text="Starte die Simulation"/>
                         </tooltip>
                     </Button>
 
-                    <Button fx:id="openButton" mnemonicParsing="false" maxHeight="30.0" maxWidth="30.0">
+                    <Button fx:id="pauseButton" layoutX="500.0" layoutY="10.0" mnemonicParsing="false">
                         <graphic>
                             <ImageView>
-                                <Image url="@../img/24x24/Open24.png"/>
+                                <Image url="@../img/24x24/Pause.png"/>
                             </ImageView>
                         </graphic>
                         <tooltip>
-                            <Tooltip text="Öffne einen Simulator"/>
+                            <Tooltip text="Pausiere die Simulation"/>
                         </tooltip>
                     </Button>
 
-                    <Separator orientation="VERTICAL"/>
-
-                    <Button fx:id="saveButton" layoutX="60.0" layoutY="10.0" mnemonicParsing="false"
-                            maxHeight="30.0"
-                            maxWidth="30.0">
+                    <Button fx:id="stopButton" layoutX="500.0" layoutY="10.0" mnemonicParsing="false">
                         <graphic>
                             <ImageView>
-                                <Image url="@../img/24x24/Save24.png"/>
+                                <Image url="@../img/24x24/Stop24.png"/>
                             </ImageView>
                         </graphic>
                         <tooltip>
-                            <Tooltip text="Speichere den Simulator"/>
+                            <Tooltip text="Beende die Simulation"/>
                         </tooltip>
                     </Button>
-
-                    <Button fx:id="compileButton" layoutX="110.0" layoutY="10.0" mnemonicParsing="false">
-                        <graphic>
-                            <ImageView>
-                                <Image url="@../img/24x24/Compile24.png"/>
-                            </ImageView>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Kompiliere den Simulator"/>
-                        </tooltip>
-                    </Button>
-
-                    <Separator orientation="VERTICAL"/>
-
-                    <Button fx:id="resizeMarketButton" layoutX="170.0" layoutY="10.0" mnemonicParsing="false">
-                        <graphic>
-                            <ImageView>
-                                <Image url="@../img/24x24/Terrain24.png"/>
-                            </ImageView>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Dimension des Markts ändern"/>
-                        </tooltip>
-                    </Button>
-
-                    <RadioButton fx:id="placeCustomerButton" mnemonicParsing="false"
-                                 toggleGroup="$placeItemToggleToolbar"
-                                 selected="true">
-                        <toggleGroup>
-                            <ToggleGroup fx:id="placeItemToggleToolbar"/>
-                        </toggleGroup>
-                        <graphic>
-                            <ImageView>
-                                <Image url="@../img/24x24/DownCustomer24.png"/>
-                            </ImageView>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Kunden platzieren"/>
-                        </tooltip>
-                    </RadioButton>
-
-                    <RadioButton fx:id="placeShelfButton" mnemonicParsing="false"
-                                 toggleGroup="$placeItemToggleToolbar">
-                        <graphic>
-                            <ImageView>
-                                <Image url="@../img/24x24/AltShelf24.png"/>
-                            </ImageView>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Regal platzieren"/>
-                        </tooltip>
-                    </RadioButton>
-
-                    <RadioButton fx:id="placeCartButton" mnemonicParsing="false"
-                                 toggleGroup="$placeItemToggleToolbar">
-                        <graphic>
-                            <ImageView>
-                                <Image url="@../img/24x24/ShoppingCart24.png"/>
-                            </ImageView>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Einkaufswagen platziern"/>
-                        </tooltip>
-                    </RadioButton>
-
-                    <RadioButton fx:id="placePresentButton" mnemonicParsing="false"
-                                 toggleGroup="$placeItemToggleToolbar">
-                        <graphic>
-                            <ImageView>
-                                <Image url="@../img/24x24/Present24.png"/>
-                            </ImageView>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Geschenk platzieren"/>
-                        </tooltip>
-                    </RadioButton>
-
-                    <RadioButton fx:id="clearTileButton" mnemonicParsing="false"
-                                 toggleGroup="$placeItemToggleToolbar">
-                        <graphic>
-                            <ImageView>
-                                <Image url="@../img/24x24/Delete24.png"/>
-                            </ImageView>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Inhalt der Kachel löschen"/>
-                        </tooltip>
-                    </RadioButton>
 
                     <Separator orientation="VERTICAL"/>
 
@@ -364,58 +276,160 @@
                         </tooltip>
                     </Button>
 
-                    <Separator orientation="VERTICAL"/>
-
-                    <Button fx:id="playButton" layoutX="230.0" layoutY="10.0" mnemonicParsing="false">
-                        <graphic>
-                            <ImageView>
-                                <Image url="@../img/24x24/Play24.png"/>
-                            </ImageView>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Starte die Simulation"/>
-                        </tooltip>
-                    </Button>
-
-                    <Button fx:id="pauseButton" layoutX="500.0" layoutY="10.0" mnemonicParsing="false">
-                        <graphic>
-                            <ImageView>
-                                <Image url="@../img/24x24/Pause.png"/>
-                            </ImageView>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Pausiere die Simulation"/>
-                        </tooltip>
-                    </Button>
-
-                    <Button fx:id="stopButton" layoutX="500.0" layoutY="10.0" mnemonicParsing="false">
-                        <graphic>
-                            <ImageView>
-                                <Image url="@../img/24x24/Stop24.png"/>
-                            </ImageView>
-                        </graphic>
-                        <tooltip>
-                            <Tooltip text="Beende die Simulation"/>
-                        </tooltip>
-                    </Button>
-
-                    <Slider fx:id="speedSlider" showTickLabels="true" value="50.0"/>
                 </ToolBar>
 
-                <SplitPane dividerPositions="0.4" prefHeight="600" prefWidth="1000.0" VBox.vgrow="ALWAYS">
-                    <AnchorPane minHeight="0.0" minWidth="0.0">
-                        <CodeEditor fx:id="codeTextArea" layoutX="-12.0" layoutY="-3.0" prefHeight="317.0"
-                                    prefWidth="252.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                <SplitPane dividerPositions="0.39" prefHeight="600" prefWidth="1000.0">
+
+                    <AnchorPane>
+                        <!-- Code editor and fitting toolbar -->
+                        <ToolBar prefHeight="40.0" VBox.vgrow="ALWAYS"
+                                 AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                            <Button fx:id="newButton" mnemonicParsing="false" maxHeight="30.0" maxWidth="30.0">
+                                <graphic>
+                                    <ImageView>
+                                        <Image url="@../img/24x24/New24.png"/>
+                                    </ImageView>
+                                </graphic>
+                                <tooltip>
+                                    <Tooltip text="Erstelle einen neuen Simulator"/>
+                                </tooltip>
+                            </Button>
+
+                            <Button fx:id="openButton" mnemonicParsing="false" maxHeight="30.0" maxWidth="30.0">
+                                <graphic>
+                                    <ImageView>
+                                        <Image url="@../img/24x24/Open24.png"/>
+                                    </ImageView>
+                                </graphic>
+                                <tooltip>
+                                    <Tooltip text="Öffne einen Simulator"/>
+                                </tooltip>
+                            </Button>
+
+                            <Separator orientation="VERTICAL"/>
+
+                            <Button fx:id="saveButton" layoutX="60.0" layoutY="10.0" mnemonicParsing="false"
+                                    maxHeight="30.0"
+                                    maxWidth="30.0">
+                                <graphic>
+                                    <ImageView>
+                                        <Image url="@../img/24x24/Save24.png"/>
+                                    </ImageView>
+                                </graphic>
+                                <tooltip>
+                                    <Tooltip text="Speichere den Simulator"/>
+                                </tooltip>
+                            </Button>
+
+                            <Button fx:id="compileButton" layoutX="110.0" layoutY="10.0" mnemonicParsing="false">
+                                <graphic>
+                                    <ImageView>
+                                        <Image url="@../img/24x24/Compile24.png"/>
+                                    </ImageView>
+                                </graphic>
+                                <tooltip>
+                                    <Tooltip text="Kompiliere das Programm."/>
+                                </tooltip>
+                            </Button>
+                        </ToolBar>
+
+                        <CodeEditor fx:id="codeTextArea" maxHeight="Infinity" maxWidth="Infinity"
+                                    AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0"
+                        />
                     </AnchorPane>
 
-                    <HBox alignment="CENTER">
-                        <VBox alignment="CENTER">
-                            <ScrollPane minHeight="0.0" minWidth="0.0">
-                                <TerritoryPanel fx:id="territoryPanel"/>
-                            </ScrollPane>
+                    <!-- Territory and fitting toolbar -->
+                    <AnchorPane>
+                        <ToolBar prefHeight="40.0" VBox.vgrow="SOMETIMES"
+                                 AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                 AnchorPane.leftAnchor="0.0">
+                            <Button fx:id="resizeMarketButton" layoutX="170.0" layoutY="10.0" mnemonicParsing="false">
+                                <graphic>
+                                    <ImageView>
+                                        <Image url="@../img/24x24/Terrain24.png"/>
+                                    </ImageView>
+                                </graphic>
+                                <tooltip>
+                                    <Tooltip text="Dimension des Markts ändern"/>
+                                </tooltip>
+                            </Button>
+
+                            <RadioButton fx:id="placeCustomerButton" mnemonicParsing="false"
+                                         toggleGroup="$placeItemToggleToolbar"
+                                         selected="true">
+                                <toggleGroup>
+                                    <ToggleGroup fx:id="placeItemToggleToolbar"/>
+                                </toggleGroup>
+                                <graphic>
+                                    <ImageView>
+                                        <Image url="@../img/24x24/DownCustomer24.png"/>
+                                    </ImageView>
+                                </graphic>
+                                <tooltip>
+                                    <Tooltip text="Kunden platzieren"/>
+                                </tooltip>
+                            </RadioButton>
+
+                            <RadioButton fx:id="placeShelfButton" mnemonicParsing="false"
+                                         toggleGroup="$placeItemToggleToolbar">
+                                <graphic>
+                                    <ImageView>
+                                        <Image url="@../img/24x24/AltShelf24.png"/>
+                                    </ImageView>
+                                </graphic>
+                                <tooltip>
+                                    <Tooltip text="Regal platzieren"/>
+                                </tooltip>
+                            </RadioButton>
+
+                            <RadioButton fx:id="placeCartButton" mnemonicParsing="false"
+                                         toggleGroup="$placeItemToggleToolbar">
+                                <graphic>
+                                    <ImageView>
+                                        <Image url="@../img/24x24/ShoppingCart24.png"/>
+                                    </ImageView>
+                                </graphic>
+                                <tooltip>
+                                    <Tooltip text="Einkaufswagen platziern"/>
+                                </tooltip>
+                            </RadioButton>
+
+                            <RadioButton fx:id="placePresentButton" mnemonicParsing="false"
+                                         toggleGroup="$placeItemToggleToolbar">
+                                <graphic>
+                                    <ImageView>
+                                        <Image url="@../img/24x24/Present24.png"/>
+                                    </ImageView>
+                                </graphic>
+                                <tooltip>
+                                    <Tooltip text="Geschenk platzieren"/>
+                                </tooltip>
+                            </RadioButton>
+
+                            <RadioButton fx:id="clearTileButton" mnemonicParsing="false"
+                                         toggleGroup="$placeItemToggleToolbar">
+                                <graphic>
+                                    <ImageView>
+                                        <Image url="@../img/24x24/Delete24.png"/>
+                                    </ImageView>
+                                </graphic>
+                                <tooltip>
+                                    <Tooltip text="Inhalt der Kachel löschen"/>
+                                </tooltip>
+                            </RadioButton>
+                        </ToolBar>
+
+                        <VBox alignment="CENTER" VBox.vgrow="ALWAYS"
+                              AnchorPane.topAnchor="40.0" AnchorPane.rightAnchor="0.0"
+                              AnchorPane.leftAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+                            <HBox alignment="CENTER">
+                                <ScrollPane minHeight="0.0" minWidth="0.0">
+                                    <TerritoryPanel fx:id="territoryPanel"/>
+                                </ScrollPane>
+                            </HBox>
                         </VBox>
-                    </HBox>
+                    </AnchorPane>
                 </SplitPane>
 
                 <Label id="notificationLabel" fx:id="notificationLabel" text="Welcome : )" VBox.vgrow="SOMETIMES"/>

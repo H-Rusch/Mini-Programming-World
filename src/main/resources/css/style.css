@@ -1,0 +1,21 @@
+CodeEditor {
+    -fx-border-style: solid;
+    -fx-border-width: 0px;
+    -fx-border-radius: 0;
+}
+
+CodeEditor {
+    -fx-wrap-text: false;
+    -fx-font-size: 14px;
+    -fx-font-family: Monospaced;
+}
+
+TerritoryPanel:focused,
+CodeEditor:focused {
+    -fx-background-color: -fx-outer-border;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 1;
+}
+
+.tool-bar {
+    -fx-spacing: 5px;
+}
