@@ -32,8 +32,46 @@ public class ProgramController {
     private static final Map<String, Stage> stageMap = new HashMap<>();
     private static final Map<String, Program> programMap = new HashMap<>();
 
-    private ProgramController() {
+    private final FXMLController controller;
+    private final Program program;
+    private final Territory territory;
+    private final Stage stage;
 
+    public ProgramController(Program program, Stage stage, Territory territory, FXMLController controller) {
+        this.program = program;
+        this.stage = stage;
+        this.territory = territory;
+        this.controller = controller;
+
+        controller.codeTextArea.setProgram(program);
+
+        setUpEventHandlers();
+    }
+
+    /** Add EventHandlers for the interaction between buttons and the program. */
+    private void setUpEventHandlers() {
+        controller.newButton.setOnAction(a -> ProgramController.newProgram());
+        controller.newMenuItem.setOnAction(a -> ProgramController.newProgram());
+
+        controller.openButton.setOnAction(a -> ProgramController.openProgram(stage));
+        controller.openMenuItem.setOnAction(a -> ProgramController.openProgram(stage));
+
+        controller.saveButton.setOnAction(a -> ProgramController.saveProgram(program, controller.codeTextArea.getText()));
+        controller.saveMenuItem.setOnAction(a -> ProgramController.saveProgram(program, controller.codeTextArea.getText()));
+
+        controller.compileButton.setOnAction(a -> CompileController.compileProgram(program, controller.codeTextArea.getText(), territory));
+        controller.compileMenuItem.setOnAction(a -> CompileController.compileProgram(program, controller.codeTextArea.getText(), territory));
+
+        controller.exitMenuItem.setOnAction(a -> {
+            ProgramController.saveProgram(program, controller.codeTextArea.getText());
+            ProgramController.removeProgram(program);
+            stage.close();
+        });
+
+        stage.setOnCloseRequest(event -> {
+            ProgramController.saveProgram(program, controller.codeTextArea.getText());
+            ProgramController.removeProgram(program);
+        });
     }
 
     public static void addProgram(Program program, Stage stage) {
@@ -93,8 +131,8 @@ public class ProgramController {
 
             FXMLController controller = fxmlLoader.getController();
             controller.setTerritory(territory);
-            controller.setProgram(program);
             controller.setStage(stage);
+            controller.setProgram(program);
 
             controller.setUpControllers();
 

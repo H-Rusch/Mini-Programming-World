@@ -1,19 +1,13 @@
 package controller;
 
 import controller.actor.ActorController;
-import controller.program.CompileController;
 import controller.program.ProgramController;
 import controller.save.SaveController;
 import controller.simulation.SimulationController;
-import controller.territory.ResizeDialogController;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import controller.territory.TerritoryController;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import model.program.Program;
 import model.territory.PlaceOnTileSelection;
 import model.territory.Territory;
@@ -21,19 +15,18 @@ import util.Position;
 import view.CodeEditor;
 import view.TerritoryPanel;
 
-import java.io.IOException;
-
 
 public class FXMLController {
 
     private Stage stage;
     private Territory territory;
     private Program program;
-    private PlaceOnTileSelection selection;
 
     private ActorController actorController;
     private SimulationController simulationController;
     private SaveController saveController;
+    private ProgramController programController;
+    private TerritoryController territoryController;
 
     // menu items
     @FXML
@@ -53,17 +46,17 @@ public class FXMLController {
     @FXML
     public MenuItem saveImageMenuItem;
     @FXML
-    private ToggleGroup placeItemToggleMenu;
+    public ToggleGroup placeItemToggleMenu;
     @FXML
-    private RadioMenuItem placeCustomerMenuItem;
+    public RadioMenuItem placeCustomerMenuItem;
     @FXML
-    private RadioMenuItem placeShelfMenuItem;
+    public RadioMenuItem placeShelfMenuItem;
     @FXML
-    private RadioMenuItem placeCartMenuItem;
+    public RadioMenuItem placeCartMenuItem;
     @FXML
-    private RadioMenuItem placePresentMenuItem;
+    public RadioMenuItem placePresentMenuItem;
     @FXML
-    private RadioMenuItem clearTileMenuItem;
+    public RadioMenuItem clearTileMenuItem;
     @FXML
     public MenuItem resizeMarketMenuItem;
     @FXML
@@ -137,14 +130,13 @@ public class FXMLController {
     @FXML
     public Label notificationLabel;
 
-    public void initialize() {
-        this.selection = new PlaceOnTileSelection();
-    }
-
+    /** Create all the used controllers. Those controllers connect the UI elements with actions. */
     public void setUpControllers() {
+        this.territoryController = new TerritoryController(territory, this);
         this.actorController = new ActorController(territory, territory.getActor(), this);
         this.simulationController = new SimulationController(territory, this);
         this.saveController = new SaveController(territory, stage, this);
+        this.programController = new ProgramController(program, stage, territory, this);
     }
 
     public void setTerritory(Territory territory) {
@@ -153,30 +145,18 @@ public class FXMLController {
         setupUI();
     }
 
-    public void setProgram(Program program) {
-        this.program = program;
-        codeTextArea.setProgram(program);
-    }
 
     public void setStage(Stage stage) {
         this.stage = stage;
-        stage.setOnCloseRequest(event -> {
-            ProgramController.saveProgram(program, codeTextArea.getText());
-            ProgramController.removeProgram(program);
-        });
     }
 
-    /**
-     * Set up the UI by restyling some elements. Also set up the EventHandlers, so the user can
-     * manipulate the territory by clicking in the UI.
-     */
+    public void setProgram(Program program) {
+        this.program = program;
+    }
+
+    /** Set up the UI by restyling some elements. */
     private void setupUI() {
         restyleRadioButtons();
-
-        bindProgramActions();
-        bindMarketActions();
-
-        territoryPanel.setTerritory(territory);
     }
 
     /** Convert radio buttons into toggle buttons visually. */
@@ -188,135 +168,13 @@ public class FXMLController {
         styleRadioToToggleButton(clearTileButton);
     }
 
-    /** Add EventHandlers for the interaction between buttons and the program. */
-    private void bindProgramActions() {
-        newButton.setOnAction(a -> ProgramController.newProgram());
-        newMenuItem.setOnAction(a -> ProgramController.newProgram());
-
-        openButton.setOnAction(a -> ProgramController.openProgram(stage));
-        openMenuItem.setOnAction(a -> ProgramController.openProgram(stage));
-
-        saveButton.setOnAction(a -> ProgramController.saveProgram(program, codeTextArea.getText()));
-        saveMenuItem.setOnAction(a -> ProgramController.saveProgram(program, codeTextArea.getText()));
-
-        compileButton.setOnAction(a -> CompileController.compileProgram(program, codeTextArea.getText(), territory));
-        compileMenuItem.setOnAction(a -> CompileController.compileProgram(program, codeTextArea.getText(), territory));
-
-        exitMenuItem.setOnAction(a -> {
-            ProgramController.saveProgram(program, codeTextArea.getText());
-            ProgramController.removeProgram(program);
-            stage.close();
-        });
-    }
-
-    /** Add EventHandlers to change the territory with the buttons. */
-    private void bindMarketActions() {
-        placeCustomerButton.selectedProperty().bindBidirectional(placeCustomerMenuItem.selectedProperty());
-        placeShelfButton.selectedProperty().bindBidirectional(placeShelfMenuItem.selectedProperty());
-        placeCartButton.selectedProperty().bindBidirectional(placeCartMenuItem.selectedProperty());
-        placePresentButton.selectedProperty().bindBidirectional(placePresentMenuItem.selectedProperty());
-        clearTileButton.selectedProperty().bindBidirectional(clearTileMenuItem.selectedProperty());
-
-        // event handlers to synchronize the selection of the toggle groups
-        placeItemToggleToolbar.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
-            if (newToggle == placeCustomerButton) {
-                selection.setSelected(PlaceOnTileSelection.ACTOR);
-            } else if (newToggle == placeShelfButton) {
-                selection.setSelected(PlaceOnTileSelection.SHELF);
-            } else if (newToggle == placeCartButton) {
-                selection.setSelected(PlaceOnTileSelection.CART);
-            } else if (newToggle == placePresentButton) {
-                selection.setSelected(PlaceOnTileSelection.PRESENT);
-            } else if (newToggle == clearTileButton) {
-                selection.setSelected(PlaceOnTileSelection.REMOVE);
-            }
-        });
-
-        // create a dialog window which takes the territory's dimensions as input and resizes the market based on those values
-        EventHandler<ActionEvent> resizerHandler = event -> {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ResizeDialogView.fxml"));
-                DialogPane dialogPane = loader.load();
-
-                ResizeDialogController controller = loader.getController();
-                controller.setColumnInputText(String.valueOf(territory.getWidth()));
-                controller.setRowInputText(String.valueOf(territory.getHeight()));
-
-                Dialog<Pair<String, String>> dialog = new Dialog<>();
-                dialog.setDialogPane(dialogPane);
-                dialog.setTitle("Territorium-Größe");
-
-                dialog.setResultConverter(dialogButton -> {
-                    if (dialogButton == ButtonType.OK) {
-                        return new Pair<>(controller.getRowInputText(), controller.getColumnInputText());
-                    }
-                    return null;
-                });
-
-                dialog.showAndWait().ifPresent(pair ->
-                        territory.resizeTerritory(Integer.parseInt(pair.getKey()), Integer.parseInt(pair.getValue()))
-                );
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        };
-        resizeMarketButton.addEventHandler(ActionEvent.ACTION, resizerHandler);
-        resizeMarketMenuItem.addEventHandler(ActionEvent.ACTION, resizerHandler);
-
-        // event handlers to place objects
-        territoryPanel.setOnMousePressed(me -> {
-            if (me.getButton() == MouseButton.PRIMARY) {
-                Position pos = territoryPanel.getTilePositionAtCoordinate(me.getX(), me.getY());
-                placeItemAtPosition(pos);
-            }
-        });
-        territoryPanel.setOnMouseDragged(me -> {
-            if (me.getButton() == MouseButton.PRIMARY) {
-                Position pos = territoryPanel.getTilePositionAtCoordinate(me.getX(), me.getY());
-                if (pos != null) {
-                    placeItemAtPosition(pos);
-                }
-            }
-        });
-
-        // context menu from where the user can call every method the actor implements
-        territoryPanel.setOnContextMenuRequested(me -> {
-            Position pos = territoryPanel.getTilePositionAtCoordinate(me.getX(), me.getY());
-            if (pos.getX() == territory.getActorPosition().getX() && pos.getY() == territory.getActorPosition().getY()) {
-                actorController.createActionContextMenu(stage, me.getScreenX() + 10, me.getScreenY() - 10);
-            }
-        });
-    }
-
     /** Change the styling from a radio button to look like a toggle button. */
     private void styleRadioToToggleButton(RadioButton radioButton) {
         radioButton.getStyleClass().remove("radio-button");
         radioButton.getStyleClass().add("toggle-button");
     }
 
-    /**
-     * Place an "item" at a specific location. Placing the actor will try to place the actor at that position, but if
-     * the tile is blocked, the actor will not be moved.
-     *
-     * @param pos the position the "item" should bee placed at
-     */
-    public void placeItemAtPosition(Position pos) {
-        switch (selection.getSelected()) {
-            case PlaceOnTileSelection.ACTOR:
-                territory.tryPlaceActor(pos.getX(), pos.getY());
-                break;
-            case PlaceOnTileSelection.SHELF:
-                territory.placeShelf(pos.getX(), pos.getY());
-                break;
-            case PlaceOnTileSelection.CART:
-                territory.placeCart(pos.getX(), pos.getY());
-                break;
-            case PlaceOnTileSelection.PRESENT:
-                territory.placePresent(pos.getX(), pos.getY());
-                break;
-            default:
-                territory.clearTile(pos.getX(), pos.getY());
-        }
+    public void createActionsMenu(double x, double y) {
+        actorController.createActionContextMenu(stage, x, y);
     }
 }

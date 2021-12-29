@@ -432,7 +432,7 @@
                     </AnchorPane>
                 </SplitPane>
 
-                <Label id="notificationLabel" fx:id="notificationLabel" text="Welcome : )" VBox.vgrow="SOMETIMES"/>
+                <Label id="notificationLabel" fx:id="notificationLabel" VBox.vgrow="SOMETIMES"/>
             </VBox>
         </Scene>
     </scene>
