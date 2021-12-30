@@ -29,7 +29,7 @@ public class CompileController {
      * @param code    the programs code without prefixes or suffix
      */
     public static void compileProgram(Program program, String code, Territory territory) {
-        ProgramController.saveProgram(program, code);
+        ProgramController.saveProgramToFile(program, code);
 
         JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
 

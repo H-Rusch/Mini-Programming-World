@@ -9,11 +9,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.program.Program;
-import model.territory.PlaceOnTileSelection;
 import model.territory.Territory;
-import util.Position;
 import view.CodeEditor;
 import view.TerritoryPanel;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class FXMLController {
@@ -176,5 +177,9 @@ public class FXMLController {
 
     public void createActionsMenu(double x, double y) {
         actorController.createActionContextMenu(stage, x, y);
+    }
+
+    public void updateNotificationText(String text) {
+        notificationLabel.setText(text + " (" + new SimpleDateFormat("HH:mm").format(new Date()) + ")");
     }
 }

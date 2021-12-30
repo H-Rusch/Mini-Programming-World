@@ -19,3 +19,8 @@ CodeEditor:focused {
 .tool-bar {
     -fx-spacing: 5px;
 }
+
+#notificationLabel {
+    -fx-padding: 2px;
+    -fx-opacity: 0.8;
+}

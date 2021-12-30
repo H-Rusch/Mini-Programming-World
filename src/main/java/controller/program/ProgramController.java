@@ -56,23 +56,31 @@ public class ProgramController {
         controller.openButton.setOnAction(a -> ProgramController.openProgram(stage));
         controller.openMenuItem.setOnAction(a -> ProgramController.openProgram(stage));
 
-        controller.saveButton.setOnAction(a -> ProgramController.saveProgram(program, controller.codeTextArea.getText()));
-        controller.saveMenuItem.setOnAction(a -> ProgramController.saveProgram(program, controller.codeTextArea.getText()));
+        controller.saveButton.setOnAction(a -> saveProgram(program, controller.codeTextArea.getText()));
+        controller.saveMenuItem.setOnAction(a -> saveProgram(program, controller.codeTextArea.getText()));
 
         controller.compileButton.setOnAction(a -> CompileController.compileProgram(program, controller.codeTextArea.getText(), territory));
         controller.compileMenuItem.setOnAction(a -> CompileController.compileProgram(program, controller.codeTextArea.getText(), territory));
 
         controller.exitMenuItem.setOnAction(a -> {
-            ProgramController.saveProgram(program, controller.codeTextArea.getText());
+            ProgramController.saveProgramToFile(program, controller.codeTextArea.getText());
             ProgramController.removeProgram(program);
             stage.close();
         });
 
         stage.setOnCloseRequest(event -> {
-            ProgramController.saveProgram(program, controller.codeTextArea.getText());
+            ProgramController.saveProgramToFile(program, controller.codeTextArea.getText());
             ProgramController.removeProgram(program);
         });
     }
+
+    /** Non-static method which updates the notification label and calls the static method to do the actual saving. */
+    public void saveProgram(Program program, String code) {
+        controller.updateNotificationText("Programm abgespeichert");
+        ProgramController.saveProgramToFile(program, code);
+    }
+
+    /* Static methods. */
 
     public static void addProgram(Program program, Stage stage) {
         programMap.put(program.getName(), program);
@@ -208,7 +216,7 @@ public class ProgramController {
      * @param program the program to be saved
      * @param code    the code of the program to be saved in the file
      */
-    public static void saveProgram(Program program, String code) {
+    public static void saveProgramToFile(Program program, String code) {
         Path file = Paths.get(program.getFullFileName());
         try {
             if (Files.notExists(file)) {

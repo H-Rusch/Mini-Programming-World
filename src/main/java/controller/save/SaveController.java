@@ -46,6 +46,7 @@ public class SaveController {
             try (ObjectOutputStream out = new ObjectOutputStream(
                     new BufferedOutputStream(new FileOutputStream(selectedFile.getAbsolutePath())))) {
                 out.writeObject(territory);
+                fxmlController.updateNotificationText("Territorium gespeichert");
             } catch (IOException e) {
                 e.printStackTrace();
                 new Alert(Alert.AlertType.ERROR, "Beim Speichern des Territoriums ist ein Fehler aufgetreten",
@@ -67,6 +68,7 @@ public class SaveController {
                 Territory loaded = (Territory) in.readObject();
 
                 this.territory.loadTerritory(loaded);
+                fxmlController.updateNotificationText("Territorium geladen");
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
                 new Alert(Alert.AlertType.ERROR, "Beim Laden des Territoriums ist ein Fehler aufgetreten",
