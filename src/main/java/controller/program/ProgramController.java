@@ -59,8 +59,8 @@ public class ProgramController {
         controller.saveButton.setOnAction(a -> saveProgram(program, controller.codeTextArea.getText()));
         controller.saveMenuItem.setOnAction(a -> saveProgram(program, controller.codeTextArea.getText()));
 
-        controller.compileButton.setOnAction(a -> CompileController.compileProgram(program, controller.codeTextArea.getText(), territory));
-        controller.compileMenuItem.setOnAction(a -> CompileController.compileProgram(program, controller.codeTextArea.getText(), territory));
+        controller.compileButton.setOnAction(a -> saveAndCompileProgram(program, controller.codeTextArea.getText(), territory));
+        controller.compileMenuItem.setOnAction(a -> saveAndCompileProgram(program, controller.codeTextArea.getText(), territory));
 
         controller.exitMenuItem.setOnAction(a -> {
             ProgramController.saveProgramToFile(program, controller.codeTextArea.getText());
@@ -78,6 +78,13 @@ public class ProgramController {
     public void saveProgram(Program program, String code) {
         controller.updateNotificationText("Programm abgespeichert");
         ProgramController.saveProgramToFile(program, code);
+    }
+
+    /** Non-static method which updates the notification label. Saves the program to a file and compiles it. */
+    public void saveAndCompileProgram(Program program, String code, Territory territory) {
+        saveProgram(program, code);
+
+        CompileController.compileProgram(program, code, territory);
     }
 
     /* Static methods. */
