@@ -344,7 +344,7 @@
                         <ToolBar prefHeight="40.0" VBox.vgrow="SOMETIMES"
                                  AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="0.0"
                                  AnchorPane.leftAnchor="0.0">
-                            <Button fx:id="resizeMarketButton" layoutX="170.0" layoutY="10.0" mnemonicParsing="false">
+                            <Button fx:id="resizeMarketButton" mnemonicParsing="false">
                                 <graphic>
                                     <ImageView>
                                         <Image url="@../img/24x24/Terrain24.png"/>
@@ -418,6 +418,17 @@
                                     <Tooltip text="Inhalt der Kachel löschen"/>
                                 </tooltip>
                             </RadioButton>
+
+                            <Button fx:id="resetTerritoryButton" mnemonicParsing="false">
+                                <graphic>
+                                    <ImageView>
+                                        <Image url="@../img/24x24/Undo24.png"/>
+                                    </ImageView>
+                                </graphic>
+                                <tooltip>
+                                    <Tooltip text="Territorium zurücksetzen"/>
+                                </tooltip>
+                            </Button>
                         </ToolBar>
 
                         <VBox alignment="CENTER" VBox.vgrow="ALWAYS"

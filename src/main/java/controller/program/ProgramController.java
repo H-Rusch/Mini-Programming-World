@@ -130,6 +130,7 @@ public class ProgramController {
             Program program = new Program(programName);
             ProgramController.addProgram(program, stage);
             Territory territory = new Territory(12, 15);
+            territory.saveState();
             // put some initial elements into the market
             territory.forcePlaceActor(0, 7);
             territory.placeShelf(5, 5);

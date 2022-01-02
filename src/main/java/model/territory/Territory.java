@@ -8,10 +8,11 @@ import util.Observable;
 import util.Position;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class Territory extends Observable implements Serializable {
 
-    private static final long serialVersionUID = 123456L;
+    private static final long serialVersionUID = 1234567L;
 
     private transient Actor actor;
     private Position actorPosition;
@@ -21,6 +22,9 @@ public class Territory extends Observable implements Serializable {
     private int height;
     private int width;
     private Tile[][] market;
+
+    // a territory this territory can be reset to.
+    private Territory savedTerritory;
 
     public Territory(int height, int width) {
         this.height = height;
@@ -46,7 +50,7 @@ public class Territory extends Observable implements Serializable {
         synchronized (this) {
             this.height = other.getHeight();
             this.width = other.getWidth();
-            this.market = other.getMarket();
+            this.market = copyMarket(other.getMarket());
             this.actorPosition = other.getActorPosition();
             this.actorDirection = other.getActorDirection();
             this.actorPresents = other.getActorPresents();
@@ -55,8 +59,30 @@ public class Territory extends Observable implements Serializable {
         notifyObservers();
     }
 
+    /** Save the current state of the territory, so it can be recovered later. */
+    public synchronized void saveState() {
+        if (savedTerritory == null) {
+            savedTerritory = new Territory(height, width);
+        }
+        savedTerritory.setActorDirection(actorDirection);
+        savedTerritory.setActorPresents(actorPresents);
+        savedTerritory.setActorPosition(actorPosition);
+        Tile[][] newMarket = copyMarket(market);
+        savedTerritory.setMarket(newMarket);
+    }
+
+    /** Reset the territory by loading the saved territory. */
+    public synchronized void resetTerritory() {
+        loadTerritory(savedTerritory);
+    }
+
+
     public synchronized Tile[][] getMarket() {
         return market;
+    }
+
+    public synchronized void setMarket(Tile[][] market) {
+        this.market = market;
     }
 
     /** Get a specific tile based on its x and y coordinate. */
@@ -79,6 +105,10 @@ public class Territory extends Observable implements Serializable {
 
     public synchronized Position getActorPosition() {
         return actorPosition;
+    }
+
+    public synchronized void setActorPosition(Position actorPosition) {
+        this.actorPosition = actorPosition;
     }
 
     public synchronized Direction getActorDirection() {
@@ -105,11 +135,13 @@ public class Territory extends Observable implements Serializable {
         return actor;
     }
 
+
     /** Change the actor object with a new actor object. */
     public synchronized void changeActor(Actor actor) {
         this.actor = actor;
         this.actor.setTerritory(this);
     }
+
 
     /**
      * Try to move the actor one tile forwards. Fails, if the actor tries to run into a shelf/ wall or into a blocked
@@ -429,5 +461,14 @@ public class Territory extends Observable implements Serializable {
 
         setChanged();
         notifyObservers();
+    }
+
+    /** Copy the market by creating a new one with new tiles of the same type. */
+    private Tile[][] copyMarket(Tile[][] market) {
+        return Arrays.stream(market)
+                .map(tiles -> Arrays.stream(tiles)
+                        .map(tile -> new Tile(tile.getState()))
+                        .toArray(Tile[]::new))
+                .toArray(Tile[][]::new);
     }
 }

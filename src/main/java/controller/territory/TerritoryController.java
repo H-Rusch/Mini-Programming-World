@@ -4,6 +4,7 @@ import controller.FXMLController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
@@ -14,6 +15,7 @@ import model.territory.Territory;
 import util.Position;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class TerritoryController {
 
@@ -109,6 +111,21 @@ public class TerritoryController {
             Position pos = controller.territoryPanel.getTilePositionAtCoordinate(me.getX(), me.getY());
             if (pos.getX() == territory.getActorPosition().getX() && pos.getY() == territory.getActorPosition().getY()) {
                 controller.createActionsMenu(me.getScreenX() + 10, me.getScreenY() - 10);
+            }
+        });
+
+        // small dialog asking the user whether he wants to reset the territory
+        controller.resetTerritoryButton.setOnAction(me -> {
+            Alert alert =
+                    new Alert(Alert.AlertType.WARNING,
+                            "Möchtest du wirklich das Territorium auf den letzten gespeicherten Stand zurücksetzen?",
+                            ButtonType.OK,
+                            ButtonType.CANCEL);
+            alert.setTitle("Territorium zurücksetzen");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                territory.resetTerritory();
             }
         });
     }

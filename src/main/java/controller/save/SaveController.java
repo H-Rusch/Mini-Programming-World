@@ -46,6 +46,8 @@ public class SaveController {
             try (ObjectOutputStream out = new ObjectOutputStream(
                     new BufferedOutputStream(new FileOutputStream(selectedFile.getAbsolutePath())))) {
                 out.writeObject(territory);
+                // save the state, so the territory can be reset to this state
+                territory.saveState();
                 fxmlController.updateNotificationText("Territorium gespeichert");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -68,6 +70,8 @@ public class SaveController {
                 Territory loaded = (Territory) in.readObject();
 
                 this.territory.loadTerritory(loaded);
+                // save the state, so the territory can be reset to this state
+                this.territory.saveState();
                 fxmlController.updateNotificationText("Territorium geladen");
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();

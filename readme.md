@@ -33,3 +33,4 @@ The customer can interact with the environment by pushing shopping carts and pic
 - Shelf: made by [Freepik](https://www.freepik.com) from [Flaticon](https://www.flaticon.com/)
 - Basket: made by [Freepik](https://www.freepik.com) from [Flaticon](https://www.flaticon.com/)
 - Turn Left/ Turn Right: made by [Iconpro86](https://www.flaticon.com/authors/iconpro86) from [Flaticon](https://www.flaticon.com/)
+- Reset: made by [Andrean Prabowo](https://www.flaticon.com/authors/andrean-prabowo) from [Flaticon](https://www.flaticon.com/)

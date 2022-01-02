@@ -103,6 +103,8 @@ public class FXMLController {
     @FXML
     public RadioButton clearTileButton;
     @FXML
+    public Button resetTerritoryButton;
+    @FXML
     public Button forwardButton;
     @FXML
     public Button turnLeftButton;
