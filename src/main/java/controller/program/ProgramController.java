@@ -129,19 +129,8 @@ public class ProgramController {
 
             Program program = new Program(programName);
             ProgramController.addProgram(program, stage);
-            Territory territory = new Territory(12, 15);
+            Territory territory = new Territory(10, 10);
             territory.saveState();
-            // put some initial elements into the market
-            territory.forcePlaceActor(0, 7);
-            territory.placeShelf(5, 5);
-            territory.placeShelf(4, 4);
-            territory.placeShelf(4, 5);
-            territory.placeShelf(4, 3);
-            territory.placePresent(1, 4);
-            territory.placePresent(8, 9);
-            territory.placePresent(14, 3);
-            territory.placeCart(1, 4);
-            territory.placeCart(7, 9);
 
             CompileController.compileProgramSilently(program, territory);
 
