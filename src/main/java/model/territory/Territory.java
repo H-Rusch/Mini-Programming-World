@@ -63,6 +63,8 @@ public class Territory extends Observable implements Serializable {
     public synchronized void saveState() {
         if (savedTerritory == null) {
             savedTerritory = new Territory(height, width);
+        } else {
+            savedTerritory.resizeTerritory(height, width);
         }
         savedTerritory.setActorDirection(actorDirection);
         savedTerritory.setActorPresents(actorPresents);
