@@ -1,5 +1,6 @@
 package model.territory;
 
+/** Enumeration describing the four cardinal directions. */
 public enum Direction {
     EAST,
     NORTH,
@@ -39,6 +40,22 @@ public enum Direction {
                 return NORTH;
             default: // SOUTH
                 return WEST;
+        }
+    }
+
+    /** Get the fitting element for a given string. */
+    public static Direction getElementByString(String str) {
+        switch (str) {
+            case "EAST":
+                return Direction.EAST;
+            case "NORTH":
+                return Direction.NORTH;
+            case "WEST":
+                return Direction.WEST;
+            case "SOUTH":
+                return Direction.SOUTH;
+            default:
+                return null;
         }
     }
 }

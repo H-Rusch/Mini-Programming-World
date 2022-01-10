@@ -49,6 +49,10 @@ public class FXMLController {
     @FXML
     public MenuItem deserializeMenuItem;
     @FXML
+    public MenuItem saveXmlMenuItem;
+    @FXML
+    public MenuItem loadXmlMenuItem;
+    @FXML
     public MenuItem saveImageMenuItem;
     @FXML
     public ToggleGroup placeItemToggleMenu;

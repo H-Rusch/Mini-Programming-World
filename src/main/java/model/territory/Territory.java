@@ -93,8 +93,8 @@ public class Territory extends Observable implements Serializable {
     }
 
     /** Get a specific tile based on its x and y coordinate. */
-    public synchronized Tile getTile(Position post) {
-        return market[post.getY()][post.getX()];
+    public synchronized Tile getTile(Position pos) {
+        return market[pos.getY()][pos.getX()];
     }
 
     public synchronized int getHeight() {

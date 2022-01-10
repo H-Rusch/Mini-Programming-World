@@ -60,12 +60,12 @@
 
                     <Menu text="_Markt">
                         <Menu text="_Speichern" fx:id="saveTerritoryMenu">
-                            <MenuItem text="_XML"/>
+                            <MenuItem fx:id="saveXmlMenuItem" text="_XML"/>
                             <MenuItem fx:id="serializeMenuItem" text="_Serialisieren"/>
                         </Menu>
 
                         <Menu text="_Laden" fx:id="loadTerritoryMenu">
-                            <MenuItem text="_XML"/>
+                            <MenuItem fx:id="loadXmlMenuItem" text="_XML"/>
                             <MenuItem fx:id="deserializeMenuItem" text="_Deserialisieren"/>
                         </Menu>
 
