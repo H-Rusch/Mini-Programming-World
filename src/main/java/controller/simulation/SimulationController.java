@@ -57,11 +57,18 @@ public class SimulationController {
         fxmlController.stopMenuItem.setDisable(!enabled);
     }
 
+    private void setSaveAndLoadEnabled(boolean enabled) {
+        fxmlController.resetTerritoryButton.setDisable(!enabled);
+        fxmlController.saveTerritoryMenu.setDisable(!enabled);
+        fxmlController.loadTerritoryMenu.setDisable(!enabled);
+    }
+
     /** Start the simulation. Disable unneeded buttons and change the 'play' buttons functionality from 'start' to 'continue'. */
     public void startSimulation() {
         setPlayButtonsEnabled(false);
         setPauseButtonsEnabled(true);
         setStopButtonsEnabled(true);
+        setSaveAndLoadEnabled(false);
 
         fxmlController.playButton.setOnAction(event -> continueSimulation());
         fxmlController.playMenuItem.setOnAction(event -> continueSimulation());
@@ -108,6 +115,7 @@ public class SimulationController {
         setPlayButtonsEnabled(true);
         setPauseButtonsEnabled(false);
         setStopButtonsEnabled(false);
+        setSaveAndLoadEnabled(true);
 
         fxmlController.playButton.setTooltip(new Tooltip("Starte die Simulation"));
 

@@ -41,6 +41,10 @@ public class FXMLController {
     @FXML
     public MenuItem exitMenuItem;
     @FXML
+    public Menu saveTerritoryMenu;
+    @FXML
+    public Menu loadTerritoryMenu;
+    @FXML
     public MenuItem serializeMenuItem;
     @FXML
     public MenuItem deserializeMenuItem;

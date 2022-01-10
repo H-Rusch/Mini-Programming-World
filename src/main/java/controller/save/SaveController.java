@@ -1,6 +1,7 @@
 package controller.save;
 
 import controller.FXMLController;
+import controller.program.ProgramController;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -11,6 +12,9 @@ import model.territory.Territory;
 
 import javax.imageio.ImageIO;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 public class SaveController {
@@ -18,6 +22,10 @@ public class SaveController {
     private final FXMLController fxmlController;
     private final Stage stage;
     private final Territory territory;
+
+    private static final String IMAGE_DIRECTORY = "images";
+    private static final String TERRITORY_DIRECTORY = "territories";
+
 
     public SaveController(Territory territory, Stage stage, FXMLController controller) {
         this.fxmlController = controller;
@@ -38,6 +46,8 @@ public class SaveController {
     /** Save the territory to a file by serializing it. */
     public void serializeTerritory() {
         FileChooser fileChooser = new FileChooser();
+        createDirectoryIfNotExists(TERRITORY_DIRECTORY);
+        fileChooser.setInitialDirectory(new File(TERRITORY_DIRECTORY));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Territory Files (*.ter)",
                 "*.ter"));
         File selectedFile = fileChooser.showSaveDialog(stage);
@@ -45,9 +55,11 @@ public class SaveController {
         if (selectedFile != null) {
             try (ObjectOutputStream out = new ObjectOutputStream(
                     new BufferedOutputStream(new FileOutputStream(selectedFile.getAbsolutePath())))) {
-                out.writeObject(territory);
-                // save the state, so the territory can be reset to this state
-                territory.saveState();
+                synchronized (territory) {
+                    out.writeObject(territory);
+                    // save the state, so the territory can be reset to this state
+                    territory.saveState();
+                }
                 fxmlController.updateNotificationText("Territorium gespeichert");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -60,6 +72,8 @@ public class SaveController {
     /** Load a territory from a file by deserializing it. */
     public void deserializeTerritory() {
         FileChooser fileChooser = new FileChooser();
+        createDirectoryIfNotExists(TERRITORY_DIRECTORY);
+        fileChooser.setInitialDirectory(new File(TERRITORY_DIRECTORY));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Territory Files (*.ter)",
                 "*.ter"));
         File selectedFile = fileChooser.showOpenDialog(stage);
@@ -67,11 +81,13 @@ public class SaveController {
         if (selectedFile != null) {
             try (ObjectInputStream in = new ObjectInputStream(
                     new BufferedInputStream(new FileInputStream(selectedFile.getAbsolutePath())))) {
-                Territory loaded = (Territory) in.readObject();
+                synchronized (territory) {
+                    Territory loaded = (Territory) in.readObject();
 
-                this.territory.loadTerritory(loaded);
-                // save the state, so the territory can be reset to this state
-                this.territory.saveState();
+                    this.territory.loadTerritory(loaded);
+                    // save the state, so the territory can be reset to this state
+                    this.territory.saveState();
+                }
                 fxmlController.updateNotificationText("Territorium geladen");
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -86,6 +102,9 @@ public class SaveController {
         WritableImage screenshot = fxmlController.territoryPanel.snapshot(null, null);
 
         FileChooser fileChooser = new FileChooser();
+
+        createDirectoryIfNotExists(IMAGE_DIRECTORY);
+        fileChooser.setInitialDirectory(new File(IMAGE_DIRECTORY));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Images (*.png, *.gif, *.jpg)",
                 "*.png", "*.gif", "*.jpg"));
         File selectedFile = fileChooser.showSaveDialog(stage);
@@ -97,6 +116,17 @@ public class SaveController {
                 e.printStackTrace();
                 new Alert(Alert.AlertType.ERROR, "Beim Speichern des Bildes ist ein Fehler aufgetreten",
                         ButtonType.OK).show();
+            }
+        }
+    }
+
+    private void createDirectoryIfNotExists(String directoryName) {
+        Path path = Paths.get(directoryName);
+        if (!Files.exists(path)) {
+            try {
+                Files.createDirectory(path);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

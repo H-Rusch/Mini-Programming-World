@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 public class Territory extends Observable implements Serializable {
 
-    private static final long serialVersionUID = 1234567L;
+    private static final long serialVersionUID = 12345678L;
 
     private transient Actor actor;
     private Position actorPosition;
@@ -24,7 +24,7 @@ public class Territory extends Observable implements Serializable {
     private Tile[][] market;
 
     // a territory this territory can be reset to.
-    private Territory savedTerritory;
+    private transient Territory savedTerritory;
 
     public Territory(int height, int width) {
         this.height = height;
@@ -466,7 +466,7 @@ public class Territory extends Observable implements Serializable {
     }
 
     /** Copy the market by creating a new one with new tiles of the same type. */
-    private Tile[][] copyMarket(Tile[][] market) {
+    private synchronized Tile[][] copyMarket(Tile[][] market) {
         return Arrays.stream(market)
                 .map(tiles -> Arrays.stream(tiles)
                         .map(tile -> new Tile(tile.getState()))
