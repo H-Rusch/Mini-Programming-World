@@ -172,10 +172,12 @@ public class SaveController {
                 writer.writeEndDocument();
                 writer.close();
 
+                fxmlController.updateNotificationText("Territorium gespeichert");
             } catch (XMLStreamException | FileNotFoundException e) {
                 e.printStackTrace();
+                new Alert(Alert.AlertType.ERROR, "Beim Speichern des Territoriums ist ein Fehler aufgetreten",
+                        ButtonType.OK).show();
             }
-            fxmlController.updateNotificationText("Territorium gespeichert");
         }
     }
 
@@ -219,6 +221,8 @@ public class SaveController {
                 fxmlController.updateNotificationText("Territorium geladen");
             } catch (XMLStreamException | FileNotFoundException e) {
                 e.printStackTrace();
+                new Alert(Alert.AlertType.ERROR, "Beim Laden des Territoriums ist ein Fehler aufgetreten",
+                        ButtonType.OK).show();
             }
         }
     }
