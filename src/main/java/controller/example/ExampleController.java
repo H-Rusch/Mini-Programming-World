@@ -13,6 +13,8 @@ import model.example.Example;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 public class ExampleController {
@@ -38,7 +40,7 @@ public class ExampleController {
     /**
      * Store an example in the database. An example consists of its name, the territories XML,
      * the programs code and its tags.
-     * */
+     */
     private void storeExample() {
         // build a dialog to ask for tag input
         Optional<String[]> tags = askTagInput();
@@ -47,31 +49,47 @@ public class ExampleController {
                 DBConnection db = DBConnection.getInstance();
 
                 String title = stage.getTitle();
-                String name = title.substring(title.indexOf(":")).trim();
+                String name = title.substring(title.indexOf(":") + 2).trim();
                 String territoryXML = saveController.getTerritoryXMLString();
                 String code = fxmlController.codeTextArea.getText();
                 Example example = new Example(name, territoryXML, code, tags.get());
 
                 db.saveExample(example);
-            } catch (XMLStreamException e) {
+            } catch (XMLStreamException | SQLException e) {
                 e.printStackTrace();
-                // Alert
+                new Alert(Alert.AlertType.ERROR, "Beim Speichern des Beispiels ist ein Fehler aufgetreten.",
+                        ButtonType.OK).show();
             }
+            fxmlController.updateNotificationText("Das Beispiel wurde in der Datenbank gespeichert.");
         }
     }
 
+    /**
+     * Load an example from the database. The user can search by giving multiple tags as an input and the entries will
+     * be listed based on how many tags are fitting.
+     */
     private void loadExample() {
         // build a dialog to ask for tag input
         Optional<String[]> tags = askTagInput();
         if (tags.isPresent()) {
             DBConnection db = DBConnection.getInstance();
 
-            db.loadExample(tags.get());
+            // load the short form "id - name" from the database
+            List<String> shortExamples = db.loadExample(tags.get());
+
+            if (shortExamples.isEmpty()) {
+                System.out.println("list empty");
+            } else {
+                // build another dialog to ask the user to select one of the listed examples
+                // TODO
+                shortExamples.forEach(System.out::println);
+            }
+
+
         }
-
-
     }
 
+    /** Show an input dialog asking the user to input multiple tags separated by a comma. */
     private Optional<String[]> askTagInput() {
         Optional<String[]> result = Optional.empty();
         try {
@@ -96,8 +114,6 @@ public class ExampleController {
 
         } catch (IOException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Beim Speichern ist ein Fehler aufgetreten.", ButtonType.OK)
-                    .showAndWait();
         }
         return result;
     }

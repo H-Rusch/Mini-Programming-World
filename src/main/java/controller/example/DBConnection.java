@@ -3,6 +3,8 @@ package controller.example;
 import model.example.Example;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
@@ -27,7 +29,7 @@ public class DBConnection {
     private static final String CREATE_HAS_TAG = "CREATE TABLE " + TABLE_HAS_TAG + " (" +
             " has_tag_id INT NOT NULL GENERATED ALWAYS AS IDENTITY, " +
             " example_id INT, " +
-            " text VARCHAR(255), " +
+            " tag VARCHAR(255), " +
             " PRIMARY KEY (has_tag_id), " +
             " FOREIGN KEY (example_id) REFERENCES " + TABLE_EXAMPLE + " (example_id))";
 
@@ -81,8 +83,8 @@ public class DBConnection {
     }
 
 
-    /** Save an Example by inserting it into the database. */
-    public void saveExample(Example example) {
+    /** Save an Example by inserting it and all its Tags into the database. */
+    public void saveExample(Example example) throws SQLException {
         PreparedStatement statement = null;
         try {
             connection = DriverManager.getConnection(CONNECTION_URL);
@@ -92,7 +94,7 @@ public class DBConnection {
 
             // insert into example which return the ID of the inserted element
             statement = connection.prepareStatement("INSERT INTO " + TABLE_EXAMPLE + " (name, code, territory) VALUES (?, ?, ?)",
-                    RETURN_GENERATED_KEYS );
+                    RETURN_GENERATED_KEYS);
             statement.setString(1, example.getName());
             statement.setString(2, example.getCode());
             statement.setString(3, example.getTerritoryString());
@@ -108,7 +110,7 @@ public class DBConnection {
 
             // insert all tags
             for (String tag : example.getTags()) {
-                statement = connection.prepareStatement("INSERT INTO " + TABLE_HAS_TAG + " (example_id, text) VALUES (?, ?)");
+                statement = connection.prepareStatement("INSERT INTO " + TABLE_HAS_TAG + " (example_id, tag) VALUES (?, ?)");
                 statement.setInt(1, exampleId);
                 statement.setString(2, tag.toLowerCase());
 
@@ -117,7 +119,7 @@ public class DBConnection {
 
             connection.commit();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             try {
                 if (connection != null) {
@@ -125,6 +127,10 @@ public class DBConnection {
                 }
             } catch (SQLException ignored) {
             }
+
+            // rethrow exception to indicate an error occurred while saving
+            throw e;
+
         } finally {
             // close open connections and statements and re-enable autocommit
             try {
@@ -148,29 +154,31 @@ public class DBConnection {
         }
     }
 
-    /** Get a list of */
-    public void loadExample(String[] tags) {
+    /** Get a list of Examples in a short form which fit the given Tags. */
+    public List<String> loadExample(String[] tags) {
         /*
         SELECT a.example_id, a.name
-        FROM Example a JOIN (SELECT example_id, COUNT(*) as occurrences
+        FROM Example AS a JOIN (SELECT example_id, COUNT(*) AS occurrences
 					FROM (	SELECT example_id
 							FROM HasTag
-							WHERE text.lower() like ?
+							WHERE text like ?
 
 							UNION ALL
 
 							SELECT example_id
 							FROM HasTag
-							WHERE text.lower() like ?
+							WHERE text like ?
 
 							...
-					)
+					) AS t
 					GROUP BY example_id
-					ORDER BY occurrences DESC) b
+					ORDER BY occurrences DESC) AS b
             ON a.example_id = b.example_id
-
          */
+
         PreparedStatement statement = null;
+        List<String> exampleList = null;
+
         try {
             connection = DriverManager.getConnection(CONNECTION_URL);
 
@@ -178,39 +186,39 @@ public class DBConnection {
             connection.setAutoCommit(false);
 
             StringBuilder tagQuery = new StringBuilder();
+            tagQuery.append("SELECT example_id, COUNT(*) AS occurrences ")
+                    .append("FROM (");
             for (int i = 0; i < tags.length; i++) {
                 tagQuery.append("SELECT example_id ")
                         .append("FROM HasTag ")
-                        .append("WHERE text like ?");
+                        .append("WHERE tag like ?");
 
                 if (i != tags.length - 1) {
                     tagQuery.append(" UNION ALL ");
                 }
             }
+            tagQuery.append(") AS t ")
+                    .append("GROUP BY example_id ")
+                    .append("ORDER BY occurrences DESC");
 
-            String fullQuery = "SELECT a.example_id, a.name" +
-                    "FROM Example as a JOIN " +
-                    "(SELECT example_id, COUNT(*) as occurrences" +
-                    "FROM ( " + tagQuery + ") " +
-                    "GROUP BY example_id " +
-                    "ORDER BY occurrences DESC) as b " +
+            String fullQuery = "SELECT a.example_id, a.name " +
+                    "FROM Example AS a JOIN " +
+                    "(" + tagQuery + " ) as b " +
                     "ON a.example_id = b.example_id";
 
-            //statement = connection.prepareStatement(fullQuery);
-            //for (int i = 0; i < tags.length; i++) {
-            //     statement.setString(i + 1, tags[i].toLowerCase());
-            //}
+            statement = connection.prepareStatement(fullQuery);
 
-            statement = connection.prepareStatement("SELECT * FROM Example");
+            for (int i = 0; i < tags.length; i++) {
+                statement.setString(i + 1, tags[i].toLowerCase());
+            }
 
             ResultSet r = statement.executeQuery();
 
             connection.commit();
 
-            while (r.next())  {
-                System.out.print(r.getString(1));
-                System.out.println(r.getString(2));
-
+            exampleList = new ArrayList<>();
+            while (r.next()) {
+                exampleList.add(r.getString(1) + " - " + r.getString(2));
             }
 
         } catch (Exception e) {
@@ -242,11 +250,14 @@ public class DBConnection {
             } catch (SQLException ignored) {
             }
         }
+
+        return exampleList;
     }
 
     public static void shutDown() {
         try {
             DriverManager.getConnection("jdbc:derby:;shutdown=true");
+            System.out.println("closing databse");
         } catch (SQLException ignored) {
         }
     }

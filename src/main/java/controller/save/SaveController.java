@@ -126,7 +126,7 @@ public class SaveController {
                 Files.write(Paths.get(selectedFile.getAbsolutePath()), territoryXML.getBytes(StandardCharsets.UTF_8));
 
                 fxmlController.updateNotificationText("Territorium gespeichert");
-            } catch (XMLStreamException | IOException e) {
+            } catch (IOException | XMLStreamException e) {
                 e.printStackTrace();
                 new Alert(Alert.AlertType.ERROR, "Beim Speichern des Territoriums ist ein Fehler aufgetreten",
                         ButtonType.OK).show();
