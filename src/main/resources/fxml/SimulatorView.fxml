@@ -168,6 +168,11 @@
                             </graphic>
                         </MenuItem>
                     </Menu>
+
+                    <Menu text="_Beispiele">
+                        <MenuItem text="_Speichern" fx:id="saveExampleMenuItem"/>
+                        <MenuItem text="_Laden" fx:id="loadExampleMenuItem"/>
+                    </Menu>
                 </MenuBar>
 
 

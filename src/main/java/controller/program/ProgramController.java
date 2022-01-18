@@ -1,6 +1,7 @@
 package controller.program;
 
 import controller.FXMLController;
+import controller.example.DBConnection;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -65,12 +66,15 @@ public class ProgramController {
         controller.exitMenuItem.setOnAction(a -> {
             ProgramController.saveProgramToFile(program, controller.codeTextArea.getText());
             ProgramController.removeProgram(program);
+            ProgramController.shutDownDatabaseIfLastClosed();
+            DBConnection.shutDown();
             stage.close();
         });
 
         stage.setOnCloseRequest(event -> {
             ProgramController.saveProgramToFile(program, controller.codeTextArea.getText());
             ProgramController.removeProgram(program);
+            ProgramController.shutDownDatabaseIfLastClosed();
         });
     }
 
@@ -97,6 +101,13 @@ public class ProgramController {
     public static void removeProgram(Program program) {
         programMap.remove(program.getName());
         stageMap.remove(program.getName());
+    }
+
+    /** If the last program was removed from the program map, the database will be closed, as all windows are closed. */
+    public static void shutDownDatabaseIfLastClosed() {
+        if (programMap.isEmpty()) {
+            DBConnection.shutDown();
+        }
     }
 
 
@@ -142,6 +153,8 @@ public class ProgramController {
             controller.setUpControllers();
 
             stage.show();
+
+            DBConnection.getInstance();
         } catch (IOException e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Simulator konnte nicht gestartet werden", ButtonType.OK).showAndWait();

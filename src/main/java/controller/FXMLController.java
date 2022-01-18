@@ -1,6 +1,7 @@
 package controller;
 
 import controller.actor.ActorController;
+import controller.example.ExampleController;
 import controller.program.ProgramController;
 import controller.save.SaveController;
 import controller.simulation.SimulationController;
@@ -28,6 +29,7 @@ public class FXMLController {
     private SaveController saveController;
     private ProgramController programController;
     private TerritoryController territoryController;
+    private ExampleController exampleController;
 
     // menu items
     @FXML
@@ -86,6 +88,10 @@ public class FXMLController {
     public MenuItem pauseMenuItem;
     @FXML
     public MenuItem stopMenuItem;
+    @FXML
+    public MenuItem loadExampleMenuItem;
+    @FXML
+    public MenuItem saveExampleMenuItem;
 
     // toolbar items
     @FXML
@@ -148,6 +154,7 @@ public class FXMLController {
         this.simulationController = new SimulationController(territory, this);
         this.saveController = new SaveController(territory, stage, this);
         this.programController = new ProgramController(program, stage, territory, this);
+        this.exampleController = new ExampleController(saveController, stage, this);
     }
 
     public void setTerritory(Territory territory) {

@@ -19,6 +19,7 @@ import javax.xml.stream.*;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -120,60 +121,12 @@ public class SaveController {
         File selectedFile = fileChooser.showSaveDialog(stage);
 
         if (selectedFile != null) {
-            XMLOutputFactory factory = XMLOutputFactory.newInstance();
             try {
-                XMLStreamWriter writer = factory.createXMLStreamWriter(new FileOutputStream(selectedFile.getAbsolutePath()));
-                writer.writeStartDocument("utf-8", "1.1");
-                writer.writeCharacters("\n");
-
-                writer.writeDTD(territoryDTD);
-                writer.writeCharacters("\n");
-
-                synchronized (territory) {
-                    writer.writeStartElement("territory"); // <territory>
-                    writer.writeAttribute("height", String.valueOf(territory.getHeight()));
-                    writer.writeAttribute("width", String.valueOf(territory.getWidth()));
-                    writer.writeCharacters("\n");
-
-                    writer.writeStartElement("actor"); // <actor>
-                    writer.writeAttribute("actorPresents", String.valueOf(territory.getActorPresents()));
-                    writer.writeAttribute("actorDirection", String.valueOf(territory.getActorDirection()));
-                    writer.writeCharacters("\n");
-
-                    writer.writeStartElement("actorPosition"); // <actorPosition>
-                    writer.writeAttribute("x", String.valueOf(territory.getActorPosition().getX()));
-                    writer.writeAttribute("y", String.valueOf(territory.getActorPosition().getY()));
-                    writer.writeEndElement(); // </actorPosition>
-                    writer.writeCharacters("\n");
-
-                    writer.writeEndElement(); // </actor>
-                    writer.writeCharacters("\n");
-
-
-                    Tile[][] market = territory.getMarket();
-                    for (int y = 0; y < market.length; y++) {
-                        for (int x = 0; x < market[y].length; x++) {
-                            if (market[y][x].getState() != TileState.EMPTY) {
-                                writer.writeStartElement("tile"); // <tile>
-                                writer.writeAttribute("x", String.valueOf(x));
-                                writer.writeAttribute("y", String.valueOf(y));
-                                writer.writeAttribute("type", market[y][x].getState().name());
-                                writer.writeEndElement(); // </tile>
-                                writer.writeCharacters(" \n");
-                            }
-                        }
-                    }
-
-                    // save the territory's state, so the territory can be reset to this state
-                    territory.saveState();
-                }
-
-                writer.writeEndElement(); // </territory>
-                writer.writeEndDocument();
-                writer.close();
+                String territoryXML = getTerritoryXMLString();
+                Files.write(Paths.get(selectedFile.getAbsolutePath()), territoryXML.getBytes(StandardCharsets.UTF_8));
 
                 fxmlController.updateNotificationText("Territorium gespeichert");
-            } catch (XMLStreamException | FileNotFoundException e) {
+            } catch (XMLStreamException | IOException e) {
                 e.printStackTrace();
                 new Alert(Alert.AlertType.ERROR, "Beim Speichern des Territoriums ist ein Fehler aufgetreten",
                         ButtonType.OK).show();
@@ -259,6 +212,64 @@ public class SaveController {
                 e.printStackTrace();
             }
         }
+    }
+
+    /** Get a String for the XML representation for the current territory. */
+    public String getTerritoryXMLString() throws XMLStreamException {
+        XMLOutputFactory factory = XMLOutputFactory.newInstance();
+
+        StringWriter stringOut = new StringWriter();
+        XMLStreamWriter writer = factory.createXMLStreamWriter(stringOut);
+        writer.writeStartDocument("utf-8", "1.1");
+        writer.writeCharacters("\n");
+
+        writer.writeDTD(territoryDTD);
+        writer.writeCharacters("\n");
+
+        synchronized (territory) {
+            writer.writeStartElement("territory"); // <territory>
+            writer.writeAttribute("height", String.valueOf(territory.getHeight()));
+            writer.writeAttribute("width", String.valueOf(territory.getWidth()));
+            writer.writeCharacters("\n");
+
+            writer.writeStartElement("actor"); // <actor>
+            writer.writeAttribute("actorPresents", String.valueOf(territory.getActorPresents()));
+            writer.writeAttribute("actorDirection", String.valueOf(territory.getActorDirection()));
+            writer.writeCharacters("\n");
+
+            writer.writeStartElement("actorPosition"); // <actorPosition>
+            writer.writeAttribute("x", String.valueOf(territory.getActorPosition().getX()));
+            writer.writeAttribute("y", String.valueOf(territory.getActorPosition().getY()));
+            writer.writeEndElement(); // </actorPosition>
+            writer.writeCharacters("\n");
+
+            writer.writeEndElement(); // </actor>
+            writer.writeCharacters("\n");
+
+
+            Tile[][] market = territory.getMarket();
+            for (int y = 0; y < market.length; y++) {
+                for (int x = 0; x < market[y].length; x++) {
+                    if (market[y][x].getState() != TileState.EMPTY) {
+                        writer.writeStartElement("tile"); // <tile>
+                        writer.writeAttribute("x", String.valueOf(x));
+                        writer.writeAttribute("y", String.valueOf(y));
+                        writer.writeAttribute("type", market[y][x].getState().name());
+                        writer.writeEndElement(); // </tile>
+                        writer.writeCharacters(" \n");
+                    }
+                }
+            }
+
+            // save the territory's state, so the territory can be reset to this state
+            territory.saveState();
+        }
+
+        writer.writeEndElement(); // </territory>
+        writer.writeEndDocument();
+        writer.close();
+
+        return stringOut.toString();
     }
 
     /** Handle an opening element when parsing the XML file while loading. */
