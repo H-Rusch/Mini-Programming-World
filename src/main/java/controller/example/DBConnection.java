@@ -85,7 +85,6 @@ public class DBConnection {
 
     /** Save an Example by inserting it and all its Tags into the database. */
     public void saveExample(Example example) throws SQLException {
-        PreparedStatement statement = null;
         try {
             connection = DriverManager.getConnection(CONNECTION_URL);
 
@@ -93,28 +92,11 @@ public class DBConnection {
             connection.setAutoCommit(false);
 
             // insert into example which return the ID of the inserted element
-            statement = connection.prepareStatement("INSERT INTO " + TABLE_EXAMPLE + " (name, code, territory) VALUES (?, ?, ?)",
-                    RETURN_GENERATED_KEYS);
-            statement.setString(1, example.getName());
-            statement.setString(2, example.getCode());
-            statement.setString(3, example.getTerritoryString());
-
-            statement.executeUpdate();
-
-            // get id of last inserted tuple
-            ResultSet result = statement.getGeneratedKeys();
-            result.next();
-            int exampleId = result.getInt(1);
-            result.close();
-
+            int exampleId = insertExample(example.getName(), example.getCode(), example.getTerritoryString());
 
             // insert all tags
             for (String tag : example.getTags()) {
-                statement = connection.prepareStatement("INSERT INTO " + TABLE_HAS_TAG + " (example_id, tag) VALUES (?, ?)");
-                statement.setInt(1, exampleId);
-                statement.setString(2, tag.toLowerCase());
-
-                statement.executeUpdate();
+                insertTag(exampleId, tag);
             }
 
             connection.commit();
@@ -140,12 +122,6 @@ public class DBConnection {
             } catch (SQLException ignored) {
             }
             try {
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException ignored) {
-            }
-            try {
                 if (connection != null) {
                     connection.close();
                 }
@@ -154,8 +130,46 @@ public class DBConnection {
         }
     }
 
+    private void insertTag(int exampleId, String tag) {
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO " + TABLE_HAS_TAG + " (example_id, tag) VALUES (?, ?)")) {
+            statement.setInt(1, exampleId);
+            statement.setString(2, tag.toLowerCase());
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Integer insertExample(String name, String code, String territoryString) {
+        Integer exampleId = null;
+
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO " + TABLE_EXAMPLE + " (name, code, territory) VALUES (?, ?, ?)",
+                RETURN_GENERATED_KEYS)) {
+
+            statement.setString(1, name);
+            statement.setString(2, code);
+            statement.setString(3, territoryString);
+
+            statement.executeUpdate();
+
+            // get id of last inserted tuple
+            ResultSet result = statement.getGeneratedKeys();
+            result.next();
+            exampleId = result.getInt(1);
+            result.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return exampleId;
+    }
+
+
     /** Get a list of Examples in a short form which fit the given Tags. */
-    public List<String> loadExample(String[] tags) {
+    public List<String> loadExamplesForTags(String[] tags) {
         /*
         SELECT a.example_id, a.name
         FROM Example AS a JOIN (SELECT example_id, COUNT(*) AS occurrences
@@ -254,10 +268,96 @@ public class DBConnection {
         return exampleList;
     }
 
+
+    /** Get the data for a specific Example from the database. */
+    public Example loadExampleForId(Integer exampleId) {
+        Example result = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DriverManager.getConnection(CONNECTION_URL);
+
+            statement = connection.prepareStatement("SELECT name, code, territory " +
+                    "FROM " + TABLE_EXAMPLE + " " +
+                    "WHERE example_id = ?");
+            statement.setInt(1, exampleId);
+
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                result = new Example(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), null);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ignored) {
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ignored) {
+                }
+            }
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException ignored) {
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public void debugSelectAll() {
+        Statement statement = null;
+        ResultSet rs = null;
+        try {
+            connection = DriverManager.getConnection(CONNECTION_URL);
+
+            statement = connection.createStatement();
+            rs = statement.executeQuery("SELECT example_id, name, tag FROM Example NATURAL JOIN HasTag");
+
+            while (rs.next()) {
+                System.out.println(Integer.parseInt(String.valueOf(rs.getInt(1))) + " " +
+                        rs.getString(2) + " " +
+                        rs.getString(3));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ignored) {
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ignored) {
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ignored) {
+                }
+            }
+        }
+
+    }
+
     public static void shutDown() {
         try {
             DriverManager.getConnection("jdbc:derby:;shutdown=true");
-            System.out.println("closing databse");
         } catch (SQLException ignored) {
         }
     }

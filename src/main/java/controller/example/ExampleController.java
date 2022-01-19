@@ -46,6 +46,7 @@ public class ExampleController {
         Optional<String[]> tags = askTagInput();
         if (tags.isPresent()) {
             try {
+                // save the example in the database
                 DBConnection db = DBConnection.getInstance();
 
                 String title = stage.getTitle();
@@ -75,13 +76,23 @@ public class ExampleController {
             DBConnection db = DBConnection.getInstance();
 
             // load the short form "id - name" from the database
-            List<String> shortExamples = db.loadExample(tags.get());
+            List<String> shortExamples = db.loadExamplesForTags(tags.get());
 
             if (shortExamples.isEmpty()) {
-                System.out.println("list empty");
+                new Alert(Alert.AlertType.INFORMATION, "Zu den gegebenen Tags wurden keine Beispiele gefunden.",
+                        ButtonType.OK).show();
             } else {
                 // build another dialog to ask the user to select one of the listed examples
-                // TODO
+                // TODO load example if value returned
+                Optional<Integer> exampleID = askExampleChoice(shortExamples);
+                if (exampleID.isPresent()) {
+                    Example example = db.loadExampleForId(exampleID.get());
+                    System.out.println(example.getName());
+                    System.out.println(example.getCode());
+                    System.out.println(example.getTerritoryString());
+
+                }
+                //exampleID.ifPresent(i -> );
                 shortExamples.forEach(System.out::println);
             }
 
@@ -106,6 +117,35 @@ public class ExampleController {
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == ButtonType.OK) {
                     return dialogController.getTags();
+                }
+                return null;
+            });
+
+            result = dialog.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /** Show an input dialog asking the user to select one of multiple examples. */
+    private Optional<Integer> askExampleChoice(List<String> shortExamples) {
+        Optional<Integer> result = Optional.empty();
+        try {
+            FXMLLoader loader = new FXMLLoader(ProgramController.class.getResource("/fxml/ExampleChoiceDialog.fxml"));
+            DialogPane dialogPane = loader.load();
+
+            ExampleChoiceDialogController dialogController = loader.getController();
+            dialogController.setChoices(shortExamples);
+
+            Dialog<Integer> dialog = new Dialog<>();
+            dialog.setDialogPane(dialogPane);
+            dialog.setTitle("Beispiel wählen");
+
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == ButtonType.OK) {
+                    return dialogController.getIdOfChoice();
                 }
                 return null;
             });

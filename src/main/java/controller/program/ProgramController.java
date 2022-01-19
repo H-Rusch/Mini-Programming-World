@@ -67,7 +67,6 @@ public class ProgramController {
             ProgramController.saveProgramToFile(program, controller.codeTextArea.getText());
             ProgramController.removeProgram(program);
             ProgramController.shutDownDatabaseIfLastClosed();
-            DBConnection.shutDown();
             stage.close();
         });
 
