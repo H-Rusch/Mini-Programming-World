@@ -51,9 +51,9 @@ public class ExampleController {
 
                 String title = stage.getTitle();
                 String name = title.substring(title.indexOf(":") + 2).trim();
-                String territoryXML = saveController.getTerritoryXMLString();
                 String code = fxmlController.codeTextArea.getText();
-                Example example = new Example(name, territoryXML, code, tags.get());
+                String territoryXML = saveController.getTerritoryXMLString();
+                Example example = new Example(name, code, territoryXML, tags.get());
 
                 db.saveExample(example);
             } catch (XMLStreamException | SQLException e) {
@@ -61,7 +61,7 @@ public class ExampleController {
                 new Alert(Alert.AlertType.ERROR, "Beim Speichern des Beispiels ist ein Fehler aufgetreten.",
                         ButtonType.OK).show();
             }
-            fxmlController.updateNotificationText("Das Beispiel wurde in der Datenbank gespeichert.");
+            fxmlController.updateNotificationText("Beispiel in die Datenbank gespeichert");
         }
     }
 
@@ -83,20 +83,19 @@ public class ExampleController {
                         ButtonType.OK).show();
             } else {
                 // build another dialog to ask the user to select one of the listed examples
-                // TODO load example if value returned
                 Optional<Integer> exampleID = askExampleChoice(shortExamples);
                 if (exampleID.isPresent()) {
                     Example example = db.loadExampleForId(exampleID.get());
-                    System.out.println(example.getName());
-                    System.out.println(example.getCode());
-                    System.out.println(example.getTerritoryString());
 
+                    fxmlController.codeTextArea.setText(example.getCode());
+                    saveController.loadTerritoryFromXMLString(example.getTerritoryString());
+
+                    fxmlController.updateNotificationText("Beispiel aus der Datenbank geladen");
+                } else {
+                    new Alert(Alert.AlertType.ERROR, "Beim Laden aus der Datenbank ist ein Fehler aufgetreten.",
+                            ButtonType.OK).show();
                 }
-                //exampleID.ifPresent(i -> );
-                shortExamples.forEach(System.out::println);
             }
-
-
         }
     }
 

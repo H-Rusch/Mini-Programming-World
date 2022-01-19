@@ -52,7 +52,7 @@ public class SaveController {
         fxmlController.deserializeMenuItem.setOnAction(a -> deserializeTerritory());
 
         fxmlController.saveXmlMenuItem.setOnAction(a -> saveTerritoryXML());
-        fxmlController.loadXmlMenuItem.setOnAction(a -> loadTerritoryXML());
+        fxmlController.loadXmlMenuItem.setOnAction(a -> loadTerritoryFromXMLFile());
 
         fxmlController.saveImageMenuItem.setOnAction(a -> saveScreenshot());
     }
@@ -134,8 +134,8 @@ public class SaveController {
         }
     }
 
-    /** Load a territory which was stored in the XML format. */
-    public void loadTerritoryXML() {
+    /** Load a territory from a file. */
+    private void loadTerritoryFromXMLFile() {
         FileChooser fileChooser = new FileChooser();
         createDirectoryIfNotExists(TERRITORY_DIRECTORY);
         fileChooser.setInitialDirectory(new File(TERRITORY_DIRECTORY));
@@ -144,41 +144,59 @@ public class SaveController {
         File selectedFile = fileChooser.showOpenDialog(stage);
 
         if (selectedFile != null) {
-            Territory newTerritory = new Territory(1, 1);
-
             try {
-                XMLInputFactory factory = XMLInputFactory.newInstance();
-                XMLEventReader parser = factory.createXMLEventReader(
-                        new FileInputStream(selectedFile.getAbsolutePath()));
+                // load territories XML from the file and then load the territory
+                String territoryXML = Files.readAllLines(Paths.get(selectedFile.getAbsolutePath())).stream()
+                        .reduce(String::concat)
+                        .orElse("");
 
-                while (parser.hasNext()) {
-                    XMLEvent event = parser.nextEvent();
-                    switch (event.getEventType()) {
-                        case XMLStreamConstants.END_DOCUMENT:
-                            parser.close();
-                            break;
-                        case XMLStreamConstants.START_ELEMENT:
-                            handleStartingElement(newTerritory, event.asStartElement());
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                synchronized (territory) {
-                    territory.loadTerritory(newTerritory);
-                    // save the territory's state, so the territory can be reset to this state
-                    territory.saveState();
-                }
-
-                fxmlController.updateNotificationText("Territorium geladen");
-            } catch (XMLStreamException | FileNotFoundException e) {
+                loadTerritoryFromXMLString(territoryXML);
+            } catch (IOException e) {
                 e.printStackTrace();
                 new Alert(Alert.AlertType.ERROR, "Beim Laden des Territoriums ist ein Fehler aufgetreten",
                         ButtonType.OK).show();
             }
         }
     }
+
+
+    /** Load a territory from a String in the XML format. */
+    public void loadTerritoryFromXMLString(String territoryXML) {
+        Territory newTerritory = new Territory(1, 1);
+
+        try {
+            XMLInputFactory factory = XMLInputFactory.newInstance();
+            XMLEventReader parser = factory.createXMLEventReader(
+                    new StringReader(territoryXML));
+
+            while (parser.hasNext()) {
+                XMLEvent event = parser.nextEvent();
+                switch (event.getEventType()) {
+                    case XMLStreamConstants.END_DOCUMENT:
+                        parser.close();
+                        break;
+                    case XMLStreamConstants.START_ELEMENT:
+                        handleStartingElement(newTerritory, event.asStartElement());
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            synchronized (territory) {
+                territory.loadTerritory(newTerritory);
+                // save the territory's state, so the territory can be reset to this state
+                territory.saveState();
+            }
+
+            fxmlController.updateNotificationText("Territorium geladen");
+        } catch (XMLStreamException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Beim Laden des Territoriums ist ein Fehler aufgetreten",
+                    ButtonType.OK).show();
+        }
+    }
+
 
     /** Save a screenshot of the TerritoryPanel and save it to the disk */
     public void saveScreenshot() {

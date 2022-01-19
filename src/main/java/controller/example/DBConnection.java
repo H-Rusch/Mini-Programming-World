@@ -43,7 +43,7 @@ public class DBConnection {
     }
 
     /** Create the database if it does not exist already and create the tables. */
-    private void createDatabaseIfNotExists() {
+    public void createDatabaseIfNotExists() {
         // load database driver
         try {
             Class.forName(DRIVER);

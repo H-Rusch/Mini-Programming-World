@@ -153,7 +153,7 @@ public class ProgramController {
 
             stage.show();
 
-            DBConnection.getInstance();
+            DBConnection.getInstance().createDatabaseIfNotExists();
         } catch (IOException e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Simulator konnte nicht gestartet werden", ButtonType.OK).showAndWait();
