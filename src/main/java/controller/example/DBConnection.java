@@ -1,5 +1,7 @@
 package controller.example;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import model.example.Example;
 
 import java.sql.*;
@@ -49,7 +51,7 @@ public class DBConnection {
             Class.forName(DRIVER);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            // Alert
+            new Alert(Alert.AlertType.ERROR, "Datenbanktreiber nicht vorhanden.", ButtonType.OK).show();
         }
 
         // create connection to database and tables
