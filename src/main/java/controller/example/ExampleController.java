@@ -86,14 +86,15 @@ public class ExampleController {
                 Optional<Integer> exampleID = askExampleChoice(shortExamples);
                 if (exampleID.isPresent()) {
                     Example example = db.loadExampleForId(exampleID.get());
+                    if (example == null) {
+                        new Alert(Alert.AlertType.ERROR, "Beim Laden aus der Datenbank ist ein Fehler aufgetreten.",
+                                ButtonType.OK).show();
+                    } else {
+                        fxmlController.codeTextArea.setText(example.getCode());
+                        saveController.loadTerritoryFromXMLString(example.getTerritoryString());
 
-                    fxmlController.codeTextArea.setText(example.getCode());
-                    saveController.loadTerritoryFromXMLString(example.getTerritoryString());
-
-                    fxmlController.updateNotificationText("Beispiel aus der Datenbank geladen");
-                } else {
-                    new Alert(Alert.AlertType.ERROR, "Beim Laden aus der Datenbank ist ein Fehler aufgetreten.",
-                            ButtonType.OK).show();
+                        fxmlController.updateNotificationText("Beispiel aus der Datenbank geladen");
+                    }
                 }
             }
         }
