@@ -25,8 +25,8 @@ public class DBConnection {
     private static final String CREATE_EXAMPLE = "CREATE TABLE " + TABLE_EXAMPLE + " (" +
             " example_id INT NOT NULL GENERATED ALWAYS AS IDENTITY, " +
             " name VARCHAR(255), " +
-            " code VARCHAR(4000), " +
-            " territory VARCHAR(4000), " +
+            " code VARCHAR(32672), " +
+            " territory VARCHAR(32672), " +
             " PRIMARY KEY (example_id))";
     private static final String CREATE_HAS_TAG = "CREATE TABLE " + TABLE_HAS_TAG + " (" +
             " has_tag_id INT NOT NULL GENERATED ALWAYS AS IDENTITY, " +
