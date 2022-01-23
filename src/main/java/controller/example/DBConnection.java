@@ -37,7 +37,6 @@ public class DBConnection {
 
 
     private DBConnection() {
-        createDatabaseIfNotExists();
     }
 
     public static DBConnection getInstance() {
@@ -53,7 +52,6 @@ public class DBConnection {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Datenbanktreiber nicht vorhanden.", ButtonType.OK).show();
         }
-
         // create connection to database and tables
         Statement statement = null;
         try {
@@ -146,6 +144,7 @@ public class DBConnection {
 
     private Integer insertExample(String name, String code, String territoryString) {
         Integer exampleId = null;
+        ResultSet result = null;
 
         try (PreparedStatement statement = connection.prepareStatement("INSERT INTO " + TABLE_EXAMPLE + " (name, code, territory) VALUES (?, ?, ?)",
                 RETURN_GENERATED_KEYS)) {
@@ -157,13 +156,20 @@ public class DBConnection {
             statement.executeUpdate();
 
             // get id of last inserted tuple
-            ResultSet result = statement.getGeneratedKeys();
+            result = statement.getGeneratedKeys();
             result.next();
             exampleId = result.getInt(1);
-            result.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if (result != null) {
+                try {
+                    result.close();
+                } catch (SQLException ignored) {
+                }
+            }
+
         }
 
         return exampleId;
@@ -198,9 +204,6 @@ public class DBConnection {
         try {
             connection = DriverManager.getConnection(CONNECTION_URL);
 
-            // start transaction
-            connection.setAutoCommit(false);
-
             StringBuilder tagQuery = new StringBuilder();
             tagQuery.append("SELECT example_id, COUNT(*) AS occurrences ")
                     .append("FROM (");
@@ -230,8 +233,6 @@ public class DBConnection {
 
             ResultSet r = statement.executeQuery();
 
-            connection.commit();
-
             exampleList = new ArrayList<>();
             while (r.next()) {
                 exampleList.add(r.getString(1) + " - " + r.getString(2));
@@ -239,20 +240,8 @@ public class DBConnection {
 
         } catch (Exception e) {
             e.printStackTrace();
-            try {
-                if (connection != null) {
-                    connection.rollback();
-                }
-            } catch (SQLException ignored) {
-            }
         } finally {
-            // close open connections and statements and re-enable autocommit
-            try {
-                if (connection != null) {
-                    connection.setAutoCommit(true);
-                }
-            } catch (SQLException ignored) {
-            }
+            // close open connections and statements
             try {
                 if (statement != null) {
                     statement.close();

@@ -56,12 +56,13 @@ public class ExampleController {
                 Example example = new Example(name, code, territoryXML, tags.get());
 
                 db.saveExample(example);
+
+                fxmlController.updateNotificationText("Beispiel in die Datenbank gespeichert");
             } catch (XMLStreamException | SQLException e) {
                 e.printStackTrace();
                 new Alert(Alert.AlertType.ERROR, "Beim Speichern des Beispiels ist ein Fehler aufgetreten.",
                         ButtonType.OK).show();
             }
-            fxmlController.updateNotificationText("Beispiel in die Datenbank gespeichert");
         }
     }
 
@@ -78,7 +79,10 @@ public class ExampleController {
             // load the short form "id - name" from the database
             List<String> shortExamples = db.loadExamplesForTags(tags.get());
 
-            if (shortExamples.isEmpty()) {
+            if (shortExamples == null) {
+                new Alert(Alert.AlertType.INFORMATION, "Bei der Kommunikation mit der Datenbank ist ein Fehler " +
+                        "aufgetreten.", ButtonType.OK).show();
+            } else if (shortExamples.isEmpty()) {
                 new Alert(Alert.AlertType.INFORMATION, "Zu den gegebenen Tags wurden keine Beispiele gefunden.",
                         ButtonType.OK).show();
             } else {
