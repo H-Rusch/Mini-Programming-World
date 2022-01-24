@@ -11,9 +11,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class TutorImpl extends UnicastRemoteObject implements Tutor {
 
     private static final Object syncObject = new Object();
-    private Queue<UUID> requestQueue;
-    private Map<UUID, Request> requests;
-    private Map<UUID, Answer> answers;
+    private final Queue<UUID> requestQueue;
+    private final Map<UUID, Request> requests;
+    private final Map<UUID, Answer> answers;
 
     public TutorImpl() throws RemoteException {
         super();
@@ -48,7 +48,7 @@ public class TutorImpl extends UnicastRemoteObject implements Tutor {
     }
 
     public Request receiveRequest() {
-        Request request = null;
+        Request request;
         synchronized (syncObject) {
             UUID oldestId = requestQueue.poll();
             request = requests.get(oldestId);

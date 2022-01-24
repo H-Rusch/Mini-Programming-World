@@ -35,7 +35,6 @@ public class StudentController implements TutorStudentController {
         fxmlController.sendStudentAnswerMenuItem.setVisible(false);
         fxmlController.receiveStudentRequestMenuItem.setVisible(false);
 
-        fxmlController.sendTutorRequestMenuItem.setDisable(true);
         fxmlController.receiveTutorAnswerMenuItem.setDisable(true);
 
         fxmlController.sendTutorRequestMenuItem.setOnAction(a -> sendTutorRequest());
@@ -53,8 +52,6 @@ public class StudentController implements TutorStudentController {
                     Integer.parseInt(PropertyController.getTutorPort()));
             this.tutor = (Tutor) registry.lookup("tutor");
 
-            fxmlController.sendTutorRequestMenuItem.setDisable(false);
-
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Die Verbindung mit dem Tutor ist fehlgeschlagen.", ButtonType.OK).show();
@@ -70,6 +67,7 @@ public class StudentController implements TutorStudentController {
             UUID newRequestId = UUID.randomUUID();
             Request request = new Request(newRequestId, fxmlController.codeTextArea.getText(), saveController.getTerritoryXMLString());
             tutor.sendRequest(lastRequestId, request);
+            lastRequestId = newRequestId;
 
             fxmlController.receiveTutorAnswerMenuItem.setDisable(false);
 
@@ -86,6 +84,8 @@ public class StudentController implements TutorStudentController {
         try {
             Answer answer = tutor.receiveAnswer(lastRequestId);
             if (answer != null) {
+                lastRequestId = null;
+
                 fxmlController.codeTextArea.setText(answer.getCode());
                 saveController.loadTerritoryFromXMLString(answer.getTerritoryXML());
 
