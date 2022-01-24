@@ -130,18 +130,6 @@ public class DBConnection {
         }
     }
 
-    private void insertTag(int exampleId, String tag) {
-        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO " + TABLE_HAS_TAG + " (example_id, tag) VALUES (?, ?)")) {
-            statement.setInt(1, exampleId);
-            statement.setString(2, tag.toLowerCase());
-
-            statement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     private Integer insertExample(String name, String code, String territoryString) {
         Integer exampleId = null;
         ResultSet result = null;
@@ -175,6 +163,18 @@ public class DBConnection {
         return exampleId;
     }
 
+    private void insertTag(int exampleId, String tag) {
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO " + TABLE_HAS_TAG + " (example_id, tag) VALUES (?, ?)")) {
+            statement.setInt(1, exampleId);
+            statement.setString(2, tag.toLowerCase());
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /** Get a list of Examples in a short form which fit the given Tags. */
     public List<String> loadExamplesForTags(String[] tags) {
@@ -199,6 +199,7 @@ public class DBConnection {
          */
 
         PreparedStatement statement = null;
+        ResultSet resultSet = null;
         List<String> exampleList = null;
 
         try {
@@ -231,17 +232,23 @@ public class DBConnection {
                 statement.setString(i + 1, tags[i].toLowerCase());
             }
 
-            ResultSet r = statement.executeQuery();
+            resultSet = statement.executeQuery();
 
             exampleList = new ArrayList<>();
-            while (r.next()) {
-                exampleList.add(r.getString(1) + " - " + r.getString(2));
+            while (resultSet.next()) {
+                exampleList.add(resultSet.getString(1) + " - " + resultSet.getString(2));
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             // close open connections and statements
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException ignored) {
+            }
             try {
                 if (statement != null) {
                     statement.close();
@@ -283,6 +290,12 @@ public class DBConnection {
             e.printStackTrace();
 
         } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException ignored) {
+                }
+            }
             if (statement != null) {
                 try {
                     statement.close();
@@ -292,12 +305,6 @@ public class DBConnection {
             if (connection != null) {
                 try {
                     connection.close();
-                } catch (SQLException ignored) {
-                }
-            }
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
                 } catch (SQLException ignored) {
                 }
             }
