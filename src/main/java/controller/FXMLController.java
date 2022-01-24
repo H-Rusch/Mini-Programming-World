@@ -6,11 +6,15 @@ import controller.program.ProgramController;
 import controller.save.SaveController;
 import controller.simulation.SimulationController;
 import controller.territory.TerritoryController;
+import controller.tutor.StudentController;
+import controller.tutor.TutorController;
+import controller.tutor.TutorStudentController;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.program.Program;
 import model.territory.Territory;
+import util.PropertyController;
 import view.CodeEditor;
 import view.TerritoryPanel;
 
@@ -30,6 +34,7 @@ public class FXMLController {
     private ProgramController programController;
     private TerritoryController territoryController;
     private ExampleController exampleController;
+    private TutorStudentController tutoringController;
 
     // menu items
     @FXML
@@ -92,6 +97,14 @@ public class FXMLController {
     public MenuItem loadExampleMenuItem;
     @FXML
     public MenuItem saveExampleMenuItem;
+    @FXML
+    public MenuItem sendTutorRequestMenuItem;
+    @FXML
+    public MenuItem receiveTutorAnswerMenuItem;
+    @FXML
+    public MenuItem receiveStudentRequestMenuItem;
+    @FXML
+    public MenuItem sendStudentAnswerMenuItem;
 
     // toolbar items
     @FXML
@@ -155,6 +168,11 @@ public class FXMLController {
         this.saveController = new SaveController(territory, stage, this);
         this.programController = new ProgramController(program, stage, territory, this);
         this.exampleController = new ExampleController(saveController, stage, this);
+        if (PropertyController.isTutor()) {
+            this.tutoringController = new TutorController(saveController, this);
+        } else {
+            this.tutoringController = new StudentController(saveController, this);
+        }
     }
 
     public void setTerritory(Territory territory) {

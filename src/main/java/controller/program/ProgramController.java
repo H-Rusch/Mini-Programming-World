@@ -2,6 +2,7 @@ package controller.program;
 
 import controller.FXMLController;
 import controller.example.DBConnection;
+import controller.tutor.TutorController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -12,6 +13,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.program.Program;
 import model.territory.Territory;
+import util.PropertyController;
 
 import java.io.File;
 import java.io.IOException;
@@ -100,6 +102,10 @@ public class ProgramController {
     public static void removeProgram(Program program) {
         programMap.remove(program.getName());
         stageMap.remove(program.getName());
+
+        if (PropertyController.isTutor()) {
+            TutorController.end();
+        }
     }
 
     /** If the last program was removed from the program map, the database will be closed, as all windows are closed. */
@@ -131,6 +137,8 @@ public class ProgramController {
      */
     public static void startSimulatorStage(String programName) {
         try {
+            PropertyController.loadProperties();
+
             FXMLLoader fxmlLoader = new FXMLLoader(ProgramController.class.getResource("/fxml/SimulatorView.fxml"));
             Stage stage = fxmlLoader.load();
             stage.setTitle("Market MPW: " + programName);

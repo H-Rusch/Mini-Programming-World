@@ -1,6 +1,5 @@
 package controller.example;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;

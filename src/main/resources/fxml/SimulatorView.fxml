@@ -173,6 +173,14 @@
                         <MenuItem text="_Speichern" fx:id="saveExampleMenuItem"/>
                         <MenuItem text="_Laden" fx:id="loadExampleMenuItem"/>
                     </Menu>
+
+                    <Menu text="_Tutor">
+                        <MenuItem text="Tutorenanfrage senden" fx:id="sendTutorRequestMenuItem"/>
+                        <MenuItem text="Tutorenantwort erhalten" fx:id="receiveTutorAnswerMenuItem"/>
+
+                        <MenuItem text="Studentenfrage erhalten" fx:id="receiveStudentRequestMenuItem"/>
+                        <MenuItem text="Studentenantwort senden" fx:id="sendStudentAnswerMenuItem"/>
+                    </Menu>
                 </MenuBar>
 
 
