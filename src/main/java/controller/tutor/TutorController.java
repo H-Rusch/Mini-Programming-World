@@ -88,9 +88,13 @@ public class TutorController implements TutorStudentController {
 
     /** Send the current code and territory to the student. */
     private void sendStudentAnswer() {
+        if (activeRequestId == null) {
+            return;
+        }
         try {
             Answer answer = new Answer(activeRequestId, fxmlController.codeTextArea.getText(), saveController.getTerritoryXMLString());
             activeRequestId = null;
+            fxmlController.sendStudentAnswerMenuItem.setDisable(true);
             tutor.sendAnswer(answer);
 
             fxmlController.updateNotificationText("Antwort an Studierenden gesendet");
