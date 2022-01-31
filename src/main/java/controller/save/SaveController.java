@@ -11,6 +11,7 @@ import model.territory.Direction;
 import model.territory.Territory;
 import model.territory.Tile;
 import model.territory.TileState;
+import util.I18nUtil;
 import util.Position;
 
 import javax.imageio.ImageIO;
@@ -74,10 +75,10 @@ public class SaveController {
                     // save the territory's state, so the territory can be reset to this state
                     territory.saveState();
                 }
-                fxmlController.updateNotificationText("Territorium gespeichert");
+                fxmlController.updateNotificationText(I18nUtil.i18n("notification.territory.saved"));
             } catch (IOException e) {
                 e.printStackTrace();
-                new Alert(Alert.AlertType.ERROR, "Beim Speichern des Territoriums ist ein Fehler aufgetreten",
+                new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.save.saveTerritoryError"),
                         ButtonType.OK).show();
             }
         }
@@ -102,10 +103,10 @@ public class SaveController {
                     // save the territory's state, so the territory can be reset to this state
                     this.territory.saveState();
                 }
-                fxmlController.updateNotificationText("Territorium geladen");
+                fxmlController.updateNotificationText(I18nUtil.i18n("notification.territory.loaded"));
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
-                new Alert(Alert.AlertType.ERROR, "Beim Laden des Territoriums ist ein Fehler aufgetreten",
+                new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.save.loadTerritoryError"),
                         ButtonType.OK).show();
             }
         }
@@ -125,10 +126,10 @@ public class SaveController {
                 String territoryXML = getTerritoryXMLString();
                 Files.write(Paths.get(selectedFile.getAbsolutePath()), territoryXML.getBytes(StandardCharsets.UTF_8));
 
-                fxmlController.updateNotificationText("Territorium gespeichert");
+                fxmlController.updateNotificationText(I18nUtil.i18n("notification.territory.saved"));
             } catch (IOException | XMLStreamException e) {
                 e.printStackTrace();
-                new Alert(Alert.AlertType.ERROR, "Beim Speichern des Territoriums ist ein Fehler aufgetreten",
+                new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.save.saveTerritoryError"),
                         ButtonType.OK).show();
             }
         }
@@ -153,7 +154,7 @@ public class SaveController {
                 loadTerritoryFromXMLString(territoryXML);
             } catch (IOException e) {
                 e.printStackTrace();
-                new Alert(Alert.AlertType.ERROR, "Beim Laden des Territoriums ist ein Fehler aufgetreten",
+                new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.save.loadTerritoryError"),
                         ButtonType.OK).show();
             }
         }
@@ -189,10 +190,10 @@ public class SaveController {
                 territory.saveState();
             }
 
-            fxmlController.updateNotificationText("Territorium geladen");
+            fxmlController.updateNotificationText(I18nUtil.i18n("notification.territory.loaded"));
         } catch (XMLStreamException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Beim Laden des Territoriums ist ein Fehler aufgetreten",
+            new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.save.loadTerritoryError"),
                     ButtonType.OK).show();
         }
     }
@@ -215,7 +216,7 @@ public class SaveController {
                 ImageIO.write(SwingFXUtils.fromFXImage(screenshot, null), "png", selectedFile);
             } catch (IOException e) {
                 e.printStackTrace();
-                new Alert(Alert.AlertType.ERROR, "Beim Speichern des Bildes ist ein Fehler aufgetreten",
+                new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.save.saveImageError"),
                         ButtonType.OK).show();
             }
         }

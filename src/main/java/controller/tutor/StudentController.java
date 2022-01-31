@@ -7,6 +7,7 @@ import javafx.scene.control.ButtonType;
 import model.tutor.Answer;
 import model.tutor.Request;
 import model.tutor.Tutor;
+import util.I18nUtil;
 import util.PropertyController;
 
 import javax.xml.stream.XMLStreamException;
@@ -54,7 +55,7 @@ public class StudentController implements TutorStudentController {
 
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Die Verbindung mit dem Tutor ist fehlgeschlagen.", ButtonType.OK).show();
+            new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.tutor.connectionError"), ButtonType.OK).show();
         }
     }
 
@@ -71,10 +72,10 @@ public class StudentController implements TutorStudentController {
 
             fxmlController.receiveTutorAnswerMenuItem.setDisable(false);
 
-            fxmlController.updateNotificationText("Anfrage an Tutor gesendet");
+            fxmlController.updateNotificationText(I18nUtil.i18n("notification.tutor.sentRequest"));
         } catch (XMLStreamException | RemoteException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Bei der Übertragung der Anfrage ist ein Fehler aufgetreten.",
+            new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.tutor.sendRequestError"),
                     ButtonType.OK).show();
         }
     }
@@ -89,14 +90,14 @@ public class StudentController implements TutorStudentController {
                 fxmlController.codeTextArea.setText(answer.getCode());
                 saveController.loadTerritoryFromXMLString(answer.getTerritoryXML());
 
-                fxmlController.updateNotificationText("Tutorenantwort geladen");
+                fxmlController.updateNotificationText(I18nUtil.i18n("notification.tutor.loadedAnswer"));
             } else {
-                new Alert(Alert.AlertType.INFORMATION, "Es ist noch keine Antwort vom Tutor eingegangen.",
+                new Alert(Alert.AlertType.INFORMATION, I18nUtil.i18n("alert.tutor.noAnswerYet"),
                         ButtonType.OK).show();
             }
         } catch (RemoteException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Bei der Übertragung der Antwort ist ein Fehler aufgetreten.",
+            new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.tutor.sendAnswerError"),
                     ButtonType.OK).show();
         }
 

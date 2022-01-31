@@ -10,6 +10,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.stage.Stage;
 import model.example.Example;
+import util.I18nUtil;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
@@ -57,10 +58,10 @@ public class ExampleController {
 
                 db.saveExample(example);
 
-                fxmlController.updateNotificationText("Beispiel in die Datenbank gespeichert");
+                fxmlController.updateNotificationText(I18nUtil.i18n("notification.example.saved"));
             } catch (XMLStreamException | SQLException e) {
                 e.printStackTrace();
-                new Alert(Alert.AlertType.ERROR, "Beim Speichern des Beispiels ist ein Fehler aufgetreten.",
+                new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.example.savingError"),
                         ButtonType.OK).show();
             }
         }
@@ -80,10 +81,9 @@ public class ExampleController {
             List<String> shortExamples = db.loadExamplesForTags(tags.get());
 
             if (shortExamples == null) {
-                new Alert(Alert.AlertType.INFORMATION, "Bei der Kommunikation mit der Datenbank ist ein Fehler " +
-                        "aufgetreten.", ButtonType.OK).show();
+                new Alert(Alert.AlertType.INFORMATION, I18nUtil.i18n("alert.example.communicationError"), ButtonType.OK).show();
             } else if (shortExamples.isEmpty()) {
-                new Alert(Alert.AlertType.INFORMATION, "Zu den gegebenen Tags wurden keine Beispiele gefunden.",
+                new Alert(Alert.AlertType.INFORMATION, I18nUtil.i18n("alert.example.noExamplesForTags"),
                         ButtonType.OK).show();
             } else {
                 // build another dialog to ask the user to select one of the listed examples
@@ -91,13 +91,13 @@ public class ExampleController {
                 if (exampleID.isPresent()) {
                     Example example = db.loadExampleForId(exampleID.get());
                     if (example == null) {
-                        new Alert(Alert.AlertType.ERROR, "Beim Laden aus der Datenbank ist ein Fehler aufgetreten.",
+                        new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.example.loadingError"),
                                 ButtonType.OK).show();
                     } else {
                         fxmlController.codeTextArea.setText(example.getCode());
                         saveController.loadTerritoryFromXMLString(example.getTerritoryString());
 
-                        fxmlController.updateNotificationText("Beispiel aus der Datenbank geladen");
+                        fxmlController.updateNotificationText(I18nUtil.i18n("notification.example.loaded"));
                     }
                 }
             }
@@ -115,8 +115,8 @@ public class ExampleController {
 
             Dialog<String[]> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
-            dialog.setTitle("Tags eingeben");
-            dialog.setHeaderText("Durch Komma getrennte Tags eingeben");
+            dialog.setTitle(I18nUtil.i18n("dialog.tag.title"));
+            dialog.setHeaderText(I18nUtil.i18n("dialog.tag.header"));
 
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == ButtonType.OK) {
@@ -145,7 +145,7 @@ public class ExampleController {
 
             Dialog<Integer> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
-            dialog.setTitle("Beispiel wählen");
+            dialog.setTitle(I18nUtil.i18n("dialog.example.title"));
 
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == ButtonType.OK) {

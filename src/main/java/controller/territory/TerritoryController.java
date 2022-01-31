@@ -12,6 +12,7 @@ import javafx.scene.input.MouseButton;
 import javafx.util.Pair;
 import model.territory.PlaceOnTileSelection;
 import model.territory.Territory;
+import util.I18nUtil;
 import util.Position;
 
 import java.io.IOException;
@@ -70,7 +71,7 @@ public class TerritoryController {
 
                 Dialog<Pair<String, String>> dialog = new Dialog<>();
                 dialog.setDialogPane(dialogPane);
-                dialog.setTitle("Territorium-Größe");
+                dialog.setTitle(I18nUtil.i18n("dialog.territory.title"));
 
                 dialog.setResultConverter(dialogButton -> {
                     if (dialogButton == ButtonType.OK) {
@@ -118,10 +119,10 @@ public class TerritoryController {
         controller.resetTerritoryButton.setOnAction(me -> {
             Alert alert =
                     new Alert(Alert.AlertType.WARNING,
-                            "Möchtest du wirklich das Territorium auf den letzten gespeicherten Stand zurücksetzen?",
+                            I18nUtil.i18n("alert.territory.resetWarning"),
                             ButtonType.OK,
                             ButtonType.CANCEL);
-            alert.setTitle("Territorium zurücksetzen");
+            alert.setTitle(I18nUtil.i18n("alert.territory.resetTitle"));
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get() == ButtonType.OK) {

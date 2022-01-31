@@ -8,6 +8,7 @@ import model.tutor.Answer;
 import model.tutor.Request;
 import model.tutor.Tutor;
 import model.tutor.TutorImpl;
+import util.I18nUtil;
 import util.PropertyController;
 
 import javax.xml.stream.XMLStreamException;
@@ -54,7 +55,7 @@ public class TutorController implements TutorStudentController {
         if (activeRequestId != null) {
             Alert alert =
                     new Alert(Alert.AlertType.WARNING,
-                            "Auf die zuletzt geladene Anfrage wurde noch keine Antwort geschickt. Wirklich laden?",
+                            I18nUtil.i18n("alert.tutor.loadMoreWarning"),
                             ButtonType.OK,
                             ButtonType.CANCEL);
             Optional<ButtonType> result = alert.showAndWait();
@@ -74,14 +75,14 @@ public class TutorController implements TutorStudentController {
                 saveController.loadTerritoryFromXMLString(request.getTerritoryXML());
 
                 fxmlController.sendStudentAnswerMenuItem.setDisable(false);
-                fxmlController.updateNotificationText("Studierendenanfrage geladen");
+                fxmlController.updateNotificationText(I18nUtil.i18n("notification.tutor.loadedRequest"));
             } else {
-                new Alert(Alert.AlertType.INFORMATION, "Es ist keine weitere Anfrage eingegangen.",
+                new Alert(Alert.AlertType.INFORMATION, I18nUtil.i18n("alert.tutor.noMoreRequests"),
                         ButtonType.OK).show();
             }
         } catch (RemoteException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Bei der Übertragung der Anfrage ist ein Fehler aufgetreten.",
+            new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.tutor.sendRequestError"),
                     ButtonType.OK).show();
         }
     }
@@ -97,10 +98,10 @@ public class TutorController implements TutorStudentController {
             fxmlController.sendStudentAnswerMenuItem.setDisable(true);
             tutor.sendAnswer(answer);
 
-            fxmlController.updateNotificationText("Antwort an Studierenden gesendet");
+            fxmlController.updateNotificationText(I18nUtil.i18n("notification.tutor.sentAnswer"));
         } catch (XMLStreamException | RemoteException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Bei der Übertragung der Antwort ist ein Fehler aufgetreten.",
+            new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.tutor.sendAnswerError"),
                     ButtonType.OK).show();
         }
     }

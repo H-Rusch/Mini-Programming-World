@@ -6,7 +6,7 @@
             fx:controller="controller.program.NewFileNameDialogController">
     <content>
         <HBox>
-            <Label fx:id="filenameLabel" text="Dateiname: "/>
+            <Label fx:id="filenameLabel"/>
             <TextField fx:id="filenameInput"/>
         </HBox>
     </content>

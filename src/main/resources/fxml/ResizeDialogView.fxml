@@ -6,10 +6,10 @@
             fx:controller="controller.territory.ResizeDialogController">
     <content>
         <GridPane>
-            <Label fx:id="rowLabel" text="Zeilen: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <Label fx:id="rowLabel" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
             <TextField fx:id="rowInput" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-            <Label fx:id="columnLabel" text="Spalten: " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <Label fx:id="columnLabel" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
             <TextField fx:id="columnInput" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
         </GridPane>
     </content>

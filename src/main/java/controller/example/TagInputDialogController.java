@@ -1,10 +1,13 @@
 package controller.example;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import util.I18nUtil;
 
 import java.util.Arrays;
 
@@ -13,12 +16,18 @@ public class TagInputDialogController {
     @FXML
     public ButtonType submitButton;
     @FXML
+    public Label tagInputLabel;
+    @FXML
     public TextField tagInput;
     @FXML
     public DialogPane dialogPane;
 
     public void initialize() {
         dialogPane.lookupButton(submitButton).setDisable(true);
+
+        tagInputLabel.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("dialog.example.tagInputLabel"), I18nUtil.localeProperty()));
+
 
         tagInput.textProperty().addListener(((observable, oldValue, newValue) ->
                 dialogPane.lookupButton(submitButton).setDisable(!validValue(newValue))

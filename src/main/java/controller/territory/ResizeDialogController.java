@@ -1,11 +1,13 @@
 package controller.territory;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import util.I18nUtil;
 import util.Validation;
 
 /**
@@ -33,6 +35,12 @@ public class ResizeDialogController {
      * a value is not valid, it is disabled. The input is valid if it is a numerical value in the interval [1, 100].
      */
     public void initialize() {
+        rowLabel.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("dialog.territory.rowInputLabel"), I18nUtil.localeProperty()));
+
+        columnInput.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("dialog.territory.columnInputLabel"), I18nUtil.localeProperty()));
+
         columnInput.textProperty().addListener(((observable, oldValue, newValue) -> {
             boolean disable = !(validValue(newValue) && validValue(rowInput.getText()));
             dialogPane.lookupButton(submitButton).setDisable(disable);

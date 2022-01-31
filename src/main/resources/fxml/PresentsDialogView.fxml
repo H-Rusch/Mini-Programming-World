@@ -6,7 +6,7 @@
             fx:controller="controller.territory.PresentsDialogController">
     <content>
         <HBox>
-            <Label fx:id="presentsLabel" text="Geschenke: "/>
+            <Label fx:id="presentsLabel"/>
             <TextField fx:id="presentsInput"/>
         </HBox>
     </content>

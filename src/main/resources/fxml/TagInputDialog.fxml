@@ -6,7 +6,7 @@
             fx:controller="controller.example.TagInputDialogController">
     <content>
         <HBox>
-            <Label text="Tags: "/>
+            <Label fx:id="tagInputLabel"/>
             <TextField fx:id="tagInput"/>
         </HBox>
     </content>

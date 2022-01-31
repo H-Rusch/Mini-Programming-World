@@ -199,7 +199,7 @@
                             </ImageView>
                         </graphic>
                         <tooltip>
-                            <Tooltip text="Starte die Simulation"/>
+                            <Tooltip fx:id="tooltipPlayButton"/>
                         </tooltip>
                     </Button>
 
@@ -210,7 +210,7 @@
                             </ImageView>
                         </graphic>
                         <tooltip>
-                            <Tooltip text="Pausiere die Simulation"/>
+                            <Tooltip fx:id="tooltipPauseButton"/>
                         </tooltip>
                     </Button>
 
@@ -221,7 +221,7 @@
                             </ImageView>
                         </graphic>
                         <tooltip>
-                            <Tooltip text="Beende die Simulation"/>
+                            <Tooltip fx:id="tooltipStopButton"/>
                         </tooltip>
                     </Button>
 
@@ -234,7 +234,7 @@
                             </ImageView>
                         </graphic>
                         <tooltip>
-                            <Tooltip text="Bewege den Kunden eine Kachel in Blickrichtung"/>
+                            <Tooltip fx:id="tooltipForwardButton"/>
                         </tooltip>
                     </Button>
 
@@ -245,7 +245,7 @@
                             </ImageView>
                         </graphic>
                         <tooltip>
-                            <Tooltip text="Drehe den Kunden um 90° nach links"/>
+                            <Tooltip fx:id="tooltipTurnLeftButton"/>
                         </tooltip>
                     </Button>
 
@@ -256,7 +256,7 @@
                             </ImageView>
                         </graphic>
                         <tooltip>
-                            <Tooltip text="Drehe den Kunden um 90° nach rechts"/>
+                            <Tooltip fx:id="tooltipTurnRightButton"/>
                         </tooltip>
                     </Button>
 
@@ -267,7 +267,7 @@
                             </ImageView>
                         </graphic>
                         <tooltip>
-                            <Tooltip text="Nimm ein auf dem Boden liegendes Geschenk auf"/>
+                            <Tooltip fx:id="tooltipPickUpButton"/>
                         </tooltip>
                     </Button>
 
@@ -278,7 +278,7 @@
                             </ImageView>
                         </graphic>
                         <tooltip>
-                            <Tooltip text="Lege ein Geschenk aus dem Korb auf den Boden"/>
+                            <Tooltip fx:id="tooltipPutDownButton"/>
                         </tooltip>
                     </Button>
 
@@ -289,7 +289,7 @@
                             </ImageView>
                         </graphic>
                         <tooltip>
-                            <Tooltip text="Lege die Anzahl der Geschenke im Korb fest"/>
+                            <Tooltip fx:id="tooltipPresentsButton"/>
                         </tooltip>
                     </Button>
 
@@ -308,7 +308,7 @@
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Erstelle einen neuen Simulator"/>
+                                    <Tooltip fx:id="tooltipNewButton"/>
                                 </tooltip>
                             </Button>
 
@@ -319,7 +319,7 @@
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Öffne einen Simulator"/>
+                                    <Tooltip fx:id="tooltipOpenButton"/>
                                 </tooltip>
                             </Button>
 
@@ -334,7 +334,7 @@
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Speichere den Simulator"/>
+                                    <Tooltip fx:id="tooltipSaveButton"/>
                                 </tooltip>
                             </Button>
 
@@ -345,7 +345,7 @@
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Kompiliere das Programm."/>
+                                    <Tooltip fx:id="tooltipCompileButton"/>
                                 </tooltip>
                             </Button>
                         </ToolBar>
@@ -368,7 +368,7 @@
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Dimension des Markts ändern"/>
+                                    <Tooltip fx:id="tooltipResizeMarketButton"/>
                                 </tooltip>
                             </Button>
 
@@ -384,7 +384,7 @@
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Kunden platzieren"/>
+                                    <Tooltip fx:id="tooltipPlaceCustomerButton"/>
                                 </tooltip>
                             </RadioButton>
 
@@ -396,7 +396,7 @@
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Regal platzieren"/>
+                                    <Tooltip fx:id="tooltipPlaceShelfButton"/>
                                 </tooltip>
                             </RadioButton>
 
@@ -408,7 +408,7 @@
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Einkaufswagen platziern"/>
+                                    <Tooltip fx:id="tooltipPlaceCartButton"/>
                                 </tooltip>
                             </RadioButton>
 
@@ -420,7 +420,7 @@
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Geschenk platzieren"/>
+                                    <Tooltip fx:id="tooltipPlacePresentButton"/>
                                 </tooltip>
                             </RadioButton>
 
@@ -432,7 +432,7 @@
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Inhalt der Kachel löschen"/>
+                                    <Tooltip fx:id="tooltipClearTileButton"/>
                                 </tooltip>
                             </RadioButton>
 
@@ -443,7 +443,7 @@
                                     </ImageView>
                                 </graphic>
                                 <tooltip>
-                                    <Tooltip text="Territorium zurücksetzen"/>
+                                    <Tooltip fx:id="tooltipResetTerritoryButton"/>
                                 </tooltip>
                             </Button>
                         </ToolBar>

@@ -1,9 +1,10 @@
 package controller.simulation;
 
 import controller.FXMLController;
-import javafx.scene.control.Tooltip;
+import javafx.beans.binding.Bindings;
 import model.simulation.Simulation;
 import model.territory.Territory;
+import util.I18nUtil;
 
 
 public class SimulationController {
@@ -84,7 +85,7 @@ public class SimulationController {
         setPauseButtonsEnabled(true);
         setStopButtonsEnabled(true);
 
-        fxmlController.playButton.setTooltip(new Tooltip("Setze die Simulation fort"));
+        changeToStart();
 
         simulation.setPauseSimulation(false);
         simulation.notifySyncObject();
@@ -95,6 +96,8 @@ public class SimulationController {
         setPlayButtonsEnabled(true);
         setPauseButtonsEnabled(false);
         setStopButtonsEnabled(true);
+
+        changeStartToResume();
 
         simulation.setPauseSimulation(true);
     }
@@ -117,9 +120,25 @@ public class SimulationController {
         setStopButtonsEnabled(false);
         setSaveAndLoadEnabled(true);
 
-        fxmlController.playButton.setTooltip(new Tooltip("Starte die Simulation"));
+        changeStartToResume();
 
         fxmlController.playButton.setOnAction(event -> startSimulation());
         fxmlController.playMenuItem.setOnAction(event -> startSimulation());
+    }
+
+    private void changeStartToResume() {
+        fxmlController.tooltipPlayButton.textProperty().bind(Bindings.createStringBinding(
+                () -> I18nUtil.i18n("tooltip.playButton.resume"), I18nUtil.localeProperty()));
+
+        fxmlController.playMenuItem.textProperty().bind(Bindings.createStringBinding(
+                () -> I18nUtil.i18n("playMenuItem.resume"), I18nUtil.localeProperty()));
+    }
+
+    private void changeToStart() {
+        fxmlController.tooltipPlayButton.textProperty().bind(Bindings.createStringBinding(
+                () -> I18nUtil.i18n("tooltip.playButton.start"), I18nUtil.localeProperty()));
+
+        fxmlController.playMenuItem.textProperty().bind(Bindings.createStringBinding(
+                () -> I18nUtil.i18n("playMenuItem"), I18nUtil.localeProperty()));
     }
 }

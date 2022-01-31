@@ -13,6 +13,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.program.Program;
 import model.territory.Territory;
+import util.I18nUtil;
 import util.PropertyController;
 
 import java.io.File;
@@ -81,7 +82,7 @@ public class ProgramController {
 
     /** Non-static method which updates the notification label and calls the static method to do the actual saving. */
     public void saveProgram(Program program, String code) {
-        controller.updateNotificationText("Programm abgespeichert");
+        controller.updateNotificationText(I18nUtil.i18n("notification.savedProgram"));
         ProgramController.saveProgramToFile(program, code);
     }
 
@@ -164,7 +165,7 @@ public class ProgramController {
             DBConnection.getInstance().createDatabaseIfNotExists();
         } catch (IOException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Simulator konnte nicht gestartet werden", ButtonType.OK).showAndWait();
+            new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.simulator.cannotStart"), ButtonType.OK).showAndWait();
         }
     }
 
@@ -191,7 +192,7 @@ public class ProgramController {
      * sample code.
      *
      * @param programName the name of a program
-     * @return the program's code. Each line seperated with a line break. The first and last line containing
+     * @return the program's code. Each line separated with a line break. The first and last line containing
      * class definition and closing braces are not included.
      */
     public static String getProgramCode(String programName) {
@@ -222,7 +223,7 @@ public class ProgramController {
             return builder.toString();
 
         } catch (IOException e) {
-            new Alert(Alert.AlertType.ERROR, "Konnte Programmdatei nicht laden.", ButtonType.OK).showAndWait();
+            new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.program.loadError"), ButtonType.OK).showAndWait();
         }
         return null;
     }
@@ -247,7 +248,7 @@ public class ProgramController {
 
             Files.write(file, lines);
         } catch (IOException e) {
-            new Alert(Alert.AlertType.ERROR, "Konnte Programm nicht speichern.", ButtonType.OK).showAndWait();
+            new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.program.saveError"), ButtonType.OK).showAndWait();
         }
     }
 
@@ -264,7 +265,7 @@ public class ProgramController {
 
             Dialog<String> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
-            dialog.setTitle("Dateinamen eingeben");
+            dialog.setTitle(I18nUtil.i18n("dialog.program.title"));
 
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == ButtonType.OK) {
@@ -277,7 +278,7 @@ public class ProgramController {
 
         } catch (IOException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Neues Programm konnte nicht erstellt werden.", ButtonType.OK)
+            new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.program.createError"), ButtonType.OK)
                     .showAndWait();
         }
     }
@@ -298,7 +299,7 @@ public class ProgramController {
         if (selectedFile != null) {
             // can only open files in the 'programs' folder
             if (!selectedFile.getParent().equals(Paths.get(DIRECTORY).toAbsolutePath().toString())) {
-                new Alert(Alert.AlertType.ERROR, "Die angegebene Datei stammt nicht aus dem 'programs'-Verzeichnis",
+                new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.program.fileFromWrongDirectory"),
                         ButtonType.OK).showAndWait();
                 return;
             }

@@ -5,6 +5,7 @@ import javafx.scene.control.ButtonType;
 import model.program.Program;
 import model.territory.Actor;
 import model.territory.Territory;
+import util.I18nUtil;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
@@ -40,7 +41,7 @@ public class CompileController {
             new Alert(Alert.AlertType.ERROR, errStream.toString(), ButtonType.OK).showAndWait();
         } else {
             changeActorToCustomActor(program, territory);
-            new Alert(Alert.AlertType.INFORMATION, "Kompilieren erfolgreich.", ButtonType.OK).showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, I18nUtil.i18n("alert.compile.success"), ButtonType.OK).showAndWait();
         }
     }
 

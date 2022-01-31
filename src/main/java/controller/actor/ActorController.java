@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import model.territory.Actor;
 import model.territory.Territory;
 import model.territory.exceptions.ActorException;
+import util.I18nUtil;
 import util.annotations.Invisible;
 
 import java.io.IOException;
@@ -83,7 +84,7 @@ public class ActorController {
 
             Dialog<String> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
-            dialog.setTitle("Geschenke im Korb");
+            dialog.setTitle(I18nUtil.i18n("dialog.present.title"));
 
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == ButtonType.OK) {
