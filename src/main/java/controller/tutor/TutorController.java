@@ -115,8 +115,6 @@ public class TutorController implements TutorStudentController {
                 Registry registry = LocateRegistry.createRegistry(Integer.parseInt(PropertyController.getTutorPort()));
                 registry.rebind("tutor", tutor);
 
-                System.out  .println(registry);
-
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

@@ -9,17 +9,20 @@ import controller.territory.TerritoryController;
 import controller.tutor.StudentController;
 import controller.tutor.TutorController;
 import controller.tutor.TutorStudentController;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.program.Program;
 import model.territory.Territory;
+import util.I18nUtil;
 import util.PropertyController;
 import view.CodeEditor;
 import view.TerritoryPanel;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class FXMLController {
@@ -36,7 +39,8 @@ public class FXMLController {
     private ExampleController exampleController;
     private TutorStudentController tutoringController;
 
-    // menu items
+    @FXML
+    public Menu editorMenu;
     @FXML
     public MenuItem newMenuItem;
     @FXML
@@ -47,6 +51,8 @@ public class FXMLController {
     public MenuItem compileMenuItem;
     @FXML
     public MenuItem exitMenuItem;
+    @FXML
+    public Menu marketMenu;
     @FXML
     public Menu saveTerritoryMenu;
     @FXML
@@ -76,6 +82,8 @@ public class FXMLController {
     @FXML
     public MenuItem resizeMarketMenuItem;
     @FXML
+    public Menu customerMenu;
+    @FXML
     public MenuItem forwardMenuItem;
     @FXML
     public MenuItem turnLeftMenuItem;
@@ -88,15 +96,21 @@ public class FXMLController {
     @FXML
     public MenuItem presentsMenuItem;
     @FXML
+    public Menu simulationMenu;
+    @FXML
     public MenuItem playMenuItem;
     @FXML
     public MenuItem pauseMenuItem;
     @FXML
     public MenuItem stopMenuItem;
     @FXML
+    public Menu examplesMenu;
+    @FXML
     public MenuItem loadExampleMenuItem;
     @FXML
     public MenuItem saveExampleMenuItem;
+    @FXML
+    public Menu tutorMenu;
     @FXML
     public MenuItem sendTutorRequestMenuItem;
     @FXML
@@ -105,6 +119,12 @@ public class FXMLController {
     public MenuItem receiveStudentRequestMenuItem;
     @FXML
     public MenuItem sendStudentAnswerMenuItem;
+    @FXML
+    public Menu languageMenu;
+    @FXML
+    public MenuItem germanLanguageMenuItem;
+    @FXML
+    public MenuItem englishLanguageMenuItem;
 
     // toolbar items
     @FXML
@@ -160,6 +180,89 @@ public class FXMLController {
     @FXML
     public Label notificationLabel;
 
+    public void initialize() {
+        editorMenu.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("editorMenu"), I18nUtil.localeProperty()));
+        newMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("newMenuItem"), I18nUtil.localeProperty()));
+        openMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("openMenuItem"), I18nUtil.localeProperty()));
+        saveMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("saveMenuItem"), I18nUtil.localeProperty()));
+        compileMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("compileMenuItem"), I18nUtil.localeProperty()));
+        exitMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("exitMenuItem"), I18nUtil.localeProperty()));
+        marketMenu.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("marketMenu"), I18nUtil.localeProperty()));
+        saveTerritoryMenu.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("saveTerritoryMenu"), I18nUtil.localeProperty()));
+        saveXmlMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("saveXmlMenuItem"), I18nUtil.localeProperty()));
+        serializeMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("serializeMenuItem"), I18nUtil.localeProperty()));
+        loadTerritoryMenu.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("loadTerritoryMenu"), I18nUtil.localeProperty()));
+        loadXmlMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("loadXmlMenuItem"), I18nUtil.localeProperty()));
+        deserializeMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("deserializeMenuItem"), I18nUtil.localeProperty()));
+        saveImageMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("saveImageMenuItem"), I18nUtil.localeProperty()));
+        resizeMarketMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("resizeMarketMenuItem"), I18nUtil.localeProperty()));
+        placeCustomerMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("placeCustomerMenuItem"), I18nUtil.localeProperty()));
+        placeShelfMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("placeShelfMenuItem"), I18nUtil.localeProperty()));
+        placeCartMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("placeCartMenuItem"), I18nUtil.localeProperty()));
+        placePresentMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("placePresentMenuItem"), I18nUtil.localeProperty()));
+        clearTileMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("clearTileMenuItem"), I18nUtil.localeProperty()));
+        customerMenu.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("customerMenu"), I18nUtil.localeProperty()));
+        forwardMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("forwardMenuItem"), I18nUtil.localeProperty()));
+        turnLeftMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("turnLeftMenuItem"), I18nUtil.localeProperty()));
+        turnRightMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("turnRightMenuItem"), I18nUtil.localeProperty()));
+        pickUpMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("pickUpMenuItem"), I18nUtil.localeProperty()));
+        putDownMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("putDownMenuItem"), I18nUtil.localeProperty()));
+        presentsMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("presentsMenuItem"), I18nUtil.localeProperty()));
+        simulationMenu.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("simulationMenu"), I18nUtil.localeProperty()));
+        playMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("playMenuItem"), I18nUtil.localeProperty()));
+        pauseMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("pauseMenuItem"), I18nUtil.localeProperty()));
+        stopMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("stopMenuItem"), I18nUtil.localeProperty()));
+        examplesMenu.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("examplesMenu"), I18nUtil.localeProperty()));
+        saveExampleMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("saveExampleMenuItem"), I18nUtil.localeProperty()));
+        loadExampleMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("loadExampleMenuItem"), I18nUtil.localeProperty()));
+        tutorMenu.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("tutorMenu"), I18nUtil.localeProperty()));
+        sendTutorRequestMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("sendTutorRequestMenuItem"), I18nUtil.localeProperty()));
+        receiveTutorAnswerMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("receiveTutorAnswerMenuItem"), I18nUtil.localeProperty()));
+        receiveStudentRequestMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("receiveStudentRequestMenuItem"), I18nUtil.localeProperty()));
+        sendStudentAnswerMenuItem.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("sendStudentAnswerMenuItem"), I18nUtil.localeProperty()));
+        languageMenu.textProperty()
+                .bind(Bindings.createStringBinding(() -> I18nUtil.i18n("languageMenu"), I18nUtil.localeProperty()));
+    }
+
     /** Create all the used controllers. Those controllers connect the UI elements with actions. */
     public void setUpControllers() {
         this.territoryController = new TerritoryController(territory, this);
@@ -193,6 +296,9 @@ public class FXMLController {
     /** Set up the UI by restyling some elements. */
     private void setupUI() {
         restyleRadioButtons();
+
+        germanLanguageMenuItem.setOnAction(a -> I18nUtil.setLocale(Locale.GERMANY));
+        englishLanguageMenuItem.setOnAction(a -> I18nUtil.setLocale(Locale.US));
     }
 
     /** Convert radio buttons into toggle buttons visually. */

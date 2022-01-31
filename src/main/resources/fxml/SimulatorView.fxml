@@ -17,15 +17,15 @@
             <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
                   xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
                 <MenuBar>
-                    <Menu text="_Editor">
-                        <MenuItem fx:id="newMenuItem" text="_Neu">
+                    <Menu fx:id="editorMenu">
+                        <MenuItem fx:id="newMenuItem">
                             <accelerator>
                                 <KeyCodeCombination shortcut="DOWN" code="N"
                                                     alt="UP" control="UP" meta="UP" shift="UP"/>
                             </accelerator>
                         </MenuItem>
 
-                        <MenuItem fx:id="openMenuItem" text="_Öffnen">
+                        <MenuItem fx:id="openMenuItem">
                             <accelerator>
                                 <KeyCodeCombination shortcut="DOWN" code="O"
                                                     alt="UP" control="UP" meta="UP" shift="UP"/>
@@ -34,14 +34,14 @@
 
                         <SeparatorMenuItem mnemonicParsing="false"/>
 
-                        <MenuItem fx:id="saveMenuItem" text="_Speichern">
+                        <MenuItem fx:id="saveMenuItem">
                             <accelerator>
                                 <KeyCodeCombination shortcut="DOWN" code="S"
                                                     alt="UP" control="UP" meta="UP" shift="UP"/>
                             </accelerator>
                         </MenuItem>
 
-                        <MenuItem fx:id="compileMenuItem" text="_Kompilieren">
+                        <MenuItem fx:id="compileMenuItem">
                             <accelerator>
                                 <KeyCodeCombination shortcut="DOWN" code="K"
                                                     alt="UP" control="UP" meta="UP" shift="UP"/>
@@ -50,7 +50,7 @@
 
                         <SeparatorMenuItem mnemonicParsing="false"/>
 
-                        <MenuItem fx:id="exitMenuItem" text="_Beenden">
+                        <MenuItem fx:id="exitMenuItem">
                             <accelerator>
                                 <KeyCodeCombination shortcut="DOWN" code="Q"
                                                     alt="UP" control="UP" meta="UP" shift="UP"/>
@@ -58,81 +58,80 @@
                         </MenuItem>
                     </Menu>
 
-                    <Menu text="_Markt">
-                        <Menu text="_Speichern" fx:id="saveTerritoryMenu">
-                            <MenuItem fx:id="saveXmlMenuItem" text="_XML"/>
-                            <MenuItem fx:id="serializeMenuItem" text="_Serialisieren"/>
+                    <Menu fx:id="marketMenu">
+                        <Menu fx:id="saveTerritoryMenu">
+                            <MenuItem fx:id="saveXmlMenuItem"/>
+                            <MenuItem fx:id="serializeMenuItem"/>
                         </Menu>
 
-                        <Menu text="_Laden" fx:id="loadTerritoryMenu">
-                            <MenuItem fx:id="loadXmlMenuItem" text="_XML"/>
-                            <MenuItem fx:id="deserializeMenuItem" text="_Deserialisieren"/>
+                        <Menu fx:id="loadTerritoryMenu">
+                            <MenuItem fx:id="loadXmlMenuItem"/>
+                            <MenuItem fx:id="deserializeMenuItem"/>
                         </Menu>
 
-                        <MenuItem fx:id="saveImageMenuItem" text="Als _Bild speichern"/>
+                        <MenuItem fx:id="saveImageMenuItem"/>
 
                         <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem fx:id="resizeMarketMenuItem" text="_Dimension ändern"/>
+                        <MenuItem fx:id="resizeMarketMenuItem"/>
 
                         <SeparatorMenuItem mnemonicParsing="false"/>
 
-                        <RadioMenuItem fx:id="placeCustomerMenuItem" selected="true"
-                                       text="_Kunden platzieren">
+                        <RadioMenuItem fx:id="placeCustomerMenuItem" selected="true">
                             <toggleGroup>
                                 <ToggleGroup fx:id="placeItemToggleMenu"/>
                             </toggleGroup>
                         </RadioMenuItem>
-                        <RadioMenuItem fx:id="placeShelfMenuItem" text="_Regal platzieren"
+                        <RadioMenuItem fx:id="placeShelfMenuItem"
                                        toggleGroup="$placeItemToggleMenu"/>
-                        <RadioMenuItem fx:id="placeCartMenuItem" text="_Einkaufswagen platzieren"
+                        <RadioMenuItem fx:id="placeCartMenuItem"
                                        toggleGroup="$placeItemToggleMenu"/>
-                        <RadioMenuItem fx:id="placePresentMenuItem" text="_Geschenk platzieren"
+                        <RadioMenuItem fx:id="placePresentMenuItem"
                                        toggleGroup="$placeItemToggleMenu"/>
-                        <RadioMenuItem fx:id="clearTileMenuItem" text="K_achel löschen"
+                        <RadioMenuItem fx:id="clearTileMenuItem"
                                        toggleGroup="$placeItemToggleMenu"/>
                     </Menu>
 
-                    <Menu text="_Kunde">
-                        <MenuItem fx:id="forwardMenuItem" text="_vor">
+                    <Menu fx:id="customerMenu">
+                        <MenuItem fx:id="forwardMenuItem">
                             <accelerator>
                                 <KeyCodeCombination shortcut="DOWN" shift="DOWN" code="V"
                                                     alt="UP" control="UP" meta="UP"/>
                             </accelerator>
                         </MenuItem>
 
-                        <MenuItem fx:id="turnLeftMenuItem" text="drehe_Links">
+                        <MenuItem fx:id="turnLeftMenuItem">
                             <accelerator>
                                 <KeyCodeCombination shortcut="DOWN" shift="DOWN" code="L"
                                                     alt="UP" control="UP" meta="UP"/>
                             </accelerator>
                         </MenuItem>
 
-                        <MenuItem fx:id="turnRightMenuItem" text="drehe_Rechts">
+                        <MenuItem fx:id="turnRightMenuItem">
                             <accelerator>
                                 <KeyCodeCombination shortcut="DOWN" shift="DOWN" code="R"
                                                     alt="UP" control="UP" meta="UP"/>
                             </accelerator>
                         </MenuItem>
 
-                        <MenuItem fx:id="pickUpMenuItem" text="_nimmAuf">
+                        <MenuItem fx:id="pickUpMenuItem">
                             <accelerator>
                                 <KeyCodeCombination shortcut="DOWN" shift="DOWN" code="N"
                                                     alt="UP" control="UP" meta="UP"/>
                             </accelerator>
                         </MenuItem>
 
-                        <MenuItem fx:id="putDownMenuItem" text="lege_Ab">
+                        <MenuItem fx:id="putDownMenuItem">
                             <accelerator>
                                 <KeyCodeCombination shortcut="DOWN" shift="DOWN" code="D"
                                                     alt="UP" control="UP" meta="UP"/>
                             </accelerator>
                         </MenuItem>
 
-                        <MenuItem fx:id="presentsMenuItem" text="_Geschenke im Korb"/>
+                        <MenuItem fx:id="presentsMenuItem"/>
                     </Menu>
 
-                    <Menu text="_Simulation">
-                        <MenuItem fx:id="playMenuItem" text="_Starten">
+                    <Menu fx:id="simulationMenu">
+                        <MenuItem fx:id="playMenuItem">
                             <accelerator>
                                 <KeyCodeCombination shortcut="DOWN" code="F5"
                                                     alt="UP" control="UP" meta="UP" shift="UP"/>
@@ -144,7 +143,7 @@
                             </graphic>
                         </MenuItem>
 
-                        <MenuItem fx:id="pauseMenuItem" text="_Pausieren">
+                        <MenuItem fx:id="pauseMenuItem">
                             <accelerator>
                                 <KeyCodeCombination shortcut="DOWN" code="F6"
                                                     alt="UP" control="UP" meta="UP" shift="UP"/>
@@ -156,7 +155,7 @@
                             </graphic>
                         </MenuItem>
 
-                        <MenuItem fx:id="stopMenuItem" text="_Beenden">
+                        <MenuItem fx:id="stopMenuItem">
                             <accelerator>
                                 <KeyCodeCombination shortcut="DOWN" code="F8"
                                                     alt="UP" control="UP" meta="UP" shift="UP"/>
@@ -169,17 +168,22 @@
                         </MenuItem>
                     </Menu>
 
-                    <Menu text="_Beispiele">
-                        <MenuItem text="_Speichern" fx:id="saveExampleMenuItem"/>
-                        <MenuItem text="_Laden" fx:id="loadExampleMenuItem"/>
+                    <Menu fx:id="examplesMenu">
+                        <MenuItem fx:id="saveExampleMenuItem"/>
+                        <MenuItem fx:id="loadExampleMenuItem"/>
                     </Menu>
 
-                    <Menu text="_Tutor">
-                        <MenuItem text="Tutorenanfrage senden" fx:id="sendTutorRequestMenuItem"/>
-                        <MenuItem text="Tutorenantwort erhalten" fx:id="receiveTutorAnswerMenuItem"/>
+                    <Menu fx:id="tutorMenu">
+                        <MenuItem fx:id="sendTutorRequestMenuItem"/>
+                        <MenuItem fx:id="receiveTutorAnswerMenuItem"/>
 
-                        <MenuItem text="Studentenfrage erhalten" fx:id="receiveStudentRequestMenuItem"/>
-                        <MenuItem text="Studentenantwort senden" fx:id="sendStudentAnswerMenuItem"/>
+                        <MenuItem fx:id="receiveStudentRequestMenuItem"/>
+                        <MenuItem fx:id="sendStudentAnswerMenuItem"/>
+                    </Menu>
+
+                    <Menu fx:id="languageMenu">
+                        <MenuItem fx:id="germanLanguageMenuItem" text="Deutsch"/>
+                        <MenuItem fx:id="englishLanguageMenuItem" text="English"/>
                     </Menu>
                 </MenuBar>
 
