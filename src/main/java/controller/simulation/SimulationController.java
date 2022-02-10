@@ -18,8 +18,8 @@ public class SimulationController {
         this.fxmlController = controller;
 
         setUpEventHandlers();
-        setPauseButtonsEnabled(false);
-        setStopButtonsEnabled(false);
+        fxmlController.pauseButton.setDisable(true);
+        fxmlController.stopButton.setDisable(true);
     }
 
     /** Connect buttons and menu items with corresponding event handlers. */
@@ -38,38 +38,20 @@ public class SimulationController {
 
         fxmlController.stopButton.setOnAction(event -> stopSimulation());
         fxmlController.stopMenuItem.setOnAction(event -> stopSimulation());
-    }
 
-    /** Enable or disable the play buttons in the application. */
-    private void setPlayButtonsEnabled(boolean enabled) {
-        fxmlController.playButton.setDisable(!enabled);
-        fxmlController.playMenuItem.setDisable(!enabled);
-    }
-
-    /** Enable or disable the pause buttons in the application. */
-    private void setPauseButtonsEnabled(boolean enabled) {
-        fxmlController.pauseButton.setDisable(!enabled);
-        fxmlController.pauseMenuItem.setDisable(!enabled);
-    }
-
-    /** Enable or disable the stop buttons in the application. */
-    private void setStopButtonsEnabled(boolean enabled) {
-        fxmlController.stopButton.setDisable(!enabled);
-        fxmlController.stopMenuItem.setDisable(!enabled);
-    }
-
-    private void setSaveAndLoadEnabled(boolean enabled) {
-        fxmlController.resetTerritoryButton.setDisable(!enabled);
-        fxmlController.saveTerritoryMenu.setDisable(!enabled);
-        fxmlController.loadTerritoryMenu.setDisable(!enabled);
+        fxmlController.playButton.disableProperty().bindBidirectional(fxmlController.playMenuItem.disableProperty());
+        fxmlController.pauseButton.disableProperty().bindBidirectional(fxmlController.pauseMenuItem.disableProperty());
+        fxmlController.stopButton.disableProperty().bindBidirectional(fxmlController.stopMenuItem.disableProperty());
+        fxmlController.saveTerritoryMenu.disableProperty().bindBidirectional(fxmlController.loadTerritoryMenu.disableProperty());
+        fxmlController.loadTerritoryMenu.disableProperty().bindBidirectional(fxmlController.resetTerritoryButton.disableProperty());
     }
 
     /** Start the simulation. Disable unneeded buttons and change the 'play' buttons functionality from 'start' to 'continue'. */
     public void startSimulation() {
-        setPlayButtonsEnabled(false);
-        setPauseButtonsEnabled(true);
-        setStopButtonsEnabled(true);
-        setSaveAndLoadEnabled(false);
+        fxmlController.playButton.setDisable(true);
+        fxmlController.pauseButton.setDisable(false);
+        fxmlController.stopButton.setDisable(false);
+        fxmlController.saveTerritoryMenu.setDisable(true);
 
         fxmlController.playButton.setOnAction(event -> continueSimulation());
         fxmlController.playMenuItem.setOnAction(event -> continueSimulation());
@@ -81,9 +63,9 @@ public class SimulationController {
 
     /** Unpause the simulation. Pausing and stopping is enabled. */
     public void continueSimulation() {
-        setPlayButtonsEnabled(false);
-        setPauseButtonsEnabled(true);
-        setStopButtonsEnabled(true);
+        fxmlController.playButton.setDisable(true);
+        fxmlController.pauseButton.setDisable(false);
+        fxmlController.stopButton.setDisable(false);
 
         changeToStart();
 
@@ -93,9 +75,9 @@ public class SimulationController {
 
     /** Pause the simulation. Continuing and stopping is enabled. */
     public void pauseSimulation() {
-        setPlayButtonsEnabled(true);
-        setPauseButtonsEnabled(false);
-        setStopButtonsEnabled(true);
+        fxmlController.playButton.setDisable(false);
+        fxmlController.pauseButton.setDisable(true);
+        fxmlController.stopButton.setDisable(false);
 
         changeStartToResume();
 
@@ -104,9 +86,9 @@ public class SimulationController {
 
     /** Stop the simulation. Starting is enabled. */
     public void stopSimulation() {
-        setPlayButtonsEnabled(true);
-        setPauseButtonsEnabled(false);
-        setStopButtonsEnabled(false);
+        fxmlController.playButton.setDisable(false);
+        fxmlController.pauseButton.setDisable(true);
+        fxmlController.stopButton.setDisable(true);
 
         simulation.setStopSimulation(true);
         simulation.setPauseSimulation(false);
@@ -115,10 +97,10 @@ public class SimulationController {
 
     /** Enable buttons, so the simulation can be started again. */
     public void simulationEnded() {
-        setPlayButtonsEnabled(true);
-        setPauseButtonsEnabled(false);
-        setStopButtonsEnabled(false);
-        setSaveAndLoadEnabled(true);
+        fxmlController.playButton.setDisable(false);
+        fxmlController.pauseButton.setDisable(true);
+        fxmlController.stopButton.setDisable(true);
+        fxmlController.saveTerritoryMenu.setDisable(false);
 
         changeStartToResume();
 

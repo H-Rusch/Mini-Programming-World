@@ -107,7 +107,7 @@ public class TutorController implements TutorStudentController {
     }
 
     /** Create the registry and export the tutor. */
-    private static void start() {
+    private synchronized static void start() {
         // create the registry only for the first tutor window
         if (active == 0) {
             try {
@@ -124,7 +124,7 @@ public class TutorController implements TutorStudentController {
     }
 
     /** Unexports the exported objects when the last tutor window is closed. */
-    public static void end() {
+    public synchronized static void end() {
         active--;
         if (active == 0) {
             try {

@@ -96,9 +96,9 @@ public class SaveController {
         if (selectedFile != null) {
             try (ObjectInputStream in = new ObjectInputStream(
                     new BufferedInputStream(new FileInputStream(selectedFile.getAbsolutePath())))) {
-                synchronized (territory) {
-                    Territory loaded = (Territory) in.readObject();
+                Territory loaded = (Territory) in.readObject();
 
+                synchronized (territory) {
                     this.territory.loadTerritory(loaded);
                     // save the territory's state, so the territory can be reset to this state
                     this.territory.saveState();
@@ -264,7 +264,6 @@ public class SaveController {
 
             writer.writeEndElement(); // </actor>
             writer.writeCharacters("\n");
-
 
             Tile[][] market = territory.getMarket();
             for (int y = 0; y < market.length; y++) {

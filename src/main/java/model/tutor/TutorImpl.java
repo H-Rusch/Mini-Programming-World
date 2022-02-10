@@ -47,6 +47,7 @@ public class TutorImpl extends UnicastRemoteObject implements Tutor {
         return answer;
     }
 
+    @Override
     public Request receiveRequest() {
         Request request;
         synchronized (syncObject) {
@@ -58,6 +59,7 @@ public class TutorImpl extends UnicastRemoteObject implements Tutor {
         return request;
     }
 
+    @Override
     public void sendAnswer(Answer answer) {
         synchronized (syncObject) {
             answers.put(answer.getId(), answer);

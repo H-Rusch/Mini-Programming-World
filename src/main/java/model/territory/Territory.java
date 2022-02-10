@@ -4,6 +4,7 @@ import model.territory.exceptions.NoPresentInBasketException;
 import model.territory.exceptions.NoPresentOnTileException;
 import model.territory.exceptions.PresentAlreadyOnTileException;
 import model.territory.exceptions.TileBlockedException;
+import util.I18nUtil;
 import util.Observable;
 import util.Position;
 
@@ -155,13 +156,13 @@ public class Territory extends Observable implements Serializable {
         synchronized (this) {
             Position pos = getTilesFurther(1);
             if (wallAhead()) {
-                throw new TileBlockedException("The tile is blocked by a wall.");
+                throw new TileBlockedException(I18nUtil.i18n("exception.tileBlockedByWall"));
             }
             if (cartAhead()) {
                 if (!pushable()) {
-                    throw new TileBlockedException("The cart can not be pushed because it is blocked itself.");
+                    throw new TileBlockedException(I18nUtil.i18n("exception.tileBlockedCart"));
                 } else {
-                    Tile adjacent = getTile(getTilesFurther(1));
+                    Tile adjacent = getTile(pos);
                     Tile furtherAway = getTile(getTilesFurther(2));
 
                     // remove the cart from the adjacent tile
@@ -215,7 +216,7 @@ public class Territory extends Observable implements Serializable {
         synchronized (this) {
             Tile currentTile = getTile(actorPosition);
             if (!currentTile.containsPresent()) {
-                throw new NoPresentOnTileException("There is no present at the current location.");
+                throw new NoPresentOnTileException(I18nUtil.i18n("exception.noPresentOnTile"));
             } else {
                 currentTile.setState(TileState.EMPTY);
                 actorPresents++;
@@ -237,10 +238,10 @@ public class Territory extends Observable implements Serializable {
         synchronized (this) {
             Tile currentTile = getTile(actorPosition);
             if (basketEmpty()) {
-                throw new NoPresentInBasketException("There are no presents to place in the basket.");
+                throw new NoPresentInBasketException(I18nUtil.i18n("exception.noPresentInBasket"));
             } else {
                 if (currentTile.containsPresent()) {
-                    throw new PresentAlreadyOnTileException("There is already a present laying at the current position.");
+                    throw new PresentAlreadyOnTileException(I18nUtil.i18n("exception.presentAlreadyOnTile"));
                 } else {
                     currentTile.setState(TileState.PRESENT);
                     actorPresents--;

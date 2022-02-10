@@ -81,7 +81,7 @@ public class ExampleController {
             List<String> shortExamples = db.loadExamplesForTags(tags.get());
 
             if (shortExamples == null) {
-                new Alert(Alert.AlertType.INFORMATION, I18nUtil.i18n("alert.example.communicationError"), ButtonType.OK).show();
+                new Alert(Alert.AlertType.ERROR, I18nUtil.i18n("alert.example.communicationError"), ButtonType.OK).show();
             } else if (shortExamples.isEmpty()) {
                 new Alert(Alert.AlertType.INFORMATION, I18nUtil.i18n("alert.example.noExamplesForTags"),
                         ButtonType.OK).show();

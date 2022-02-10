@@ -99,12 +99,14 @@ public class TerritoryPanel extends Region implements Observer {
      * redrawn and the new size is calculated.
      */
     public void draw() {
-        if (height == 0.0 || width == 0.0 || height != territory.getHeight() * TILE_DIMENSION
-                || width != territory.getWidth() * TILE_DIMENSION) {
-            computeSize();
-            drawBackground();
+        synchronized (territory) {
+            if (height == 0.0 || width == 0.0 || height != territory.getHeight() * TILE_DIMENSION
+                    || width != territory.getWidth() * TILE_DIMENSION) {
+                computeSize();
+                drawBackground();
+            }
+            drawImages();
         }
-        drawImages();
     }
 
     /** Background is drawn with a solid color and a grid to separate the tiles. */
