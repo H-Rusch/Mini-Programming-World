@@ -35,6 +35,7 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: target/MPWSimulator.jar
+        tag: release
         asset_name: MPWSimulator-Ubuntu.jar
         prerelease: false
         overwrite: true
@@ -67,6 +68,7 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: target/MPWSimulator.jar
+        tag: release
         asset_name: MPWSimulator-Win.jar
         prerelease: false
         overwrite: true
