@@ -4,8 +4,9 @@
 name: Build and Publish Maven Package
 
 on:
-  release:
-    types: [push]
+  push:
+    branches:
+      - master
 
 jobs:
   build-on-ubuntu:
