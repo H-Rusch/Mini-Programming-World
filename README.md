@@ -6,6 +6,8 @@ In this mini-programming-world a customer should be guided through a supermarket
 in the process. The customer is controlled by a small set of simple instructions. With this program,
 the user should be able to learn simple programming concepts.
 
+![Screenshot of the simulator](./SimulatorScreenshot.png)
+
 ### Landscape
 
 The landscape the actor can move around in, is a 2-dimensional overview of a supermarket, separated
